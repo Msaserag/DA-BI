@@ -270,6 +270,27 @@ html[dir="rtl"] .panel h3{letter-spacing:0}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 /* v2 additions */
+.bell{position:relative}
+.bell .bn{position:absolute;top:-6px;inset-inline-end:-6px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:var(--bad);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;font-family:var(--fs-num)}
+.notes{position:fixed;z-index:70;top:calc(64px + env(safe-area-inset-top,0px));inset-inline-end:24px;width:min(420px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--solid);border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--shadow);padding:8px}
+.notes h4{margin:8px 10px 6px;font-size:14px}
+.nt{padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:4px}
+.nt + .nt{border-top:1px solid var(--line)}
+.nt.unread{background:var(--chip-teal)}
+.nt b{font-size:14.5px}
+.nt p{margin:0;font-size:13.5px;color:var(--ink-2);white-space:pre-line;line-height:1.7}
+.nt small{font-size:11.5px;color:var(--ink-3);font-family:var(--fs-num)}
+.nt a{color:var(--teal-2);font-weight:800;font-size:13px;text-decoration:none}
+.annb{display:flex;gap:14px;align-items:flex-start;margin-top:22px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,var(--chip-blue),var(--chip-teal));border:1px solid rgba(0,201,167,.3)}
+.annb .ico{width:22px;height:22px;color:var(--teal-2);margin-top:2px}
+.annb > div{flex:1;min-width:0}
+.annb b{display:block;font-size:15px}
+.annb p{margin:2px 0 0;font-size:13.5px;color:var(--ink-2);white-space:pre-line}
+.annb .x{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.annb button,.annb a{height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);font-size:12.5px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.newb{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:99px;background:var(--gold);color:#1A1200;font-size:10.5px;font-weight:800;margin-inline-start:8px;vertical-align:middle;letter-spacing:.03em}
+.chip.new{border-color:rgba(255,184,0,.45);color:var(--gold)}
+@media (max-width:640px){.notes{inset-inline-end:16px}}
 .boot{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;background:var(--bg);color:var(--ink-2);font-weight:700}
 .spin{width:44px;height:44px;border-radius:50%;border:3px solid var(--line-2);border-top-color:var(--teal);animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -351,12 +372,15 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
       <span class="sp"></span>
       <button class="ctl langBtn" type="button" aria-label="Switch language"><span class="lang-mark"><span class="ar">EN</span><span class="en">ع</span></span></button>
       <button class="ctl themeBtn" type="button" aria-label="Switch theme"><span class="ico themeIco" data-i="sun"></span></button>
+      <button class="ctl bell" id="bell" type="button" aria-label="Announcements" aria-expanded="false"><span class="ico" data-i="bell"></span><span class="bn n" id="bellN" hidden></span></button>
       <div class="who"><span class="avatar" id="avatar"></span><span class="nm" id="whoName"></span></div>
       <button class="ctl" id="logout" type="button" aria-label="Sign out"><span class="ico" data-i="logout"></span><span class="ar">خروج</span><span class="en">Sign out</span></button>
     </div>
   </header>
 
+  <div class="notes" id="notes" hidden></div>
   <main class="wrap">
+    <div class="annb" id="annb" hidden></div>
     <div class="welcome">
       <div>
         <h1 id="hello"></h1>
@@ -451,6 +475,8 @@ const I = {
   cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   chat:'<path d="M4 19.5 5.3 15A8 8 0 1 1 9 18.7z"/><path d="M9 10.5h6M9 13.5h4"/>',
   yt:'<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10.5 9.3 4.5 2.7-4.5 2.7z" fill="currentColor"/>',
+  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  megaphone:'<path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
   ext:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>'
 };
 const ic = (k,cls) => '<span class="ico'+(cls?' '+cls:'')+'" data-i="'+k+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'</svg></span>';
@@ -478,6 +504,7 @@ const T = {
        priv:e=>'المحاضرات الخاصة متاحة فقط لحساب Google المسجّل لدينا: <b>'+e+'</b>. إذا ظهرت رسالة "Video unavailable"، بدّل الحساب من صورة الملف الشخصي في YouTube.',
        privNoEmail:'المحاضرات الخاصة متاحة فقط لحساب Google المسجّل لدينا. إذا ظهرت رسالة "Video unavailable"، بدّل الحساب من صورة الملف الشخصي في YouTube.',
        search:'ابحث عن محاضرة...', none:'لا توجد محاضرات مطابقة.', hours:'ساعة', mark:'تحديد كمكتملة',
+       bell:'التنبيهات', noAnn:'لا توجد تنبيهات حاليًا.', newL:n=>n+(n===1?' محاضرة جديدة':' محاضرات جديدة'), newBadge:'جديد', view:'عرض كل التنبيهات', dismiss:'تم', openLink:'افتح الرابط',
        recorded:'محاضرة مسجّلة', resource:'ملفات', lecture:'المحاضرة المسجّلة', saved:'تم حفظ تقدّمك', notSaved:'تعذّر حفظ التقدّم، سيُعاد المحاولة تلقائيًا' },
   en:{ title:'Learner Portal | Mahmoud Serag',
        bad_login:'Wrong username or password. Passwords are case-sensitive.',
@@ -498,6 +525,7 @@ const T = {
        priv:e=>'Private lectures are available only to the Google account registered with us: <b>'+e+'</b>. If you see "Video unavailable", switch accounts from your YouTube profile picture.',
        privNoEmail:'Private lectures are available only to the Google account registered with us. If you see "Video unavailable", switch accounts from your YouTube profile picture.',
        search:'Search lectures...', none:'No matching lectures.', hours:'h', mark:'Mark as completed',
+       bell:'Announcements', noAnn:'No announcements yet.', newL:n=>n+(n===1?' new lecture':' new lectures'), newBadge:'NEW', view:'View all announcements', dismiss:'Got it', openLink:'Open link',
        recorded:'Recorded lecture', resource:'Files', lecture:'Recorded lecture', saved:'Progress saved', notSaved:'Could not save progress; retrying automatically' }
 };
 const t = k => T[root.dataset.lang||'ar'][k];
@@ -557,7 +585,8 @@ $('loginForm').addEventListener('submit', async e=>{
   enter(r);
 });
 function enter(r){
-  S = r.user; C = r.content;
+  S = r.user; C = r.content; ANN = r.announcements || [];
+  loadSeen();
   P = {}; (r.progress||[]).forEach(id=>P[id]=1);
   $('login').hidden = true; $('boot').hidden = true; $('app').hidden = false;
   window.scrollTo(0,0); render();
@@ -569,6 +598,47 @@ function signOut(code){
   if(code) showErr(code);
 }
 $('logout').addEventListener('click',()=>{ signOut(); $('username').focus(); });
+
+/* ---------- notifications ---------- */
+let ANN = [], seenAnn = [], seenLes = null;
+const sk = k => 'serag-'+k+'-'+String((S&&(S.e||S.n))||'').toLowerCase();
+function loadSeen(){
+  try{ seenAnn = JSON.parse(store.get('localStorage', sk('seen-ann'))||'[]'); }catch(e){ seenAnn = []; }
+  try{ seenLes = JSON.parse(store.get('localStorage', sk('seen-les'))||'null'); }catch(e){ seenLes = null; }
+  if(!Array.isArray(seenLes)){   // first visit on this device: everything published so far is the baseline
+    seenLes = []; C.chapters.forEach(c=>c.sections.forEach(s=>s.lessons.forEach(x=>{ if(x.url) seenLes.push(x.id); })));
+    saveSeen();
+  }
+}
+function saveSeen(){ store.set('localStorage', sk('seen-ann'), JSON.stringify(seenAnn)); store.set('localStorage', sk('seen-les'), JSON.stringify(seenLes)); }
+const isNewLesson = x => !!x.url && seenLes && seenLes.indexOf(x.id) < 0;
+function markLessonSeen(id){ if(seenLes && seenLes.indexOf(id) < 0){ seenLes.push(id); saveSeen(); } }
+const annT = a => (isAr() ? (a.tar||a.ten) : (a.ten||a.tar)) || '';
+const annM = a => (isAr() ? (a.mar||a.men) : (a.men||a.mar)) || '';
+function renderNotes(){
+  const unread = ANN.filter(a=>seenAnn.indexOf(a.id) < 0);
+  $('bellN').textContent = unread.length; $('bellN').hidden = !unread.length;
+  $('notes').innerHTML = '<h4>'+t('bell')+'</h4>' + (ANN.length ? ANN.map(a=>
+    '<div class="nt'+(seenAnn.indexOf(a.id)<0?' unread':'')+'"><small>'+esc(a.date)+'</small><b>'+esc(annT(a))+'</b><p>'+esc(annM(a))+'</p>'+
+    (a.link?'<a href="'+esc(a.link)+'" target="_blank" rel="noopener">'+t('openLink')+'</a>':'')+'</div>').join('') : '<div class="nt"><p>'+t('noAnn')+'</p></div>');
+  const top = unread[0];
+  $('annb').hidden = !top;
+  if(top) $('annb').innerHTML = ic('megaphone')+'<div><b>'+esc(annT(top))+'</b><p>'+esc(annM(top))+'</p><div class="x">'+
+    (top.link?'<a href="'+esc(top.link)+'" target="_blank" rel="noopener">'+t('openLink')+'</a>':'')+
+    '<button type="button" data-seen="'+esc(top.id)+'">'+t('dismiss')+'</button>'+(unread.length>1?'<button type="button" data-open-notes>'+t('view')+'</button>':'')+'</div></div>';
+}
+$('bell').addEventListener('click', e=>{
+  e.stopPropagation();
+  const open = $('notes').hidden;
+  $('notes').hidden = !open; $('bell').setAttribute('aria-expanded', open);
+  if(open){ renderNotes(); ANN.forEach(a=>{ if(seenAnn.indexOf(a.id)<0) seenAnn.push(a.id); }); saveSeen(); setTimeout(()=>{ $('bellN').hidden = true; $('annb').hidden = true; }, 0); }
+});
+document.addEventListener('click', e=>{
+  if(!$('notes').hidden && !e.target.closest('#notes') && !e.target.closest('#bell')){ $('notes').hidden = true; $('bell').setAttribute('aria-expanded', false); renderNotes(); }
+  const sb = e.target.closest('[data-seen]'); if(sb){ seenAnn.push(sb.dataset.seen); saveSeen(); renderNotes(); }
+  if(e.target.closest('[data-open-notes]')) $('bell').click();
+  const lk = e.target.closest('a.watch[data-lid]'); if(lk){ markLessonSeen(lk.dataset.lid); setTimeout(render, 300); }
+});
 
 /* ---------- progress (saved to your account) ---------- */
 let P = {}, saveTimer = null;
@@ -593,7 +663,7 @@ function lessonBtn(x, extra){
   if(!x.url) return '<span class="soon">'+t('soon')+'</span>';
   const yt = /youtu\.?be/i.test(x.url);
   const label = x.type==='Live' ? t('join') : (x.type==='Resource' ? t('open') : (yt ? t('watch') : t('open')));
-  return '<a class="watch '+(yt?'yt':'go')+(extra?' '+extra:'')+'" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+ic(yt?'yt':(x.type==='Live'?'live':'ext'))+'<span>'+label+'</span></a>';
+  return '<a class="watch '+(yt?'yt':'go')+(extra?' '+extra:'')+'" href="'+esc(x.url)+'" target="_blank" rel="noopener" data-lid="'+esc(x.id)+'">'+ic(yt?'yt':(x.type==='Live'?'live':'ext'))+'<span>'+label+'</span></a>';
 }
 const typeIcon = x => x.type==='Live'?'live':(x.type==='Resource'?'file':'play');
 const typeLabel = x => x.type==='Live'?t('live'):(x.type==='Resource'?t('resource'):t('recorded'));
@@ -606,6 +676,9 @@ function render(){
   $('chips').innerHTML =
     (S.c ? '<span class="chip">'+ic('users')+t('cohort')+': <span class="n">'+esc(S.c)+'</span></span>' : '') +
     '<span class="chip">'+ic('cal')+(S.u ? t('until')+': <span class="n">'+esc(S.u)+'</span>' : t('noLimit'))+'</span>';
+  const newCount = [].concat(...C.chapters.filter(c=>c.id!=='L').map(c=>[].concat(...c.sections.map(s=>s.lessons)))).filter(isNewLesson).length;
+  if(newCount) $('chips').insertAdjacentHTML('beforeend','<span class="chip new">'+ic('bell')+t('newL')(newCount)+'</span>');
+  renderNotes();
   $('privNote').innerHTML = S.e ? t('priv')(esc(S.e)) : t('privNoEmail');
   if(C.support){ ['forgot','errWa','support'].forEach(id=>$(id).href = 'https://wa.me/'+C.support); }
 
@@ -645,7 +718,7 @@ function render(){
       return '<div class="section"><div class="s-head"><span class="n">'+esc(s.no)+'</span><b>'+esc(L(s))+'</b></div>'+ls.map(x=>{
         const d = !!P[x.id];
         return '<div class="lesson'+(d?' done':'')+'"><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
-          '<div><div class="lt">'+esc(lessonTitle(x,s))+'</div><div class="lm"><span>'+ic(typeIcon(x))+typeLabel(x)+'</span>'+
+          '<div><div class="lt">'+esc(lessonTitle(x,s))+(isNewLesson(x)?'<span class="newb">'+t('newBadge')+'</span>':'')+'</div><div class="lm"><span>'+ic(typeIcon(x))+typeLabel(x)+'</span>'+
           (x.dur?'<span>'+ic('clock')+'<span class="n">'+x.dur+'</span> '+t('min')+'</span>':'')+
           '<span class="badge '+(x.access==='Public'?'pub':'pri')+'">'+(x.access==='Public'?t('pub'):t('pri'))+'</span></div></div>'+
           '<div class="act">'+lessonBtn(x)+'</div></div>';
@@ -664,7 +737,7 @@ function render(){
 
 document.addEventListener('click', e=>{
   const tk = e.target.closest('[data-tick]');
-  if(tk && S){ const id = tk.dataset.tick; if(P[id]) delete P[id]; else P[id] = 1; render(); queueSave(); }
+  if(tk && S){ const id = tk.dataset.tick; if(P[id]) delete P[id]; else P[id] = 1; markLessonSeen(id); render(); queueSave(); }
 });
 $('q').addEventListener('input', e=>{ query = e.target.value.trim(); render(); });
 document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
