@@ -1,6 +1,6 @@
 /* Serag site analytics: Google Analytics 4 + Microsoft Clarity (both free).
    Paste your IDs below. Leave empty to keep tracking off. */
-const SG_GA4_ID = "";        // e.g. "G-ABC123XYZ9"  (analytics.google.com > Admin > Data streams)
+const SG_GA4_ID = "G-C9T3V3L3Z2";        // e.g. "G-ABC123XYZ9"  (analytics.google.com > Admin > Data streams)
 const SG_CLARITY_ID = "";    // e.g. "abcd1234ef"    (clarity.microsoft.com > Settings > Overview)
 
 (function () {
