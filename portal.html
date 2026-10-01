@@ -426,6 +426,7 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
 <div class="cur cur-ring" id="curRing" aria-hidden="true"></div>
 <div class="cur cur-dot" id="curDot" aria-hidden="true"></div>
 
+<script src="analytics.js"></script>
 <script>
 /* =========================================================
    SETTINGS
@@ -579,6 +580,7 @@ $('loginForm').addEventListener('submit', async e=>{
   btn.disabled = false; lbl.innerHTML = old;
   if(!r.ok){ showErr(r.code, r.until); return; }
   TOKEN = r.token;
+  if(window.sgTrack) window.sgTrack('trainee_login');
   store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');
   store.set($('remember').checked ? 'localStorage':'sessionStorage', 'serag-token', TOKEN);
   $('password').value = '';
@@ -637,7 +639,7 @@ document.addEventListener('click', e=>{
   if(!$('notes').hidden && !e.target.closest('#notes') && !e.target.closest('#bell')){ $('notes').hidden = true; $('bell').setAttribute('aria-expanded', false); renderNotes(); }
   const sb = e.target.closest('[data-seen]'); if(sb){ seenAnn.push(sb.dataset.seen); saveSeen(); renderNotes(); }
   if(e.target.closest('[data-open-notes]')) $('bell').click();
-  const lk = e.target.closest('a.watch[data-lid]'); if(lk){ markLessonSeen(lk.dataset.lid); setTimeout(render, 300); }
+  const lk = e.target.closest('a.watch[data-lid]'); if(lk){ markLessonSeen(lk.dataset.lid); if(window.sgTrack) window.sgTrack('lecture_open', {lecture: lk.dataset.lid}); setTimeout(render, 300); }
 });
 
 /* ---------- progress (saved to your account) ---------- */
