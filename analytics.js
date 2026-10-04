@@ -30,6 +30,14 @@ const SG_CLARITY_ID = "";    // e.g. "abcd1234ef"    (clarity.microsoft.com > Se
     queue = [];
   }
 
+  // Vercel Web Analytics: only on the Vercel copy of the site (the route does not exist on GitHub Pages)
+  if (!/github\.io$/i.test(location.hostname) && !/^(localhost|127\.)/.test(location.hostname)) {
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    var v = document.createElement("script");
+    v.defer = true; v.src = "/_vercel/insights/script.js";
+    document.head.appendChild(v);
+  }
+
   if (SG_CLARITY_ID) {
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
