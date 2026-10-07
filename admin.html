@@ -245,6 +245,7 @@ tr.main:hover td{background:var(--surface-2)}
       <span class="sp"></span>
       <span class="upd" id="upd"></span>
       <button class="ctl" id="refresh" type="button"><span class="ico" data-i="refresh"></span>Refresh</button>
+      <a class="ctl" id="openSheet" href="#" target="_blank" rel="noopener" hidden><span class="ico" data-i="ext"></span>Sheet</a>
       <a class="ctl" id="sheetLink" href="portal.html" target="_blank" rel="noopener"><span class="ico" data-i="ext"></span>Portal</a>
       <button class="ctl" id="theme" type="button" aria-label="Switch theme"><span class="ico" id="themeIco" data-i="sun"></span></button>
       <button class="ctl" id="out" type="button"><span class="ico" data-i="logout"></span>Sign out</button>
@@ -457,6 +458,8 @@ function attention(){
 function render(){
   $('upd').textContent = 'Updated '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   if(D.portalUrl) $('sheetLink').href = D.portalUrl;
+  if(D.sheetUrl){ $('openSheet').href = D.sheetUrl; $('openSheet').hidden = false; }
+  if(D.version) $('upd').textContent += ' · Backend v'+D.version;
   const T = D.trainees, A = T.filter(active);
   const avg = A.length ? A.reduce((s,t)=>s+t.pct,0)/A.length : 0;
   const k = [
