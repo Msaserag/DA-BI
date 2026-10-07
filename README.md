@@ -18,6 +18,7 @@ Each release is tagged in git (for example `v2.2.0`). The Apps Script backend ca
 
 | Version | Date | Changes |
 |---|---|---|
+| v2.4.0 | 2026-10-07 | Cloudflare Turnstile bot check on admin sign-in (always) and trainee sign-in (after 3 wrong tries). |
 | v2.3.0 | 2026-10-07 | Backend: access lasts 6 months from approval instead of a fixed end date. |
 | v2.2.0 | 2026-10-07 | Dashboard shows backend version and an "Open Sheet" button. Backend: WhatsApp login message fix, date cohorts, Vercel as main site, `afterUpdate()`. |
 | v2.1.1 | 2026-10-04 | Vercel Web Analytics on the Vercel deployment. |

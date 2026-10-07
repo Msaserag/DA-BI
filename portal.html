@@ -302,6 +302,7 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
 .newbie{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px;font-size:13.5px;color:var(--ink-3)}
 .toast{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:80;background:var(--solid);border:1px solid var(--line-2);color:var(--ink);padding:10px 18px;border-radius:999px;font-size:13.5px;font-weight:700;box-shadow:var(--shadow)}
 .watch.big{height:44px;padding:0 22px;font-size:15px}
+.cfbox{display:flex;justify-content:center;min-height:66px;margin:2px 0 14px}
 </style>
 </head>
 <body>
@@ -352,6 +353,7 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
         <label class="check" for="remember"><input type="checkbox" id="remember"><span class="ar">تذكّرني على هذا الجهاز</span><span class="en">Keep me signed in on this device</span></label>
         <a class="link" id="forgot" href="https://wa.me/201550888810" target="_blank" rel="noopener"><span class="ar">نسيت كلمة المرور؟</span><span class="en">Forgot password?</span></a>
       </div>
+      <div class="cfbox" id="cfBox" hidden></div>
       <button class="btn btn-p" id="loginBtn" type="submit"><span class="lbl"><span class="ar">دخول</span><span class="en">Sign in</span></span><span class="ico flip" data-i="arrow"></span></button>
       <div class="secure"><span class="ico" data-i="lock"></span><span class="ar">الدخول متاح للمتدربين المعتمدين فقط</span><span class="en">Access is limited to approved trainees</span></div>
       <div class="newbie">
@@ -494,6 +496,8 @@ const T = {
        expired:d=>'انتهت صلاحية الوصول بتاريخ '+d+'. تواصل معنا على واتساب لتمديدها.',
        locked:'تم إيقاف المحاولة مؤقتًا بسبب تكرار إدخال بيانات غير صحيحة. حاول مرة أخرى بعد 15 دقيقة أو تواصل معنا على واتساب.',
        session_expired:'انتهت جلستك. يُرجى تسجيل الدخول مرة أخرى.',
+       captcha_required:'لحماية حسابك، أكمل خطوة التحقق السريعة أدناه ثم اضغط دخول.',
+       captcha_failed:'لم تكتمل خطوة التحقق. أعد المحاولة ثم اضغط دخول.',
        network:'تعذّر الاتصال بالخادم. تحقق من اتصالك بالإنترنت وحاول مرة أخرى.',
        server_error:'حدث خطأ مؤقت. حاول مرة أخرى بعد قليل.',
        setup:'البوابة قيد الإعداد حاليًا. تواصل معنا على واتساب.',
@@ -515,6 +519,8 @@ const T = {
        expired:d=>'Your access ended on '+d+'. Contact us on WhatsApp to extend it.',
        locked:'Too many incorrect attempts. Try again in 15 minutes or contact us on WhatsApp.',
        session_expired:'Your session has ended. Please sign in again.',
+       captcha_required:'To protect your account, complete the quick check below, then press Sign in.',
+       captcha_failed:'The security check did not pass. Try it again, then press Sign in.',
        network:'Could not reach the server. Check your internet connection and try again.',
        server_error:'A temporary error occurred. Please try again shortly.',
        setup:'The portal is being set up. Please contact us on WhatsApp.',
@@ -535,6 +541,24 @@ const WA_CODES = ['pending','suspended','expired','locked','setup'];
 /* ---------- language & theme ---------- */
 let S = null, C = null, TOKEN = null;
 let lastErr = null, lastArg = '';
+const TS_KEY = '0x4AAAAAAFQCuD6m16_FLnIW';            // Cloudflare Turnstile site key (public)
+let CF = null, cfId = null, cfLoading = null;
+function loadTS(){
+  if(window.turnstile) return Promise.resolve();
+  if(cfLoading) return cfLoading;
+  cfLoading = new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async=true; s.onload=res; s.onerror=()=>{cfLoading=null; rej();}; document.head.appendChild(s); });
+  return cfLoading;
+}
+async function showCaptcha(lang){
+  $('cfBox').hidden = false;
+  try{ await loadTS(); }catch(e){ return; }
+  if(cfId === null) cfId = turnstile.render('#cfBox', {sitekey:TS_KEY, theme:'auto', language:lang||'auto',
+    callback:t=>{ CF=t; }, 'expired-callback':()=>{ CF=null; }, 'error-callback':()=>{ CF=null; }});
+  else turnstile.reset(cfId);
+  CF = null;
+}
+function resetCaptcha(){ if(cfId !== null && window.turnstile){ turnstile.reset(cfId); } CF = null; }
+
 function setLang(l){
   root.lang = l; root.dir = l==='ar'?'rtl':'ltr'; root.dataset.lang = l;
   document.title = t('title'); $('q').placeholder = t('search');
@@ -576,9 +600,11 @@ $('loginForm').addEventListener('submit', async e=>{
   if(!u || !p){ showErr('empty'); return; }
   const btn = $('loginBtn'), lbl = btn.querySelector('.lbl'), old = lbl.innerHTML;
   btn.disabled = true; lbl.textContent = t('checking');
-  const r = await api({action:'login', u, p, remember: $('remember').checked});
+  const r = await api({action:'login', u, p, remember: $('remember').checked, cf: CF});
   btn.disabled = false; lbl.innerHTML = old;
-  if(!r.ok){ showErr(r.code, r.until); return; }
+  resetCaptcha();
+  if(!r.ok){ showErr(r.code, r.until); if(r.code==='captcha_required' || r.code==='captcha_failed') showCaptcha(root.dataset.lang||'ar'); return; }
+  $('cfBox').hidden = true;
   TOKEN = r.token;
   if(window.sgTrack) window.sgTrack('trainee_login');
   store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');

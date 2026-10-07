@@ -220,6 +220,7 @@ tr.main:hover td{background:var(--surface-2)}
   .det dl{grid-template-columns:1fr 1fr}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.cfbox{display:flex;justify-content:center;min-height:66px;margin:4px 0}
 </style>
 </head>
 <body>
@@ -231,6 +232,7 @@ tr.main:hover td{background:var(--surface-2)}
     <p>Trainee performance, approvals and announcements for the diploma.</p>
     <div class="err" id="lerr" hidden></div>
     <input id="apw" type="password" autocomplete="current-password" placeholder="Admin password" aria-label="Admin password" required>
+    <div class="cfbox" id="cfBox"></div>
     <button class="ctl pri" id="lbtn" type="submit">Sign in</button>
   </form>
 </section>
@@ -383,31 +385,51 @@ syncTheme();
 
 /* api */
 let TOKEN = store.get('serag-admin'), D = null;
+const TS_KEY = '0x4AAAAAAFQCuD6m16_FLnIW';            // Cloudflare Turnstile site key (public)
+let CF = null, cfId = null, cfLoading = null;
+function loadTS(){
+  if(window.turnstile) return Promise.resolve();
+  if(cfLoading) return cfLoading;
+  cfLoading = new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async=true; s.onload=res; s.onerror=()=>{cfLoading=null; rej();}; document.head.appendChild(s); });
+  return cfLoading;
+}
+async function showCaptcha(lang){
+  $('cfBox').hidden = false;
+  try{ await loadTS(); }catch(e){ return; }
+  if(cfId === null) cfId = turnstile.render('#cfBox', {sitekey:TS_KEY, theme:'auto', language:lang||'auto',
+    callback:t=>{ CF=t; }, 'expired-callback':()=>{ CF=null; }, 'error-callback':()=>{ CF=null; }});
+  else turnstile.reset(cfId);
+  CF = null;
+}
+function resetCaptcha(){ if(cfId !== null && window.turnstile){ turnstile.reset(cfId); } CF = null; }
+if(!TOKEN) showCaptcha('en');
+
 async function api(body){
   try{
     const r = await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
     return await r.json();
   }catch(e){ return {ok:false, code:'network'}; }
 }
-const ERR = {bad_login:'Wrong admin password.', locked:'Too many attempts. Try again in 15 minutes.', network:'Could not reach the server. Check your connection.', server_error:'Temporary server error. Try again.', session_expired:'Session ended. Sign in again.', conflict:'That row changed in the sheet. Refreshed; try again.', bad_request:'Please fill in a title and a message.'};
+const ERR = {captcha_required:'Complete the security check, then sign in.', captcha_failed:'The security check did not pass. Try it again.', bad_login:'Wrong admin password.', locked:'Too many attempts. Try again in 15 minutes.', network:'Could not reach the server. Check your connection.', server_error:'Temporary server error. Try again.', session_expired:'Session ended. Sign in again.', conflict:'That row changed in the sheet. Refreshed; try again.', bad_request:'Please fill in a title and a message.'};
 let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
 
 $('lf').addEventListener('submit', async e=>{
   e.preventDefault(); $('lerr').hidden=true;
   const b=$('lbtn'); b.disabled=true; b.textContent='Checking...';
-  const r = await api({action:'admin_login', p:$('apw').value});
+  const r = await api({action:'admin_login', p:$('apw').value, cf:CF});
   b.disabled=false; b.textContent='Sign in';
+  resetCaptcha();
   if(!r.ok){ $('lerr').textContent = ERR[r.code]||ERR.server_error; $('lerr').hidden=false; return; }
   TOKEN = r.token; store.set('serag-admin', TOKEN); $('apw').value='';
   load();
 });
-$('out').addEventListener('click',()=>{ store.del('serag-admin'); TOKEN=null; D=null; $('app').hidden=true; $('login').hidden=false; });
+$('out').addEventListener('click',()=>{ store.del('serag-admin'); TOKEN=null; D=null; $('app').hidden=true; $('login').hidden=false; showCaptcha('en'); });
 async function load(silent){
   if(!silent) $('loading').hidden=false;
   const r = await api({action:'admin_data', token:TOKEN});
   $('loading').hidden=true;
   if(!r.ok){
-    if(r.code==='session_expired'){ store.del('serag-admin'); $('app').hidden=true; $('login').hidden=false; $('lerr').textContent=ERR.session_expired; $('lerr').hidden=false; }
+    if(r.code==='session_expired'){ store.del('serag-admin'); $('app').hidden=true; $('login').hidden=false; $('lerr').textContent=ERR.session_expired; $('lerr').hidden=false; showCaptcha('en'); }
     else toast(ERR[r.code]||ERR.server_error);
     return;
   }
