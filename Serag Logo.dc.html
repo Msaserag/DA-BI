@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&amp;family=Outfit:wght@600;700;800&amp;display=swap"></link></helmet>
+<div style="display:inline-flex;align-items:center;gap:11px;zoom:{{ z }};direction:ltr">
+  <sc-if value="{{ isBars }}" hint-placeholder-val="{{ true }}">
+    <div style="position:relative;width:40px;height:40px;display:flex;align-items:flex-end;justify-content:center;gap:4px;padding-bottom:2px;box-sizing:border-box">
+      <div style="width:8px;height:14px;border-radius:2.5px;background:#3AA0FF"></div>
+      <div style="width:8px;height:22px;border-radius:2.5px;background:#0057FF"></div>
+      <div style="width:8px;height:29px;border-radius:2.5px;background:#00C9A7"></div>
+      <div style="position:absolute;top:0;right:3px;width:7px;height:7px;border-radius:50%;background:#FFB800"></div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ isMono }}">
+    <div style="position:relative;width:40px;height:40px;border-radius:11px;background:#0057FF;display:grid;place-items:center;overflow:hidden">
+      <span style="font-family:Outfit,sans-serif;font-weight:800;font-size:27px;line-height:1;color:#FFFFFF;margin-top:-2px">S</span>
+      <div style="position:absolute;right:0;bottom:0;width:12px;height:12px;background:#00C9A7;border-top-left-radius:4px"></div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ isNode }}">
+    <svg width="40" height="40" viewBox="0 0 40 40" style="display:block">
+      <line x1="9" y1="30" x2="20" y2="12" stroke="#3AA0FF" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="20" y1="12" x2="31" y2="25" stroke="#00C9A7" stroke-width="3" stroke-linecap="round"></line>
+      <circle cx="9" cy="30" r="5" fill="#3AA0FF"></circle>
+      <circle cx="20" cy="12" r="5" fill="#0057FF"></circle>
+      <circle cx="31" cy="25" r="5.5" fill="#00C9A7"></circle>
+    </svg>
+  </sc-if>
+  <sc-if value="{{ showWord }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <div style="display:flex;align-items:baseline;gap:8px">
+        <span style="font-family:Outfit,sans-serif;font-weight:700;font-size:22px;line-height:1;letter-spacing:.005em;color:{{ ink }}">Serag</span>
+        <span style="font-family:Cairo,sans-serif;font-weight:700;font-size:15px;line-height:1;color:{{ ink3 }}">سراج</span>
+      </div>
+      <span style="font-family:Outfit,sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;line-height:1;color:{{ ink3 }}">Turning Data Into Decisions</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:320,&quot;height&quot;:80},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;bars&quot;,&quot;mono&quot;,&quot;node&quot;],&quot;default&quot;:&quot;bars&quot;,&quot;tsType&quot;:&quot;'bars'|'mono'|'node'&quot;},&quot;tone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'dark'|'light'&quot;},&quot;size&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:40,&quot;min&quot;:16,&quot;max&quot;:200,&quot;tsType&quot;:&quot;number&quot;},&quot;wordmark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const v = this.props.variant ?? 'bars';
+    const light = (this.props.tone ?? 'dark') === 'light';
+    return {
+      isBars: v === 'bars', isMono: v === 'mono', isNode: v === 'node',
+      showWord: this.props.wordmark ?? true,
+      z: (this.props.size ?? 40) / 40,
+      ink: light ? '#0D1B3E' : '#FFFFFF',
+      ink3: light ? '#66769A' : '#8C9CC0'
+    };
+  }
+}
+</script>
+</body>
+</html>
