@@ -22,7 +22,7 @@
     <sc-if value="{{ showRibbon }}" hint-placeholder-val="{{ true }}">
       <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:700;text-align:center">
         <span>خصم <b style="font-family:Outfit,sans-serif">50%</b> للحجز المبكر · <b style="font-family:Outfit,sans-serif">5,000</b> ج.م بدل <s style="font-family:Outfit,sans-serif;opacity:.7">10,000</s> · <span>{{ untilAr }}</span></span>
-        <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-family:Cairo,sans-serif">{{ cdText }}</span>
+        <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-family:Cairo,sans-serif;font-variant-numeric:tabular-nums">{{ cdText }}</span>
       </a>
     </sc-if>
     <nav style="background:var(--nav,rgba(10,22,51,.88));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line,rgba(255,255,255,.09))">
@@ -194,7 +194,7 @@
           <sc-if value="{{ earlyActive }}" hint-placeholder-val="{{ true }}">
             <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:800">حجز مبكر · خصم 50%</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:700">{{ endsAr }}</span></div>
             <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><b style="font-family:Outfit,sans-serif;font-size:clamp(44px,6vw,60px);line-height:1;font-weight:800">5,000</b><span style="font-size:18px;font-weight:700">ج.م</span><s style="font-family:Outfit,sans-serif;font-size:22px;color:var(--ink-3,#8C9CC0)">10,000</s></div>
-            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;direction:ltr"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="3"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-family:Outfit,sans-serif;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.ar }}</span></div></sc-for></div>
+            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;direction:ltr"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="4"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-family:Outfit,sans-serif;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.ar }}</span></div></sc-for></div>
           </sc-if>
           <sc-if value="{{ earlyOver }}">
             <div style="display:flex;align-items:baseline;gap:14px"><b style="font-family:Outfit,sans-serif;font-size:56px;line-height:1;font-weight:800">10,000</b><span style="font-size:18px;font-weight:700">ج.م</span></div>
@@ -240,7 +240,7 @@
     <sc-if value="{{ showRibbon }}">
       <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:600;text-align:center">
         <span>Early bird <b>50% off</b> · <b>5,000 EGP</b> instead of <s style="opacity:.7">10,000</s> · <span>{{ untilEn }}</span></span>
-        <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px">{{ cdTextEn }}</span>
+        <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-variant-numeric:tabular-nums">{{ cdTextEn }}</span>
       </a>
     </sc-if>
     <nav style="background:var(--nav,rgba(10,22,51,.88));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line,rgba(255,255,255,.09))">
@@ -411,7 +411,7 @@
           <sc-if value="{{ earlyActive }}">
             <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:700">Early bird · 50% off</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:600">{{ endsEn }}</span></div>
             <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><b style="font-size:clamp(44px,6vw,60px);line-height:1;font-weight:800">5,000</b><span style="font-size:18px;font-weight:600">EGP</span><s style="font-size:22px;color:var(--ink-3,#8C9CC0)">10,000</s></div>
-            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="3"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.en }}</span></div></sc-for></div>
+            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="4"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.en }}</span></div></sc-for></div>
           </sc-if>
           <sc-if value="{{ earlyOver }}">
             <div style="display:flex;align-items:baseline;gap:14px"><b style="font-size:56px;line-height:1;font-weight:800">10,000</b><span style="font-size:18px;font-weight:600">EGP</span></div>
@@ -501,7 +501,7 @@ class Component extends DCLogic {
     const now = Date.now();
     if (!isFinite(start) || start > now) { start = now; try { localStorage.setItem(OFFER_KEY, String(start)); } catch(e) {} }
     this.setState({ deadline: start + OFFER_MS, now });
-    this.timer = setInterval(() => this.setState({ now: Date.now() }), 30000);
+    this.timer = setInterval(() => this.setState({ now: Date.now() }), 1000);
   }
   componentWillUnmount() { clearInterval(this.timer); }
   toggleLang = () => {
@@ -517,7 +517,7 @@ class Component extends DCLogic {
   renderVals() {
     const deadline = this.state.deadline ?? (this.state.now + OFFER_MS);
     const ms = Math.max(0, deadline - this.state.now);
-    const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60;
+    const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, sec = Math.floor(ms / 1e3) % 60, H = Math.floor(ms / 36e5);
     const early = ms > 0;
     const pad = n => String(n).padStart(2, '0');
     return {
@@ -527,9 +527,9 @@ class Component extends DCLogic {
       isDark: this.theme() === 'dark', isLight: this.theme() === 'light', logoTone: this.theme() === 'light' ? 'light' : 'dark',
       earlyActive: early, earlyOver: !early,
       showRibbon: early && (this.props.showRibbon ?? true),
-      cdCells: [{v:pad(d),ar:'يوم',en:'days'},{v:pad(h),ar:'ساعة',en:'hours'},{v:pad(m),ar:'دقيقة',en:'min'}],
-      cdText: `متبقي ${d}ي ${h}س ${m}د`,
-      cdTextEn: `${d}d ${h}h ${m}m left`,
+      cdCells: [{v:pad(d),ar:'يوم',en:'days'},{v:pad(h),ar:'ساعة',en:'hours'},{v:pad(m),ar:'دقيقة',en:'min'},{v:pad(sec),ar:'ثانية',en:'sec'}],
+      cdText: `متبقي ${pad(H)}:${pad(m)}:${pad(sec)}`,
+      cdTextEn: `${pad(H)}:${pad(m)}:${pad(sec)} left`,
       untilAr: 'حتى ' + fmtDay(deadline, 'ar-EG-u-nu-latn'), endsAr: 'ينتهي ' + fmtDay(deadline, 'ar-EG-u-nu-latn'),
       untilEn: 'until ' + fmtDay(deadline, 'en-US'), endsEn: 'Ends ' + fmtDay(deadline, 'en-US')
     };
