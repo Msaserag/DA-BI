@@ -21,7 +21,7 @@
   <div style="position:sticky;top:0;z-index:50">
     <sc-if value="{{ showRibbon }}" hint-placeholder-val="{{ true }}">
       <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:700;text-align:center">
-        <span>خصم <b style="font-family:Outfit,sans-serif">50%</b> للحجز المبكر · <b style="font-family:Outfit,sans-serif">5,000</b> ج.م بدل <s style="font-family:Outfit,sans-serif;opacity:.7">10,000</s> · حتى الأحد 18 أكتوبر</span>
+        <span>خصم <b style="font-family:Outfit,sans-serif">50%</b> للحجز المبكر · <b style="font-family:Outfit,sans-serif">5,000</b> ج.م بدل <s style="font-family:Outfit,sans-serif;opacity:.7">10,000</s> · <span>{{ untilAr }}</span></span>
         <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-family:Cairo,sans-serif">{{ cdText }}</span>
       </a>
     </sc-if>
@@ -192,7 +192,7 @@
         </div>
         <div style="background:var(--solid,#12244C);border:1px solid var(--line-2,rgba(255,255,255,.18));border-radius:26px;padding:clamp(22px,3vw,34px);box-shadow:var(--shadow,0 24px 60px rgba(0,0,0,.35));display:flex;flex-direction:column;gap:16px">
           <sc-if value="{{ earlyActive }}" hint-placeholder-val="{{ true }}">
-            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:800">حجز مبكر · خصم 50%</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:700">ينتهي الأحد 18 أكتوبر</span></div>
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:800">حجز مبكر · خصم 50%</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:700">{{ endsAr }}</span></div>
             <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><b style="font-family:Outfit,sans-serif;font-size:clamp(44px,6vw,60px);line-height:1;font-weight:800">5,000</b><span style="font-size:18px;font-weight:700">ج.م</span><s style="font-family:Outfit,sans-serif;font-size:22px;color:var(--ink-3,#8C9CC0)">10,000</s></div>
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;direction:ltr"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="3"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-family:Outfit,sans-serif;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.ar }}</span></div></sc-for></div>
           </sc-if>
@@ -239,7 +239,7 @@
   <div style="position:sticky;top:0;z-index:50">
     <sc-if value="{{ showRibbon }}">
       <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:600;text-align:center">
-        <span>Early bird <b>50% off</b> · <b>5,000 EGP</b> instead of <s style="opacity:.7">10,000</s> · until Sunday, Oct 18</span>
+        <span>Early bird <b>50% off</b> · <b>5,000 EGP</b> instead of <s style="opacity:.7">10,000</s> · <span>{{ untilEn }}</span></span>
         <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px">{{ cdTextEn }}</span>
       </a>
     </sc-if>
@@ -409,7 +409,7 @@
         </div>
         <div style="background:var(--solid,#12244C);border:1px solid var(--line-2,rgba(255,255,255,.18));border-radius:26px;padding:clamp(22px,3vw,34px);box-shadow:var(--shadow,0 24px 60px rgba(0,0,0,.35));display:flex;flex-direction:column;gap:16px">
           <sc-if value="{{ earlyActive }}">
-            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:700">Early bird · 50% off</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:600">Ends Sunday, Oct 18</span></div>
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:700">Early bird · 50% off</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:600">{{ endsEn }}</span></div>
             <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><b style="font-size:clamp(44px,6vw,60px);line-height:1;font-weight:800">5,000</b><span style="font-size:18px;font-weight:600">EGP</span><s style="font-size:22px;color:var(--ink-3,#8C9CC0)">10,000</s></div>
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="3"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.en }}</span></div></sc-for></div>
           </sc-if>
@@ -453,7 +453,10 @@
 <a href="https://wa.me/201550888810" target="_blank" rel="noopener" aria-label="WhatsApp" style="position:fixed;bottom:22px;left:22px;z-index:60;width:56px;height:56px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 24px rgba(37,211,102,.45);color:var(--ink,#FFFFFF);text-decoration:none"><svg width="30" height="30" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg></a>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ar&quot;,&quot;en&quot;],&quot;default&quot;:&quot;ar&quot;,&quot;tsType&quot;:&quot;'ar'|'en'&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'dark'|'light'&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;showRibbon&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;}}">
-const DEADLINE = new Date('2026-10-18T23:59:59+03:00').getTime();
+// Early-bird offer: 48 hours per visitor, counted from their first visit (stored in this browser).
+const OFFER_MS = 48 * 36e5;
+const OFFER_KEY = 'serag-offer-start';
+const fmtDay = (ts, loc) => { try { return new Date(ts).toLocaleDateString(loc, { weekday:'long', day:'numeric', month: loc.startsWith('ar') ? 'long' : 'short', timeZone:'Africa/Cairo' }).replace(/[،,]\s*/g, loc.startsWith('ar') ? ' ' : ', '); } catch(e) { return ''; } };
 const V = [2.1,2.4,2.2,2.8,3.0,2.9,3.4,3.9,4.8,4.1,4.4,4.6];
 const MO = ['J','F','M','A','M','J','J','A','S','O','N','D'];
 const BARS = V.map((v,i)=>({ h:(v/5*100)+'%', c: i>=6&&i<=8 ? '#00C9A7' : '#3AA0FF', m: MO[i] }));
@@ -482,18 +485,22 @@ const DATA = {
   stepsEn: [{n:'1',t:'Complete the registration form',d:'Using the Google account you will watch lectures with'},{n:'2',t:'Confirm on WhatsApp',d:'We confirm your cohort, schedule and payment'},{n:'3',t:'Receive your login',d:'For the learner portal once your account is active'}],
   inclAr: ['42 ساعة: 60% مسجّل + 40% Live','محاضرة Live أسبوعيًا لمدة 6 أسابيع على Google Meet','Datasets وملفات حالات حقيقية','AI Prompting Cheat Sheet و Slides كاملة','شهادة إتمام رقمية'],
   inclEn: ['42 hours: 60% recorded + 40% live','A weekly live session for 6 weeks on Google Meet','Real datasets and case files','AI prompting cheat sheet and full slides','Digital certificate of completion'],
-  faqAr: [{q:'محتاج خبرة سابقة؟',a:'لأ. الدبلومة بتبدأ معاك من الصفر في Excel و Power BI، وكل اللي محتاجه لابتوب ووقت للتمارين.'},{q:'المحاضرات الـ Live امتى وفين؟',a:'محاضرة Live كل أسبوع لمدة شهر ونص على Google Meet، وبيتم تسجيلها لو فاتتك.'},{q:'نظام التعلّم المدمج شغال إزاي؟',a:'60% تدريب مسجّل موجّه بخطة مذاكرة وتمارين، و40% جلسات Live للتطبيق الحي والأسئلة ومراجعة شغلك.'},{q:'السعر كام؟',a:'السعر الأساسي 10,000 ج.م، ومتاح خصم 50% للحجز المبكر (5,000 ج.م) حتى الأحد 18 أكتوبر.'},{q:'هل استخدام الـ AI آمن على بيانات شركتي؟',a:'بنتدرب على Datasets تدريبية، وفيه جزء كامل عن الاستخدام المسؤول: الخصوصية والصلاحيات ودور الإنسان.'},{q:'متاحة للشركات؟',a:'أيوه. دفعات مفتوحة للأفراد، وتدريب In-house للشركات يتفصّل على بيانات وقطاع الشركة.'}],
-  faqEn: [{q:'Do I need prior experience?',a:'No. The diploma starts from zero in Excel and Power BI. All you need is a laptop and time for the exercises.'},{q:'When and where are the live sessions?',a:'One live session every week for six weeks on Google Meet. Sessions are recorded in case you miss one.'},{q:'How does the blended format work?',a:'60% guided recorded training with a study plan and exercises, and 40% live sessions for hands-on practice, Q&A and review.'},{q:'How much does it cost?',a:'The full price is 10,000 EGP. Early-bird registrations get 50% off (5,000 EGP) until Sunday, October 18.'},{q:"Is AI safe for my company's data?",a:'We practice on training datasets, and a full part of Chapter 3 covers responsible use: privacy, access control and human oversight.'},{q:'Is it available for companies?',a:'Yes. Open cohorts for individuals, and in-house delivery tailored to your sector and data.'}]
+  faqAr: [{q:'محتاج خبرة سابقة؟',a:'لأ. الدبلومة بتبدأ معاك من الصفر في Excel و Power BI، وكل اللي محتاجه لابتوب ووقت للتمارين.'},{q:'المحاضرات الـ Live امتى وفين؟',a:'محاضرة Live كل أسبوع لمدة شهر ونص على Google Meet، وبيتم تسجيلها لو فاتتك.'},{q:'نظام التعلّم المدمج شغال إزاي؟',a:'60% تدريب مسجّل موجّه بخطة مذاكرة وتمارين، و40% جلسات Live للتطبيق الحي والأسئلة ومراجعة شغلك.'},{q:'السعر كام؟',a:'السعر الأساسي 10,000 ج.م، ومتاح خصم 50% للحجز المبكر (5,000 ج.م) لمدة 48 ساعة من أول زيارة لك للموقع.'},{q:'هل استخدام الـ AI آمن على بيانات شركتي؟',a:'بنتدرب على Datasets تدريبية، وفيه جزء كامل عن الاستخدام المسؤول: الخصوصية والصلاحيات ودور الإنسان.'},{q:'متاحة للشركات؟',a:'أيوه. دفعات مفتوحة للأفراد، وتدريب In-house للشركات يتفصّل على بيانات وقطاع الشركة.'}],
+  faqEn: [{q:'Do I need prior experience?',a:'No. The diploma starts from zero in Excel and Power BI. All you need is a laptop and time for the exercises.'},{q:'When and where are the live sessions?',a:'One live session every week for six weeks on Google Meet. Sessions are recorded in case you miss one.'},{q:'How does the blended format work?',a:'60% guided recorded training with a study plan and exercises, and 40% live sessions for hands-on practice, Q&A and review.'},{q:'How much does it cost?',a:'The full price is 10,000 EGP. Early-bird registrations get 50% off (5,000 EGP) for 48 hours from your first visit to this page.'},{q:"Is AI safe for my company's data?",a:'We practice on training datasets, and a full part of Chapter 3 covers responsible use: privacy, access control and human oversight.'},{q:'Is it available for companies?',a:'Yes. Open cohorts for individuals, and in-house delivery tailored to your sector and data.'}]
 };
 
 class Component extends DCLogic {
-  state = { lang: null, now: Date.now(), theme: null };
+  state = { lang: null, now: Date.now(), theme: null, deadline: null };
   componentDidMount() {
     let saved = null; try { saved = localStorage.getItem('serag-lang'); } catch(e) {}
     if (saved === 'ar' || saved === 'en') this.setState({ lang: saved });
     let t = null; try { t = localStorage.getItem('serag-theme'); } catch(e) {}
     if (t !== 'light' && t !== 'dark') t = this.props.defaultTheme ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     this.applyTheme(t);
+    let start = NaN; try { start = parseInt(localStorage.getItem(OFFER_KEY), 10); } catch(e) {}
+    const now = Date.now();
+    if (!isFinite(start) || start > now) { start = now; try { localStorage.setItem(OFFER_KEY, String(start)); } catch(e) {} }
+    this.setState({ deadline: start + OFFER_MS, now });
     this.timer = setInterval(() => this.setState({ now: Date.now() }), 30000);
   }
   componentWillUnmount() { clearInterval(this.timer); }
@@ -508,7 +515,8 @@ class Component extends DCLogic {
   theme() { return this.state.theme ?? this.props.defaultTheme ?? 'dark'; }
   lang() { return this.state.lang ?? this.props.defaultLang ?? 'ar'; }
   renderVals() {
-    const ms = Math.max(0, DEADLINE - this.state.now);
+    const deadline = this.state.deadline ?? (this.state.now + OFFER_MS);
+    const ms = Math.max(0, deadline - this.state.now);
     const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60;
     const early = ms > 0;
     const pad = n => String(n).padStart(2, '0');
@@ -521,7 +529,9 @@ class Component extends DCLogic {
       showRibbon: early && (this.props.showRibbon ?? true),
       cdCells: [{v:pad(d),ar:'يوم',en:'days'},{v:pad(h),ar:'ساعة',en:'hours'},{v:pad(m),ar:'دقيقة',en:'min'}],
       cdText: `متبقي ${d}ي ${h}س ${m}د`,
-      cdTextEn: `${d}d ${h}h ${m}m left`
+      cdTextEn: `${d}d ${h}h ${m}m left`,
+      untilAr: 'حتى ' + fmtDay(deadline, 'ar-EG-u-nu-latn'), endsAr: 'ينتهي ' + fmtDay(deadline, 'ar-EG-u-nu-latn'),
+      untilEn: 'until ' + fmtDay(deadline, 'en-US'), endsEn: 'Ends ' + fmtDay(deadline, 'en-US')
     };
   }
 }
