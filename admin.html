@@ -222,6 +222,19 @@ tr.main:hover td{background:var(--surface-2)}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .cfbox{display:flex;justify-content:center;min-height:66px;margin:4px 0}
+
+/* tools */
+.tg{display:flex;flex-direction:column;gap:22px}
+.tg h3{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+.tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.tcard{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;text-decoration:none;transition:border-color .15s,transform .15s}
+.tcard:hover{border-color:var(--teal);transform:translateY(-1px)}
+.tcard .ico{width:34px;height:34px;padding:8px;border-radius:10px;background:var(--chip-teal);color:var(--teal-2)}
+.tcard b{display:block;font-size:14.5px}
+.tcard span.d{display:block;font-size:12.5px;color:var(--ink-3);margin-top:2px;line-height:1.45}
+.tcard .go{margin-inline-start:auto;color:var(--ink-3);width:15px;height:15px}
+.tcard.off{opacity:.6}
+@media (prefers-reduced-motion:reduce){.tcard:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -259,6 +272,7 @@ tr.main:hover td{background:var(--surface-2)}
       <button type="button" data-v="lectures">Lectures</button>
       <button type="button" data-v="announce" id="tabAnnounce">Announcements</button>
       <button type="button" data-v="activity">Activity</button>
+      <button type="button" data-v="tools" id="tabTools">Tools</button>
     </nav>
   </header>
 
@@ -343,6 +357,12 @@ tr.main:hover td{background:var(--surface-2)}
         <div class="ph"><div><h2>Sign-in activity</h2><p class="sub">Latest 60 entries from the Login Log tab. Repeated failures may mean a trainee needs a password reset.</p></div></div>
         <div class="tw"><table style="min-width:560px"><thead><tr><th class="ns">Time</th><th class="ns">Username</th><th class="ns">Result</th><th class="ns">Detail</th></tr></thead><tbody id="logb"></tbody></table></div>
       </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="view" data-view="tools" hidden>
+      <div class="ph"><div><h2>Tools and links</h2><p class="sub">Everything you use to run registration, manage trainees, and maintain and update the site. Each link opens in a new tab.</p></div></div>
+      <div class="tg" id="toolsGrid"></div>
     </div>
   </main>
 </section>
@@ -441,8 +461,9 @@ function applyRole(){
   const st = isStaff();
   $('rolePill').textContent = st ? 'TEAM · '+(D.who||'') : 'ADMIN';
   $('tabAnnounce').hidden = st;
+  $('tabTools').hidden = st;
   $('tbSub').textContent = st ? 'View trainees and follow up on WhatsApp. Click a row for details.' : 'Change Login Status or Access Until right here. Click a row for details.';
-  if(st && view==='announce'){ view='overview'; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.v==='overview')); document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view); }
+  if(st && (view==='announce' || view==='tools')){ view='overview'; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.v==='overview')); document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view); }
 }
 function set(r){ D = r; $('login').hidden=true; $('app').hidden=false; applyRole(); render(); }
 $('refresh').addEventListener('click',()=>load(true).then(()=>toast('Updated')));
@@ -525,7 +546,45 @@ function render(){
   ['fc','lcCohort'].forEach(id=>{ const sel=$(id), v=sel.value; sel.innerHTML='<option value="">All cohorts</option>'+cohorts.map(c=>'<option>'+esc(c)+'</option>').join(''); sel.value=v; });
   const ac=$('aCoh'), av=ac.value; ac.innerHTML='<option value="All">All trainees</option>'+cohorts.map(c=>'<option>'+esc(c)+'</option>').join(''); ac.value=av||'All';
 
-  renderTable(); renderLectures(); renderAnn(); renderLog();
+  renderTable(); renderLectures(); renderAnn(); renderLog(); renderTools();
+}
+
+/* tools and links */
+const LIVE_URL = 'https://da-bi-diploma.vercel.app', MIRROR_URL = 'https://msaserag.github.io/DA-BI/';
+function toolGroups(){
+  const base = (D.portalUrl||'').replace(/portal\.html.*$/,'') || (LIVE_URL+'/');
+  return [
+    ['Registration and trainees', [
+      ['Trainee sheet', 'The Google Sheet behind everything: Trainees, Content and Login Log tabs. Approve, set access dates, publish lecture links.', D.sheetUrl||'', 'cal'],
+      ['Registration form', 'The Google Form linked from the landing page. Open it to edit questions or view responses.', 'https://forms.gle/voQJU1H5jLoozL5CA', 'user'],
+      ['Apps Script backend', 'The code that powers login, approvals, progress, emails and reminders. Redeploy here after backend changes.', 'https://script.google.com/home', 'key'],
+      ['Gmail', 'Registration notices, login emails and announcement emails come through here.', 'https://mail.google.com', 'send'],
+      ['WhatsApp Web', 'Follow up with leads and trainees, and send logins from your computer.', 'https://web.whatsapp.com', 'chat']
+    ]],
+    ['Course content', [
+      ['YouTube Studio', 'Private lectures: set Visibility > Share and invite trainees by Google email (up to 50 per video).', 'https://studio.youtube.com', 'award']
+    ]],
+    ['Site, code and hosting', [
+      ['Live site', 'Main public site on Vercel: landing page and syllabus.', LIVE_URL, 'ext'],
+      ['Trainee portal', 'What trainees see after they sign in.', base+'portal.html', 'user'],
+      ['GitHub Pages mirror', 'Backup copy of the same site.', MIRROR_URL, 'ext'],
+      ['GitHub repository', 'Source code, version tags and the README change log. Commit here to update the site.', 'https://github.com/Msaserag/DA-BI', 'ext'],
+      ['Vercel dashboard', 'Deployments, logs, domain settings and Web Analytics for the main site.', 'https://vercel.com/dashboard', 'trend'],
+      ['Cloudflare Turnstile', 'Bot check on admin and trainee sign-in. Manage the site key and allowed domains.', 'https://dash.cloudflare.com', 'alert']
+    ]],
+    ['Analytics', [
+      ['Google Analytics 4', 'Visits, sources and registration clicks (stream ID G-C9T3V3L3Z2).', 'https://analytics.google.com', 'trend'],
+      ['Microsoft Clarity', 'Heatmaps and session recordings. Optional: paste the project ID in analytics.js to turn it on.', 'https://clarity.microsoft.com', 'clock']
+    ]]
+  ];
+}
+function renderTools(){
+  $('toolsGrid').innerHTML = toolGroups().map(g=>{
+    return '<section><h3>'+esc(g[0])+'</h3><div class="tcards">'+g[1].map(x=>{
+      const on = !!x[2];
+      return '<a class="tcard'+(on?'':' off')+'"'+(on?' href="'+esc(x[2])+'" target="_blank" rel="noopener"':' aria-disabled="true"')+'>'+ic(x[3])+'<div><b>'+esc(x[0])+'</b><span class="d">'+esc(x[1])+'</span></div>'+(on?'<span class="ico go"><svg viewBox="0 0 24 24" aria-hidden="true">'+I.ext+'</svg></span>':'')+'</a>';
+    }).join('')+'</div></section>';
+  }).join('');
 }
 
 /* trainees table */
