@@ -91,6 +91,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .lcard input{width:100%;height:48px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);padding:0 14px;font-size:15px;margin-bottom:14px}
 .lcard input:focus{outline:none;border-color:var(--teal)}
 .lcard .ctl{width:100%;height:46px;font-size:15px}
+.lcard .rem{margin:-2px 0 14px}
+.lcard .rem input{width:17px;height:17px;margin:0;padding:0}
 .err{padding:10px 12px;border-radius:10px;background:rgba(255,90,90,.1);border:1px solid rgba(255,90,90,.35);color:var(--bad);font-size:13.5px;margin-bottom:14px}
 
 /* app */
@@ -229,7 +231,8 @@ tr.main:hover td{background:var(--surface-2)}
 .tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 .tcard{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;text-decoration:none;transition:border-color .15s,transform .15s}
 .tcard:hover{border-color:var(--teal);transform:translateY(-1px)}
-.tcard .ico{width:34px;height:34px;padding:8px;border-radius:10px;background:var(--chip-teal);color:var(--teal-2)}
+.tcard>.ico:first-child{width:38px;height:38px;padding:9px;border-radius:11px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);border:1px solid color-mix(in srgb,var(--c) 32%,transparent)}
+.tcard:hover>.ico:first-child{background:color-mix(in srgb,var(--c) 26%,transparent)}
 .tcard b{display:block;font-size:14.5px}
 .tcard span.d{display:block;font-size:12.5px;color:var(--ink-3);margin-top:2px;line-height:1.45}
 .tcard .go{margin-inline-start:auto;color:var(--ink-3);width:15px;height:15px}
@@ -246,6 +249,7 @@ tr.main:hover td{background:var(--surface-2)}
     <p>Trainee performance, approvals and announcements for the diploma. Team members: use the password from your invite email.</p>
     <div class="err" id="lerr" hidden></div>
     <input id="apw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
+    <label class="chk rem"><input type="checkbox" id="arem" checked><span>Remember me on this device</span></label>
     <div class="cfbox" id="cfBox"></div>
     <button class="ctl pri" id="lbtn" type="submit">Sign in</button>
   </form>
@@ -375,7 +379,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxx-6Spvj33B1b49E4SHBuV
 "use strict";
 const root = document.documentElement, $ = id => document.getElementById(id);
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const store = { get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }, del(k){ try{ sessionStorage.removeItem(k); }catch(e){} } };
+const store = { get(k){ try{ return sessionStorage.getItem(k) || localStorage.getItem(k); }catch(e){ return null; } }, set(k,v,keep){ try{ sessionStorage.removeItem(k); localStorage.removeItem(k); (keep?localStorage:sessionStorage).setItem(k,v); }catch(e){} }, del(k){ try{ sessionStorage.removeItem(k); localStorage.removeItem(k); }catch(e){} } };
 const I = {
   refresh:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',
   ext:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>',
@@ -390,6 +394,19 @@ const I = {
   trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
   cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   award:'<circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/>',
+  sheet:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 9v12"/>',
+  form:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM8.5 11h7M8.5 14.5h7M8.5 18h4"/>',
+  code:'<path d="m8 8-4.5 4L8 16M16 8l4.5 4L16 16M13.5 5l-3 14"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6.5L20.5 7"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  branch:'<circle cx="6" cy="5.5" r="2.2"/><circle cx="6" cy="18.5" r="2.2"/><circle cx="18" cy="9" r="2.2"/><path d="M6 7.7v8.6M18 11.2c0 4-6 3-11 6"/>',
+  tri:'<path d="M12 4 21.5 20h-19z"/>',
+  cloud:'<path d="M7 18.5a4.5 4.5 0 0 1-.4-9A6 6 0 0 1 18 10.5a4 4 0 0 1-.5 8z"/>',
+  bars:'<path d="M5 20V11M12 20V4M19 20v-7"/>',
+  heat:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',
+  vid:'<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10.5 9.3 4.5 2.7-4.5 2.7z"/>',
+  webinar:'<rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8 20.5h8M12 16.5v4M10.5 8.5l4 2.5-4 2.5z"/>',
+  table:'<rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M9 9.5V20M15 9.5V20"/>',
   key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M14.5 8.5l2 2"/>'
 };
 const ic = k => '<span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'</svg></span>';
@@ -441,7 +458,7 @@ $('lf').addEventListener('submit', async e=>{
   b.disabled=false; b.textContent='Sign in';
   resetCaptcha();
   if(!r.ok){ $('lerr').textContent = ERR[r.code]||ERR.server_error; $('lerr').hidden=false; return; }
-  TOKEN = r.token; store.set('serag-admin', TOKEN); $('apw').value='';
+  TOKEN = r.token; store.set('serag-admin', TOKEN, $('arem').checked); $('apw').value='';
   load();
 });
 $('out').addEventListener('click',()=>{ store.del('serag-admin'); TOKEN=null; D=null; $('app').hidden=true; $('login').hidden=false; showCaptcha('en'); });
@@ -553,31 +570,32 @@ function render(){
 const LIVE_URL = 'https://da-bi-diploma.vercel.app', MIRROR_URL = 'https://msaserag.github.io/DA-BI/';
 function toolGroups(){
   const base = (D.portalUrl||'').replace(/portal\.html.*$/,'') || (LIVE_URL+'/');
+  const SCRIPT = 'https://script.google.com/home/projects/';
   return [
     ['Registration and trainees', [
-      ['Trainee sheet', 'The Google Sheet behind everything: Trainees, Content and Login Log tabs. Approve, set access dates, publish lecture links.', D.sheetUrl||'', 'cal'],
-      ['Registration form', 'The Google Form linked from the landing page. Open it to edit questions or view responses.', 'https://forms.gle/voQJU1H5jLoozL5CA', 'user'],
-      ['Registration form lead script', 'Apps Script project (RegistrationFormLead) that processes new registration leads from the form.', 'https://script.google.com/home/projects/13bIb165HkAhmWR9LE4ancUbcfOLDEA4NaIwU0ODsHaCM40y0GLkEbaQ_/edit', 'key'],
-      ['Apps Script backend', 'Portal backend: login, approvals, progress, emails and reminders. Redeploy here after backend changes.', 'https://script.google.com/home/projects/1N6dgsauGzzDDraQUsHtm73GCfK0zUAclsLS1iPQO9G0aXYsyVKMWWhoU/edit', 'key'],
-      ['Introduction webinar form', 'Edit view of the Introduction Webinar registration form.', 'https://docs.google.com/forms/d/1IMjUZEExJYlLTQ-IOKN5T4stAp92IZ94NiN0GpI5mOk/edit', 'cal'],
-      ['Introduction webinar responses', 'The responses sheet for the Introduction Webinar form.', 'https://docs.google.com/spreadsheets/d/1ZrYQJooneY9ycbEAmyKIYdBHU-iw_4lhDltJYluOrtw/edit?gid=547507348#gid=547507348', 'cal'],
-      ['Gmail', 'Registration notices, login emails and announcement emails come through here.', 'https://mail.google.com', 'send'],
-      ['WhatsApp Web', 'Follow up with leads and trainees, and send logins from your computer.', 'https://web.whatsapp.com', 'chat']
+      ['Trainee sheet', 'The Google Sheet behind everything: Trainees, Content and Login Log tabs. Approve, set access dates, publish lecture links.', D.sheetUrl||'', 'sheet', '#0F9D58'],
+      ['Registration form', 'The Google Form linked from the landing page. Open it to edit questions or view responses.', 'https://forms.gle/voQJU1H5jLoozL5CA', 'form', '#7B4FD0'],
+      ['Apps Script backend', 'Portal backend: login, approvals, progress, emails and reminders. Redeploy here after backend changes.', SCRIPT+'1N6dgsauGzzDDraQUsHtm73GCfK0zUAclsLS1iPQO9G0aXYsyVKMWWhoU/edit', 'code', '#4285F4'],
+      ['Registration form lead script', 'Apps Script project (RegistrationFormLead) that processes new registration leads from the form.', SCRIPT+'13bIb165HkAhmWR9LE4ancUbcfOLDEA4NaIwU0ODsHaCM40y0GLkEbaQ_/edit', 'code', '#00A7C7'],
+      ['Introduction webinar form', 'Edit view of the Introduction Webinar registration form.', 'https://docs.google.com/forms/d/1IMjUZEExJYlLTQ-IOKN5T4stAp92IZ94NiN0GpI5mOk/edit', 'webinar', '#E8710A'],
+      ['Introduction webinar responses', 'The responses sheet for the Introduction Webinar form.', 'https://docs.google.com/spreadsheets/d/1ZrYQJooneY9ycbEAmyKIYdBHU-iw_4lhDltJYluOrtw/edit?gid=547507348#gid=547507348', 'table', '#34A853'],
+      ['Gmail', 'Registration notices, login emails and announcement emails come through here.', 'https://mail.google.com', 'mail', '#EA4335'],
+      ['WhatsApp Web', 'Follow up with leads and trainees, and send logins from your computer.', 'https://web.whatsapp.com', 'chat', '#25D366']
     ]],
     ['Course content', [
-      ['YouTube Studio', 'Private lectures: set Visibility > Share and invite trainees by Google email (up to 50 per video).', 'https://studio.youtube.com', 'award']
+      ['YouTube Studio', 'Private lectures: set Visibility > Share and invite trainees by Google email (up to 50 per video).', 'https://studio.youtube.com', 'vid', '#FF2D2D']
     ]],
     ['Site, code and hosting', [
-      ['Live site', 'Main public site on Vercel: landing page and syllabus.', LIVE_URL, 'ext'],
-      ['Trainee portal', 'What trainees see after they sign in.', base+'portal.html', 'user'],
-      ['GitHub Pages mirror', 'Backup copy of the same site.', MIRROR_URL, 'ext'],
-      ['GitHub repository', 'Source code, version tags and the README change log. Commit here to update the site.', 'https://github.com/Msaserag/DA-BI', 'ext'],
-      ['Vercel dashboard', 'Deployments, logs, domain settings and Web Analytics for the main site.', 'https://vercel.com/dashboard', 'trend'],
-      ['Cloudflare Turnstile', 'Bot check on admin and trainee sign-in. Manage the site key and allowed domains.', 'https://dash.cloudflare.com', 'alert']
+      ['Live site', 'Main public site on Vercel: landing page and syllabus.', LIVE_URL, 'globe', '#00C9A7'],
+      ['Trainee portal', 'What trainees see after they sign in.', base+'portal.html', 'user', '#3AA0FF'],
+      ['GitHub Pages mirror', 'Backup copy of the same site.', MIRROR_URL, 'globe', '#8B6CF6'],
+      ['GitHub repository', 'Source code, version tags and the README change log. Commit here to update the site.', 'https://github.com/Msaserag/DA-BI', 'branch', '#F05133'],
+      ['Vercel dashboard', 'Deployments, logs, domain settings and Web Analytics for the main site.', 'https://vercel.com/dashboard', 'tri', 'var(--ink)'],
+      ['Cloudflare Turnstile', 'Bot check on admin and trainee sign-in. Manage the site key and allowed domains.', 'https://dash.cloudflare.com', 'cloud', '#F6821F']
     ]],
     ['Analytics', [
-      ['Google Analytics 4', 'Visits, sources and registration clicks (stream ID G-C9T3V3L3Z2).', 'https://analytics.google.com', 'trend'],
-      ['Microsoft Clarity', 'Heatmaps and session recordings. Optional: paste the project ID in analytics.js to turn it on.', 'https://clarity.microsoft.com', 'clock']
+      ['Google Analytics 4', 'Visits, sources and registration clicks (stream ID G-C9T3V3L3Z2).', 'https://analytics.google.com', 'bars', '#F9AB00'],
+      ['Microsoft Clarity', 'Heatmaps and session recordings. Optional: paste the project ID in analytics.js to turn it on.', 'https://clarity.microsoft.com', 'heat', '#2B88D8']
     ]]
   ];
 }
@@ -585,7 +603,7 @@ function renderTools(){
   $('toolsGrid').innerHTML = toolGroups().map(g=>{
     return '<section><h3>'+esc(g[0])+'</h3><div class="tcards">'+g[1].map(x=>{
       const on = !!x[2];
-      return '<a class="tcard'+(on?'':' off')+'"'+(on?' href="'+esc(x[2])+'" target="_blank" rel="noopener"':' aria-disabled="true"')+'>'+ic(x[3])+'<div><b>'+esc(x[0])+'</b><span class="d">'+esc(x[1])+'</span></div>'+(on?'<span class="ico go"><svg viewBox="0 0 24 24" aria-hidden="true">'+I.ext+'</svg></span>':'')+'</a>';
+      return '<a class="tcard'+(on?'':' off')+'" style="--c:'+x[4]+'"'+(on?' href="'+esc(x[2])+'" target="_blank" rel="noopener"':' aria-disabled="true"')+'>'+ic(x[3])+'<div><b>'+esc(x[0])+'</b><span class="d">'+esc(x[1])+'</span></div>'+(on?'<span class="ico go"><svg viewBox="0 0 24 24" aria-hidden="true">'+I.ext+'</svg></span>':'')+'</a>';
     }).join('')+'</div></section>';
   }).join('');
 }
