@@ -18,6 +18,7 @@ Each release is tagged in git (for example `v2.2.0`). The Apps Script backend ca
 
 | Version | Date | Changes |
 |---|---|---|
+| v2.7.0 | 2026-10-21 | Trainees choose their own password at first sign-in and can change it any time (portal Password button). Login email stays automatic, WhatsApp is the manual backup. Needs backend v2.7.0. |
 | v2.6.0 | 2026-10-21 | Admin dashboard: new Tools tab with links to the sheet, form, Apps Script, YouTube Studio, GitHub, Vercel, Cloudflare and analytics (owner only). |
 | v2.5.0 | 2026-10-07 | Team member access on the dashboard (view and follow up). Backend: login emailed on approval, daily reminders and summary. |
 | v2.4.0 | 2026-10-07 | Cloudflare Turnstile bot check on admin sign-in (always) and trainee sign-in (after 3 wrong tries). |

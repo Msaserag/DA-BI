@@ -637,7 +637,7 @@ function renderTable(){
       '<td>'+rel(t.last)+'</td><td class="n">'+(t.logins||0)+'</td>'+
       '<td>'+(isStaff() ? esc(t.until||'–') : '<input class="date" type="date" value="'+esc(t.until)+'" data-set="until" data-row="'+t.row+'" aria-label="Access until for '+esc(t.name)+'">')+'</td>'+
       '<td><div class="acts">'+(t.mobile?'<a class="ctl sm wa" href="https://wa.me/'+t.mobile+'" target="_blank" rel="noopener">'+ic('chat')+'Chat</a>':'')+
-      (t.loginWa?'<a class="ctl sm" href="'+t.loginWa+'" target="_blank" rel="noopener" title="Open WhatsApp with the login message">'+ic('key')+'Send login</a>':'')+'</div></td></tr>';
+      (t.loginWa?'<a class="ctl sm" href="'+t.loginWa+'" target="_blank" rel="noopener" title="Open WhatsApp with the login message">'+ic('key')+'Send login</a>':(t.pwSet?'<span style="font-size:12px;opacity:.7" title="The trainee chose their own password. It is stored as a hash and cannot be seen.">Own password set</span>':''))+'</div></td></tr>';
     const det = openRows.has(t.row) ? '<tr class="det"><td colspan="8"><dl>'+
       [['Job title',t.job],['Company',t.company],['Country',t.country],['Excel level',t.excel],['Windows + Office',t.laptop],['Mobile',t.mobile],['Registered',(t.submitted||'').replace('T',' ')],['Lectures done',doneN+' of '+total]]
       .map(x=>'<div><dt>'+x[0]+'</dt><dd>'+esc(x[1]||'–')+'</dd></div>').join('')+'</dl><div class="lessons">'+

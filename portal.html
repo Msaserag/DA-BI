@@ -304,6 +304,21 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
 .toast{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:80;background:var(--solid);border:1px solid var(--line-2);color:var(--ink);padding:10px 18px;border-radius:999px;font-size:13.5px;font-weight:700;box-shadow:var(--shadow)}
 .watch.big{height:44px;padding:0 22px;font-size:15px}
 .cfbox{display:flex;justify-content:center;min-height:66px;margin:2px 0 14px}
+
+/* ---- change password (v2.7.0) ---- */
+.pwm{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,12,28,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:auto}
+.pwm[hidden]{display:none}
+.pwm-card{width:100%;max-width:440px;background:var(--solid);border:1px solid var(--line-2);border-radius:20px;padding:28px;box-shadow:var(--shadow);margin:auto}
+.pwm-card h2{font-size:24px;font-weight:900;margin:0 0 6px;line-height:1.3}
+.pwm-card .lead{color:var(--ink-3);font-size:14.5px;margin:0 0 20px}
+.pwm .rules{list-style:none;padding:0;margin:-4px 0 18px;display:grid;gap:4px;font-size:13px;color:var(--ink-3)}
+.pwm .rules li::before{content:"\25CB  "}
+.pwm .rules li.ok{color:var(--ok)}
+.pwm .rules li.ok::before{content:"\25CF  "}
+.pwm-actions{display:flex;gap:10px;align-items:center}
+.pwm-actions .btn-p{flex:1}
+.pwm .btn-s{background:var(--surface-2);color:var(--ink);padding:14px 22px;font-size:15px;border:1px solid var(--line-2)}
+@media (max-width:640px){ #chgPw span.ar, #chgPw span.en{display:none!important} }
 </style>
 </head>
 <body>
@@ -377,6 +392,7 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
       <button class="ctl themeBtn" type="button" aria-label="Switch theme"><span class="ico themeIco" data-i="sun"></span></button>
       <button class="ctl bell" id="bell" type="button" aria-label="Announcements" aria-expanded="false"><span class="ico" data-i="bell"></span><span class="bn n" id="bellN" hidden></span></button>
       <div class="who"><span class="avatar" id="avatar"></span><span class="nm" id="whoName"></span></div>
+      <button class="ctl" id="chgPw" type="button" aria-label="Change password"><span class="ico" data-i="key"></span><span class="ar">كلمة المرور</span><span class="en">Password</span></button>
       <button class="ctl" id="logout" type="button" aria-label="Sign out"><span class="ico" data-i="logout"></span><span class="ar">خروج</span><span class="en">Sign out</span></button>
     </div>
   </header>
@@ -425,6 +441,40 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
   </main>
 </section>
 
+<div class="pwm" id="pwModal" hidden role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+  <form class="pwm-card" id="pwForm" novalidate autocomplete="off">
+    <div id="pwFirst">
+      <h2 id="pwTitle"><span class="ar">اختر كلمة مرور خاصة بك</span><span class="en">Choose your own password</span></h2>
+      <p class="lead"><span class="ar">هذا أول دخول لك. كلمة المرور المرسلة إليك مؤقتة، اختر كلمة مرور خاصة بك لحماية حسابك ثم تابع إلى البوابة.</span><span class="en">This is your first sign-in. The password we sent you is temporary. Choose your own to protect your account, then continue to the portal.</span></p>
+    </div>
+    <div id="pwChange" hidden>
+      <h2><span class="ar">تغيير كلمة المرور</span><span class="en">Change your password</span></h2>
+      <p class="lead"><span class="ar">أدخل كلمة المرور الحالية ثم اختر كلمة مرور جديدة. ستحتاج لتسجيل الدخول بها على باقي أجهزتك.</span><span class="en">Enter your current password, then choose a new one. You will need to sign in with it again on your other devices.</span></p>
+    </div>
+    <div class="err" id="pwErr" hidden><span class="ico" data-i="alert"></span><div><span id="pwErrTxt"></span></div></div>
+    <div class="f" id="pwCurWrap">
+      <label for="pwCur"><span class="ar">كلمة المرور الحالية</span><span class="en">Current password</span></label>
+      <div class="inp pw"><input id="pwCur" type="password" autocomplete="current-password"><button class="eye" type="button" data-eye="pwCur" aria-label="Show password"><span class="ico" data-i="eye"></span></button></div>
+    </div>
+    <div class="f">
+      <label for="pwNew"><span class="ar">كلمة المرور الجديدة</span><span class="en">New password</span></label>
+      <div class="inp pw"><input id="pwNew" type="password" autocomplete="new-password"><button class="eye" type="button" data-eye="pwNew" aria-label="Show password"><span class="ico" data-i="eye"></span></button></div>
+    </div>
+    <ul class="rules" aria-live="polite">
+      <li id="pwR1"><span class="ar">8 أحرف على الأقل</span><span class="en">At least 8 characters</span></li>
+      <li id="pwR2"><span class="ar">حرف واحد على الأقل</span><span class="en">At least one letter</span></li>
+      <li id="pwR3"><span class="ar">رقم واحد على الأقل</span><span class="en">At least one digit</span></li>
+    </ul>
+    <div class="f">
+      <label for="pwNew2"><span class="ar">تأكيد كلمة المرور الجديدة</span><span class="en">Confirm new password</span></label>
+      <div class="inp pw"><input id="pwNew2" type="password" autocomplete="new-password"><button class="eye" type="button" data-eye="pwNew2" aria-label="Show password"><span class="ico" data-i="eye"></span></button></div>
+    </div>
+    <div class="pwm-actions">
+      <button class="btn btn-s" id="pwCancel" type="button" hidden><span class="ar">إلغاء</span><span class="en">Cancel</span></button>
+      <button class="btn btn-p" id="pwBtn" type="submit"><span class="lbl"><span class="ar">حفظ ومتابعة</span><span class="en">Save and continue</span></span></button>
+    </div>
+  </form>
+</div>
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="cur cur-ring" id="curRing" aria-hidden="true"></div>
 <div class="cur cur-dot" id="curDot" aria-hidden="true"></div>
@@ -503,6 +553,9 @@ const T = {
        server_error:'حدث خطأ مؤقت. حاول مرة أخرى بعد قليل.',
        setup:'البوابة قيد الإعداد حاليًا. تواصل معنا على واتساب.',
        checking:'جارٍ التحقق...',
+       bad_current:'كلمة المرور الحالية غير صحيحة.', pw_short:'كلمة المرور قصيرة، استخدم 8 أحرف على الأقل.', pw_long:'كلمة المرور طويلة جدًا (الحد الأقصى 64 حرفًا).',
+       pw_weak:'يجب أن تحتوي كلمة المرور على حرف واحد ورقم واحد على الأقل.', pw_same:'كلمة المرور الجديدة يجب أن تختلف عن الحالية.', pw_user:'لا تستخدم اسم المستخدم ككلمة مرور.',
+       pw_mismatch:'كلمتا المرور غير متطابقتين.', pw_cur_empty:'أدخل كلمة المرور الحالية.', pw_done:'تم حفظ كلمة المرور الجديدة',
        hello:n=>'مرحبًا، '+n, cohort:'الدفعة', until:'الوصول متاح حتى', noLimit:'وصول مفتوح', of:(a,b)=>a+' من '+b+' محاضرة',
        next:'تابع من حيث توقفت', allDone:'أنهيت جميع المحاضرات المتاحة حاليًا', allDoneP:'ستظهر المحاضرات الجديدة هنا فور نشرها.', nothing:'ستتوفر المحاضرات هنا فور نشرها.',
        watch:'شاهد المحاضرة', open:'فتح الملفات', join:'انضم إلى الجلسة', soon:'قريبًا', min:'دقيقة', pub:'متاح للجميع', pri:'خاص',
@@ -526,6 +579,9 @@ const T = {
        server_error:'A temporary error occurred. Please try again shortly.',
        setup:'The portal is being set up. Please contact us on WhatsApp.',
        checking:'Checking...',
+       bad_current:'The current password is not correct.', pw_short:'That password is too short. Use at least 8 characters.', pw_long:'That password is too long (64 characters maximum).',
+       pw_weak:'Your password needs at least one letter and one digit.', pw_same:'Your new password must be different from the current one.', pw_user:'Do not use your username as your password.',
+       pw_mismatch:'The two passwords do not match.', pw_cur_empty:'Enter your current password.', pw_done:'Your new password was saved',
        hello:n=>'Welcome, '+n, cohort:'Cohort', until:'Access until', noLimit:'Open access', of:(a,b)=>a+' of '+b+' lectures',
        next:'Continue where you left off', allDone:'You have completed every available lecture', allDoneP:'New lectures will appear here as soon as they are published.', nothing:'Lectures will appear here as soon as they are published.',
        watch:'Watch lecture', open:'Open files', join:'Join session', soon:'Coming soon', min:'min', pub:'Public', pri:'Private',
@@ -540,7 +596,7 @@ const t = k => T[root.dataset.lang||'ar'][k];
 const WA_CODES = ['pending','suspended','expired','locked','setup'];
 
 /* ---------- language & theme ---------- */
-let S = null, C = null, TOKEN = null;
+let S = null, C = null, TOKEN = null, LASTPW = null;
 let lastErr = null, lastArg = '';
 const TS_KEY = '0x4AAAAAAFQCuD6m16_FLnIW';            // Cloudflare Turnstile site key (public)
 let CF = null, cfId = null, cfLoading = null;
@@ -611,6 +667,7 @@ $('loginForm').addEventListener('submit', async e=>{
   store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');
   store.set($('remember').checked ? 'localStorage':'sessionStorage', 'serag-token', TOKEN);
   $('password').value = '';
+  if(r.mustChange){ LASTPW = p; $('login').hidden = true; openPw(true); return; }
   enter(r);
 });
 function enter(r){
@@ -622,11 +679,69 @@ function enter(r){
 }
 function signOut(code){
   store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');
-  TOKEN = null; S = null; C = null;
+  TOKEN = null; S = null; C = null; LASTPW = null; $('pwModal').hidden = true;
   $('app').hidden = true; $('boot').hidden = true; $('login').hidden = false;
   if(code) showErr(code);
 }
 $('logout').addEventListener('click',()=>{ signOut(); $('username').focus(); });
+
+/* ---------- change password (first sign-in and any time later) ---------- */
+let pwForced = false;
+function pwShowErr(code){
+  const el = $('pwErr');
+  if(!code){ el.hidden = true; return; }
+  $('pwErrTxt').textContent = t(code) || t('server_error'); el.hidden = false;
+}
+function pwRules(){
+  const v = $('pwNew').value;
+  $('pwR1').classList.toggle('ok', v.length >= 8);
+  $('pwR2').classList.toggle('ok', /[A-Za-z؀-ۿ]/.test(v));
+  $('pwR3').classList.toggle('ok', /[0-9٠-٩]/.test(v));
+}
+function openPw(forced){
+  pwForced = !!forced;
+  ['pwCur','pwNew','pwNew2'].forEach(id=>{ $(id).value = ''; $(id).type = 'password'; });
+  document.querySelectorAll('#pwForm [data-eye] .ico').forEach(i=>{ i.setAttribute('data-i','eye'); });
+  paint($('pwForm'));
+  $('pwFirst').hidden = !pwForced; $('pwChange').hidden = pwForced;
+  $('pwCurWrap').hidden = !!(pwForced && LASTPW);          // already typed at sign-in
+  $('pwCancel').hidden = pwForced;
+  pwShowErr(''); pwRules();
+  $('pwModal').hidden = false;
+  setTimeout(()=>($('pwCurWrap').hidden ? $('pwNew') : $('pwCur')).focus(), 60);
+}
+function closePw(){ $('pwModal').hidden = true; LASTPW = pwForced ? LASTPW : null; }
+$('chgPw').addEventListener('click', ()=>openPw(false));
+$('pwCancel').addEventListener('click', closePw);
+$('pwNew').addEventListener('input', pwRules);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('pwModal').hidden && !pwForced) closePw(); });
+document.querySelectorAll('#pwForm [data-eye]').forEach(b=>b.addEventListener('click', ()=>{
+  const i = $(b.dataset.eye); i.type = i.type==='password' ? 'text' : 'password';
+  b.querySelector('.ico').setAttribute('data-i', i.type==='password' ? 'eye' : 'eyeoff'); paint(b);
+}));
+$('pwForm').addEventListener('submit', async e=>{
+  e.preventDefault(); pwShowErr('');
+  const cur = LASTPW || $('pwCur').value, nw = $('pwNew').value, nw2 = $('pwNew2').value;
+  if(!cur){ pwShowErr('pw_cur_empty'); return; }
+  if(nw !== nw2){ pwShowErr('pw_mismatch'); return; }
+  const btn = $('pwBtn'), lbl = btn.querySelector('.lbl'), old = lbl.innerHTML;
+  btn.disabled = true; lbl.textContent = t('checking');
+  const remember = !!store.get('localStorage','serag-token');
+  const r = await api({action:'change_password', token:TOKEN, p:cur, np:nw, remember});
+  btn.disabled = false; lbl.innerHTML = old;
+  if(!r.ok){
+    if(['session_expired','pending','suspended','expired'].indexOf(r.code) > -1){ signOut(r.code); return; }
+    if(r.code==='bad_current'){ LASTPW = null; $('pwCurWrap').hidden = false; }   // let them retype it
+    pwShowErr(r.code); return;
+  }
+  TOKEN = r.token; LASTPW = null;
+  store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');
+  store.set(remember ? 'localStorage':'sessionStorage', 'serag-token', TOKEN);
+  $('pwModal').hidden = true;
+  if(window.sgTrack) window.sgTrack('password_changed');
+  if(!S) enter(r);
+  toast(t('pw_done'));
+});
 
 /* ---------- notifications ---------- */
 let ANN = [], seenAnn = [], seenLes = null;
@@ -677,6 +792,7 @@ function queueSave(){
     const r = await api({action:'progress', token:TOKEN, done:Object.keys(P)});
     if(r.ok) toast(t('saved'));
     else if(r.code==='network' || r.code==='server_error'){ toast(t('notSaved')); setTimeout(queueSave, 8000); }
+    else if(r.code==='password_change_required') openPw(true);
     else signOut(r.code);
   }, 900);
 }
@@ -818,7 +934,8 @@ if(reduce) frame(); else (function loop(){ frame(); requestAnimationFrame(loop);
   if(!TOKEN) return;
   $('login').hidden = true; $('boot').hidden = false;
   const r = await api({action:'session', token:TOKEN});
-  if(r.ok) enter(r);
+  if(r.ok && r.mustChange){ $('boot').hidden = true; openPw(true); }
+  else if(r.ok) enter(r);
   else signOut(r.code==='network' || r.code==='server_error' ? r.code : (r.code==='session_expired' ? 'session_expired' : r.code));
 })();
 })();
