@@ -376,6 +376,7 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
       <div class="two">
         <div class="panel">
           <div class="ph"><div><h2>Send an email</h2><p class="sub">Choose who gets it, start from a template or write your own, preview, send yourself a test, then send. Every email goes out individually with the person's first name.</p></div></div>
+          <div class="ecount" id="eNote" hidden style="margin-bottom:12px"></div>
           <form class="comp" id="ef" onsubmit="return false">
             <div class="f"><label for="eAud">Send to</label>
               <select id="eAud">
@@ -801,7 +802,16 @@ function emErr(r){
 const TRAINEE_AUD = {active:1, pending:1, all_trainees:1};
 async function loadEmail(){
   const r = await api({action:'admin_email_data', token:TOKEN});
-  if(!r.ok){ toast(emErr(r)); return; }
+  const note = $('eNote');
+  if(!r.ok){
+    const vn = v => String(v||'0').split('.').reduce((a,x)=>a*1000+(+x||0),0);
+    const stale = D && D.version && vn(D.version) < vn('2.8.0');
+    note.innerHTML = '<span class="warn">Templates could not load.</span> '+esc(stale
+      ? 'Your Apps Script backend is still v'+D.version+'. In Apps Script choose Deploy > Manage deployments > pencil > Version: New version > Deploy, then refresh this page.'
+      : emErr(r)+' (code: '+(r.code||'unknown')+')');
+    note.hidden = false; return;
+  }
+  note.hidden = true;
   Object.assign(EM, {loaded:true, templates:r.templates||[], fields:r.fields||[], counts:r.counts||{}, quota:r.quota, log:r.log||[]});
   renderEmail();
 }
