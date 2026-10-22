@@ -6,7 +6,7 @@ Live site: https://da-bi-diploma.vercel.app (main) · mirror: https://msaserag.g
 
 - `index.html`: diploma landing page (registration opens the Google Form, Trainee login opens the portal)
 - `portal.html`: learner portal. Sign-in is checked live by the Google Apps Script backend.
-- `admin.html`: admin dashboard (trainee performance, approvals, announcements). Protected by the admin password.
+- `admin.html`: admin dashboard (trainee performance, approvals, announcements, email center). Protected by the admin password.
 - `analytics.js`: Google Analytics 4, Vercel Web Analytics (Vercel only), optional Microsoft Clarity.
 
 To connect the portal, set `API_URL` near the top of the script in `portal.html` to the Apps Script Web app URL (ends with `/exec`).
@@ -18,6 +18,7 @@ Each release is tagged in git (for example `v2.2.0`). The Apps Script backend ca
 
 | Version | Date | Changes |
 |---|---|---|
+| v2.8.0 | 2026-10-22 | Email tab in the admin dashboard (owner only): send templates or custom messages to active trainees, pending registrations, webinar registrants or pasted emails, with preview, test send, send log and opt-out list. Needs backend v2.8.0, then run afterUpdate once. |
 | v2.7.0 | 2026-10-21 | Trainees choose their own password at first sign-in and can change it any time (portal Password button). Login email stays automatic, WhatsApp is the manual backup. Needs backend v2.7.0. |
 | v2.6.0 | 2026-10-21 | Admin dashboard: new Tools tab with links to the sheet, form, Apps Script, YouTube Studio, GitHub, Vercel, Cloudflare and analytics (owner only). |
 | v2.5.0 | 2026-10-07 | Team member access on the dashboard (view and follow up). Backend: login emailed on approval, daily reminders and summary. |
