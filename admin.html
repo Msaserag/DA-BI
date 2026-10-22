@@ -824,6 +824,7 @@ function renderEmail(){
 function emSync(){
   const aud = $('eAud').value;
   $('eCohWrap').hidden = !TRAINEE_AUD[aud];
+  $('eAud').closest('.f').classList.toggle('full', !TRAINEE_AUD[aud]);
   $('eCustomWrap').hidden = aud!=='custom';
   $('eSkipEnr').closest('label').hidden = !!TRAINEE_AUD[aud];
   emSchedule();
