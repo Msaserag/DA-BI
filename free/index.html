@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Power BI Resources | Mahmoud Serag</title>
+<meta name="description" content="مصادر مجانية في Power BI وDAX وPower Query من محمود سراج: ملخصات وقوائم مراجعة وأوامر للذكاء الاصطناعي.">
+<meta property="og:title" content="Free Power BI Resources | Mahmoud Serag">
+<meta property="og:description" content="Free cheat sheets, checklists and AI prompts for Power BI analysts. Turning Data Into Decisions.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="../analytics.js" defer></script>
+<style>
+:root{--bg:#0A1633;--band:#0F2149;--card:#12244C;--ink:#FFFFFF;--muted:#A9B8D3;--teal:#14B8A6;--cyan:#22D3EE;--gold:#FFB800;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Cairo,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header{background:radial-gradient(800px 400px at 0% 0%,rgba(20,184,166,.25),transparent 60%),radial-gradient(700px 400px at 100% 100%,rgba(255,184,0,.12),transparent 60%),var(--band);border-bottom:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.brand{display:flex;gap:10px;align-items:center;font-weight:700;text-decoration:none}
+.brand small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.nav a{color:var(--muted);text-decoration:none;font-size:15px;margin-inline-start:18px}
+.hero{padding:46px 0 54px}
+.kicker{color:var(--teal);font-weight:700;font-family:Outfit,Cairo,sans-serif;letter-spacing:1px;font-size:14px}
+h1{font-size:clamp(28px,4.5vw,46px);line-height:1.25;font-weight:900;margin:8px 0 6px}
+.en{font-family:Outfit,sans-serif;direction:ltr;unicode-bidi:isolate}
+.hero .en{color:var(--cyan);font-size:clamp(16px,2.2vw,22px);font-weight:600;display:block;text-align:right}
+.hero p{color:var(--muted);max-width:720px;margin-top:12px;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:40px 0 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .2s;scroll-margin-top:20px}
+.card:hover{transform:translateY(-4px);border-color:rgba(34,211,238,.5)}
+.card.hl{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,184,0,.35)}
+.thumb{background:#fff;aspect-ratio:210/150;overflow:hidden}
+.thumb img{width:100%;display:block}
+.body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.body h3{font-size:19px;line-height:1.35}
+.body .en{color:var(--cyan);font-size:14px;text-align:right;display:block}
+.body p{color:var(--muted);font-size:14.5px;flex:1}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
+.kw{font-family:Outfit,sans-serif;font-size:12px;border:1px solid var(--teal);color:var(--teal);padding:2px 10px;border-radius:999px}
+.btn{background:var(--gold);color:#0A1633;font-weight:800;border:0;border-radius:12px;padding:10px 16px;font-family:inherit;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.cta{background:linear-gradient(135deg,#0F2149,#12345A);border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:60px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.cta h2{font-size:24px}
+.cta p{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
+.modal{position:fixed;inset:0;background:rgba(3,10,25,.75);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.open{display:flex}
+.box{background:var(--band);border:1px solid var(--line);border-radius:18px;max-width:440px;width:100%;padding:24px}
+.box h3{font-size:21px;margin-bottom:4px}
+.box p{color:var(--muted);font-size:14.5px;margin-bottom:14px}
+.box label{display:block;font-size:14px;margin:10px 0 4px}
+.box input,.box select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:#0A1633;color:var(--ink);font-family:inherit;font-size:15px}
+.row{display:flex;gap:10px;margin-top:16px}
+.small{font-size:12.5px;color:var(--muted);margin-top:10px}
+@media (max-width:560px){.nav{display:none}.cta{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="../">
+        <svg width="40" height="40" viewBox="0 0 62 62" aria-hidden="true"><rect width="62" height="62" rx="16" fill="#12244C" stroke="#22D3EE" stroke-width="2"/><rect x="12" y="32" width="9" height="18" rx="2" fill="#14B8A6"/><rect x="26" y="22" width="9" height="28" rx="2" fill="#22D3EE"/><rect x="40" y="11" width="9" height="39" rx="2" fill="#FFB800"/></svg>
+        <span>محمود سراج | <span class="en">Mahmoud Serag</span><small>Turning Data Into Decisions</small></span>
+      </a>
+      <nav class="nav"><a href="../">الدبلومة</a><a href="#resources">المصادر</a></nav>
+    </div>
+    <div class="hero">
+      <div class="kicker en">FREE RESOURCES</div>
+      <h1>مصادر مجانية لمحللي Power BI</h1>
+      <span class="en">Free cheat sheets, checklists and AI prompts</span>
+      <p>ملخصات وقوائم مراجعة جاهزة للتطبيق في Power Query ونمذجة البيانات وDAX وتصميم لوحات المعلومات. حمّل ما تحتاجه مجانًا.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="grid" id="resources" aria-label="Resources"></section>
+  <section class="cta">
+    <div>
+      <h2>تعلّم المسار كاملًا بمشاريع عملية</h2>
+      <p>دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي: Power Query وDAX وتصميم لوحات المعلومات والذكاء الاصطناعي.</p>
+    </div>
+    <div class="row" style="margin:0">
+      <a class="btn" href="../">تفاصيل الدبلومة</a>
+      <a class="btn ghost" href="https://wa.me/201550888810" target="_blank" rel="noopener">تواصل عبر واتساب</a>
+    </div>
+  </section>
+</main>
+<footer>© Mahmoud Serag | محمود سراج · Turning Data Into Decisions</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <form class="box" id="leadForm">
+    <h3 id="mTitle">أين نرسل لك المزيد؟</h3>
+    <p>اكتب بياناتك ليبدأ التحميل فورًا، وتصلك المصادر الجديدة أولًا بأول.</p>
+    <label for="fName">الاسم</label><input id="fName" name="name" required autocomplete="name">
+    <label for="fEmail">البريد الإلكتروني</label><input id="fEmail" name="email" type="email" required autocomplete="email" dir="ltr">
+    <label for="fPhone">رقم واتساب (اختياري)</label><input id="fPhone" name="phone" type="tel" autocomplete="tel" dir="ltr">
+    <label for="fGoal">هدفك الأساسي (اختياري)</label>
+    <select id="fGoal" name="goal"><option value="">اختر</option><option>أبدأ في Power BI</option><option>أطور مستواي في DAX</option><option>أحسّن تقارير فريقي</option><option>تدريب لشركتي</option></select>
+    <div class="row"><button class="btn" type="submit">تحميل الملف</button><button class="btn ghost" type="button" id="mClose">إلغاء</button></div>
+    <div class="small">لن نشارك بياناتك مع أي جهة.</div>
+  </form>
+</div>
+
+<script>
+/* Lead capture: paste your Google Apps Script Web App URL below to save each request to your Google Sheet.
+   Leave it empty and downloads start directly with no form. */
+const LEAD_ENDPOINT = "";
+
+const R = [
+ {id:"dax", kw:["CHEAT"], file:"10-DAX-Measures-Cheat-Sheet", ar:"10 مقاييس DAX تحتاجها كل لوحة معلومات", en:"10 DAX Measures Every Dashboard Needs", d:"من إجمالي المبيعات إلى النمو السنوي وآخر 12 شهرًا، جاهزة للنسخ."},
+ {id:"prompts", kw:["PROMPTS","AIPACK"], file:"AI-Prompt-Pack-for-Power-BI", ar:"12 أمرًا للذكاء الاصطناعي لمحللي Power BI", en:"12 AI Prompts for Power BI Analysts", d:"أوامر جاهزة لـ Power Query والنمذجة وDAX ولوحات المعلومات."},
+ {id:"pq", kw:["CHECKLIST","PQ"], file:"Power-Query-Cleaning-Checklist", ar:"قائمة تنظيف البيانات في Power Query", en:"Power Query Cleaning Checklist", d:"الخطوات العشر التي تطبقها على أي بيانات جديدة، بالترتيب."},
+ {id:"star", kw:["STAR"], file:"Star-Schema-Cheat-Sheet", ar:"ملخص Star Schema", en:"Star Schema Cheat Sheet", d:"جداول Fact وDimension والمفاتيح وقواعد العلاقات الصحيحة."},
+ {id:"date", kw:["DATE"], file:"Date-Table-Script", extra:{file:"Date-Table-Script.txt", label:"الكود (TXT)"}, ar:"جدول تواريخ جاهز بلغة DAX", en:"Ready-to-use DAX Date Table", d:"انسخ الكود، وعدّل تاريخين، وابدأ التحليل الزمني."},
+ {id:"filter", kw:["FILTER","DAX"], file:"Filter-Context-Cheat-Sheet", ar:"الـ Filter Context في 5 أمثلة", en:"Filter Context in 5 Examples", d:"الفكرة الأساسية وراء كل رقم غير متوقع في DAX."},
+ {id:"design", kw:["DESIGN"], file:"Dashboard-Design-Checklist", ar:"قائمة مراجعة تصميم لوحات المعلومات", en:"Dashboard Design Checklist", d:"15 نقطة مراجعة سريعة قبل نشر أي لوحة معلومات."},
+ {id:"time", kw:["TIME"], file:"Time-Intelligence-Patterns", ar:"أنماط التحليل الزمني في DAX", en:"Time Intelligence Patterns", d:"10 أنماط تجيب عن معظم أسئلة المقارنة الزمنية."}
+];
+
+const grid = document.getElementById("resources");
+grid.innerHTML = R.map(r => `
+ <article class="card" id="r-${r.id}">
+  <div class="thumb"><img src="img/${r.file}.jpg" alt="${r.en}" loading="lazy"></div>
+  <div class="body">
+   <h3>${r.ar}</h3><span class="en">${r.en}</span>
+   <p>${r.d}</p>
+   <div class="meta"><span class="kw">${r.kw[0]}</span>
+    <span>${r.extra ? `<a class="btn ghost" href="files/${r.extra.file}" data-id="${r.id}" data-file="files/${r.extra.file}">${r.extra.label}</a> ` : ""}<a class="btn" href="files/${r.file}.pdf" data-id="${r.id}" data-file="files/${r.file}.pdf">تحميل PDF</a></span>
+   </div>
+  </div>
+ </article>`).join("");
+
+/* Deep links: /free/?r=dax or /free/?k=CHEAT highlight the matching resource */
+const q = new URLSearchParams(location.search);
+const want = (q.get("r") || "").toLowerCase();
+const kw = (q.get("k") || "").toUpperCase();
+const hit = R.find(r => r.id === want || (kw && r.kw.includes(kw)));
+if (hit) { const el = document.getElementById("r-" + hit.id); el.classList.add("hl"); setTimeout(() => el.scrollIntoView({behavior:"smooth", block:"center"}), 300); }
+
+const modal = document.getElementById("modal"), form = document.getElementById("leadForm");
+let pending = null;
+function start(file, id) {
+  try { window.sgTrack && window.sgTrack("resource_download", {resource: id}); } catch (e) {}
+  const a = document.createElement("a"); a.href = file; a.download = ""; document.body.appendChild(a); a.click(); a.remove();
+}
+function known() { try { return localStorage.getItem("sg_lead") === "1"; } catch (e) { return false; } }
+grid.addEventListener("click", ev => {
+  const b = ev.target.closest("a[data-file]"); if (!b) return;
+  if (!LEAD_ENDPOINT || known()) { start(b.dataset.file, b.dataset.id); ev.preventDefault(); return; }
+  ev.preventDefault(); pending = b; modal.classList.add("open"); document.getElementById("fName").focus();
+});
+document.getElementById("mClose").onclick = () => modal.classList.remove("open");
+form.addEventListener("submit", ev => {
+  ev.preventDefault();
+  const data = new URLSearchParams(new FormData(form));
+  data.append("resource", pending ? pending.dataset.id : ""); data.append("source", q.get("utm_source") || document.referrer || "direct");
+  data.append("type", "lead_magnet");
+  fetch(LEAD_ENDPOINT, {method:"POST", mode:"no-cors", body:data}).catch(() => {});
+  try { localStorage.setItem("sg_lead", "1"); } catch (e) {}
+  modal.classList.remove("open");
+  if (pending) start(pending.dataset.file, pending.dataset.id);
+});
+</script>
+</body>
+</html>

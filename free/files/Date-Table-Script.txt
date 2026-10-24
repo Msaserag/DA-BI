@@ -1,0 +1,18 @@
+Date =
+VAR _Start = DATE(2020, 1, 1)
+VAR _End   = DATE(2030, 12, 31)
+RETURN
+ADDCOLUMNS(
+    CALENDAR(_Start, _End),
+    "Year", YEAR([Date]),
+    "Quarter", "Q" & QUARTER([Date]),
+    "Month Number", MONTH([Date]),
+    "Month", FORMAT([Date], "MMMM"),
+    "Month Short", FORMAT([Date], "MMM"),
+    "Year Month", FORMAT([Date], "YYYY-MM"),
+    "Weekday Number", WEEKDAY([Date], 2),
+    "Weekday", FORMAT([Date], "dddd"),
+    "Is Weekend (Fri-Sat)", WEEKDAY([Date], 2) IN {5, 6},
+    "Fiscal Year (Jul-Jun)",
+        "FY" & IF(MONTH([Date]) >= 7, YEAR([Date]) + 1, YEAR([Date]))
+)
