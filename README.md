@@ -18,6 +18,7 @@ Each release is tagged in git (for example `v2.2.0`). The Apps Script backend ca
 
 | Version | Date | Changes |
 |---|---|---|
+| v2.8.1 | 2026-10-25 | Email tab: built-in "Last hours: 50% ends tonight + extra 10%" template (Arabic and English) for webinar registrants, skipping active trainees. No backend change needed. |
 | v2.8.0 | 2026-10-22 | Email tab in the admin dashboard (owner only): send templates or custom messages to active trainees, pending registrations, webinar registrants or pasted emails, with preview, test send, send log and opt-out list. Needs backend v2.8.0, then run afterUpdate once. |
 | v2.7.0 | 2026-10-21 | Trainees choose their own password at first sign-in and can change it any time (portal Password button). Login email stays automatic, WhatsApp is the manual backup. Needs backend v2.7.0. |
 | v2.6.0 | 2026-10-21 | Admin dashboard: new Tools tab with links to the sheet, form, Apps Script, YouTube Studio, GitHub, Vercel, Cloudflare and analytics (owner only). |
