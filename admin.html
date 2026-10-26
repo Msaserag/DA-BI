@@ -411,11 +411,19 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
               <button class="ctl" id="ePrevBtn" type="button"><span class="ico" data-i="form"></span>Preview</button>
               <button class="ctl" id="eTest" type="button"><span class="ico" data-i="mail"></span>Send test to me</button>
               <button class="ctl pri" id="eSend" type="button" disabled><span class="ico" data-i="send"></span><span id="eSendTxt">Send</span></button>
+              <button class="ctl" id="eInv" type="button" hidden><span class="ico" data-i="send"></span>Send as calendar invite</button>
               <button class="ctl" id="eSave" type="button">Save as template</button>
             </div>
           </form>
         </div>
         <div>
+          <div class="panel" style="margin-bottom:20px">
+            <div class="ph"><div><h2>Calendar responses</h2><p class="sub">Who accepted the session invitation. Read live from Google Calendar.</p></div></div>
+            <div class="f" style="margin-bottom:10px"><label for="iSel">Session</label><select id="iSel"><option value="">No invitations sent yet</option></select></div>
+            <div class="ecount" id="iSum"><span class="muted">Send a session as a calendar invite to see responses here.</span></div>
+            <div class="tw" style="margin-top:10px"><table style="min-width:360px"><thead><tr><th class="ns">Name</th><th class="ns">Email</th><th class="ns">Response</th></tr></thead><tbody id="iTbl"></tbody></table></div>
+            <div class="cbar" style="margin-top:10px"><button class="ctl" id="iRef" type="button">Refresh</button></div>
+          </div>
           <div class="panel">
             <div class="ph"><div><h2>Preview</h2><p class="sub" id="ePrevSub">Click Preview to see exactly what the email looks like.</p></div></div>
             <iframe class="ep" id="ePrev" sandbox="" title="Email preview"></iframe>
@@ -834,18 +842,19 @@ const BUILTIN_TPL = [{
 const isBuiltin = id => BUILTIN_TPL.some(t=>t.id===id);
 /* class schedule used by the session reminder template. time is Cairo time. */
 const SESSIONS = [
-  {n:1, date:'2026-10-26', en:'8:00 PM', ar:'8:00 مساءً'},
-  {n:2, date:'2026-11-02', en:'8:00 PM', ar:'8:00 مساءً'},
-  {n:3, date:'2026-11-09', en:'8:00 PM', ar:'8:00 مساءً'},
-  {n:4, date:'2026-11-16', en:'8:00 PM', ar:'8:00 مساءً'},
-  {n:5, date:'2026-11-23', en:'8:00 PM', ar:'8:00 مساءً'},
-  {n:6, date:'2026-11-30', en:'8:00 PM', ar:'8:00 مساءً'}
+  {n:1, date:'2026-10-26', time:'20:00', min:90, en:'8:00 PM', ar:'8:00 مساءً'},
+  {n:2, date:'2026-11-02', time:'20:00', min:90, en:'8:00 PM', ar:'8:00 مساءً'},
+  {n:3, date:'2026-11-09', time:'20:00', min:90, en:'8:00 PM', ar:'8:00 مساءً'},
+  {n:4, date:'2026-11-16', time:'20:00', min:90, en:'8:00 PM', ar:'8:00 مساءً'},
+  {n:5, date:'2026-11-23', time:'20:00', min:90, en:'8:00 PM', ar:'8:00 مساءً'},
+  {n:6, date:'2026-11-30', time:'20:00', min:90, en:'8:00 PM', ar:'8:00 مساءً'}
 ];
 const sesDay = (d,loc) => new Date(d+'T12:00:00+03:00').toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long',timeZone:'Africa/Cairo'});
 function sesFill(){
   const t = EM.templates.find(x=>x.id===$('eTpl').value);
   const wrap = $('eSesWrap');
   wrap.hidden = !(t && t.id==='builtin-session-reminder');
+  $('eInv').hidden = wrap.hidden;
   if(wrap.hidden) return;
   const x = SESSIONS[+$('eSes').value]; if(!x) return;
   const fill = (str,ar) => str.replace(/\[DATE\]/g, sesDay(x.date, ar?'ar-EG-u-nu-latn':'en-US'))
@@ -853,6 +862,51 @@ function sesFill(){
   $('eSar').value = fill(t.sAr,true); $('eSen').value = fill(t.sEn,false);
   $('eBar').value = fill(t.bAr,true); $('eBen').value = fill(t.bEn,false);
 }
+
+/* calendar invitations (needs backend v2.9.0) */
+const INV_LABEL = {yes:'Accepted', maybe:'Maybe', none:'No reply', no:'Declined'};
+const INV_CLASS = {yes:'t-done', maybe:'t-idle', none:'t-never', no:'t-idle'};
+function curSession(){ return SESSIONS[+$('eSes').value]; }
+function invBody(mode){
+  const x = curSession(), b = emBody('count');
+  return {action:'admin_invite_send', token:TOKEN, mode:mode, audience:b.audience, cohort:b.cohort, emails:b.emails, skipEnrolled:b.skipEnrolled,
+    key:'S'+x.n+'-'+x.date, date:x.date, time:x.time, minutes:x.min,
+    title:'DA-BI Live Session '+x.n+' | الجلسة المباشرة '+x.n,
+    description:'AI-Powered Data Analytics & BI Diploma, live session '+x.n+'.\nدبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي، الجلسة المباشرة '+x.n+'.\nPortal: https://da-bi-diploma.vercel.app/portal.html'};
+}
+async function invLoad(key){
+  const r = await api({action:'admin_invite_data', token:TOKEN, key:key||''});
+  const sel = $('iSel');
+  if(!r.ok){ $('iSum').innerHTML = '<span class="muted">'+esc(r.code==='bad_request' ? 'Update the Apps Script backend to v2.9.0 to see calendar responses.' : emErr(r))+'</span>'; return; }
+  if(!r.list.length){ sel.innerHTML = '<option value="">No invitations sent yet</option>'; $('iTbl').innerHTML=''; $('iSum').innerHTML='<span class="muted">Send a session as a calendar invite to see responses here.</span>'; return; }
+  sel.innerHTML = r.list.map(l=>'<option value="'+esc(l.key)+'">'+esc(l.title)+' · '+esc(l.start)+'</option>').join('');
+  const d = r.detail; if(!d) return;
+  sel.value = d.key;
+  if(d.missing){ $('iSum').innerHTML = '<span class="warn">This event was deleted from Google Calendar.</span>'; $('iTbl').innerHTML=''; return; }
+  const c = d.counts;
+  $('iSum').innerHTML = '<b>'+c.yes+'</b> accepted · <b>'+c.maybe+'</b> maybe · <b>'+c.no+'</b> declined · <b>'+c.none+'</b> no reply<br><span class="muted">'+d.total+' invited</span>';
+  $('iTbl').innerHTML = d.guests.map(g=>'<tr><td>'+esc(g.name||'')+'</td><td class="n">'+esc(g.email)+'</td><td><span class="tag '+INV_CLASS[g.status]+'">'+INV_LABEL[g.status]+'</span></td></tr>').join('') || '<tr><td colspan="3" class="empty">No guests.</td></tr>';
+}
+$('iSel').addEventListener('change', ()=>invLoad($('iSel').value));
+$('iRef').addEventListener('click', ()=>invLoad($('iSel').value));
+$('eInv').addEventListener('click', async ()=>{
+  const x = curSession(); if(!x) return;
+  const b = $('eInv'); b.disabled = true;
+  const c = await api(invBody('count'));
+  if(!c.ok){ b.disabled = false; toast(c.code==='bad_request' ? 'Update the Apps Script backend to v2.9.0 first.' : emErr(c)); return; }
+  const n = c.count.pending;
+  if(!n){ b.disabled = false; toast('Nobody new to invite for this session.'); return; }
+  const skip = [c.count.alreadySent&&c.count.alreadySent+' already invited', c.count.enrolled&&c.count.enrolled+' already active trainees', c.count.optedOut&&c.count.optedOut+' opted out'].filter(Boolean);
+  if(!confirm('Send a Google Calendar invitation for Session '+x.n+' ('+sesDay(x.date,'en-US')+', '+x.en+' Cairo time) to '+n+(n===1?' person':' people')+' ('+c.count.label+')?'+(skip.length?'\n\nSkipped: '+skip.join(', '):'')+'\n\nGuests cannot see each other. Invitations cannot be recalled.')){ b.disabled = false; return; }
+  b.textContent = 'Sending... keep this tab open';
+  const body = invBody('send'); body.expect = n;
+  const r = await api(body);
+  b.disabled = false; b.innerHTML = '<span class="ico" data-i="send"></span>Send as calendar invite';
+  if(!r.ok){ toast(emErr(r)); return; }
+  toast('Invited '+r.invited+(r.failed?', failed '+r.failed:'')+(r.remaining?', '+r.remaining+' left, run it again':''));
+  if(r.failed && r.error) alert('Some invitations failed. First error: '+r.error);
+  await loadEmail(); invLoad(body.key);
+});
 function sesInit(){
   const today = new Date().toLocaleDateString('en-CA',{timeZone:'Africa/Cairo'});
   $('eSes').innerHTML = SESSIONS.map((x,i)=>'<option value="'+i+'">Session '+x.n+' · '+esc(sesDay(x.date,'en-US'))+', '+esc(x.en)+'</option>').join('');
@@ -874,6 +928,7 @@ async function loadEmail(){
   note.hidden = true;
   Object.assign(EM, {loaded:true, templates:BUILTIN_TPL.concat(r.templates||[]), fields:r.fields||[], counts:r.counts||{}, quota:r.quota, log:r.log||[]});
   renderEmail();
+  invLoad($('iSel').value);
 }
 function renderEmail(){
   const A = $('eAud'), av = A.value;

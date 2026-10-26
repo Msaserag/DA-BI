@@ -18,6 +18,7 @@ Each release is tagged in git (for example `v2.2.0`). The Apps Script backend ca
 
 | Version | Date | Changes |
 |---|---|---|
+| v2.9.0 | 2026-10-26 | Email tab: send a live session as a Google Calendar invitation and see who accepted, declined, said maybe or has not replied. Needs backend v2.9.0, then run authorizeCalendar and afterUpdate once. |
 | v2.8.2 | 2026-10-26 | Email tab: built-in templates for the first live session notice and a session reminder with a session picker that fills date and time (Arabic and English). |
 | v2.8.1 | 2026-10-25 | Email tab: built-in "Last hours: 50% ends tonight + extra 10%" template (Arabic and English) for webinar registrants, skipping active trainees. No backend change needed. |
 | v2.8.0 | 2026-10-22 | Email tab in the admin dashboard (owner only): send templates or custom messages to active trainees, pending registrations, webinar registrants or pasted emails, with preview, test send, send log and opt-out list. Needs backend v2.8.0, then run afterUpdate once. |
