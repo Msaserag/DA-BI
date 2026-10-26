@@ -389,6 +389,7 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
             <div class="f" id="eCohWrap"><label for="eCoh">Cohort</label><select id="eCoh"><option value="">All cohorts</option></select></div>
             <div class="f full" id="eCustomWrap" hidden><label for="eEmails">Emails (one per line, a name after the email is optional)</label><textarea id="eEmails" dir="ltr" placeholder="sara@example.com, Sara Ahmed&#10;khaled@example.com"></textarea></div>
             <div class="f"><label for="eTpl">Template</label><select id="eTpl"><option value="">Write my own</option></select></div>
+            <div class="f full" id="eSesWrap" hidden><label for="eSes">Session to remind about</label><select id="eSes"></select><p class="etip" style="margin:6px 0 0">Fills the date, time and topic in both languages. Edit the list of sessions at the top of the Email script in admin.html (SESSIONS).</p></div>
             <div class="f"><label for="eLang">Language</label><select id="eLang"><option value="both">Arabic and English</option><option value="ar">Arabic only</option><option value="en">English only</option></select></div>
             <div class="f"><label for="eSar">Subject (Arabic)</label><input id="eSar" dir="rtl" maxlength="140"></div>
             <div class="f"><label for="eSen">Subject (English)</label><input id="eSen" maxlength="140"></div>
@@ -818,8 +819,8 @@ const BUILTIN_TPL = [{
   skipEnr:false,
   sEn:'Today at 8:00 PM: your first live session',
   sAr:'النهارده الساعة 8 مساءً: أول جلسة لايف',
-  bEn:'Today is the day. Our first live session of the AI-Powered Data Analytics & BI Diploma starts **tonight at 8:00 PM Cairo time** on Google Meet.\n\nWhat we will cover:\n\n- What the diploma looks like, from Excel to Power BI and AI\n- How the live sessions, recordings and the learner portal work\n- A live demo, then your questions\n\nBefore you join:\n\n1. Use a laptop if you can.\n2. Join with the same Google account you registered with.\n3. Join 5 minutes early so we start on time.\n\n[[button: Join the session on Google Meet | [MEET LINK]]]\n\nThe session is recorded, but joining live lets you ask your questions directly.\n\nSee you tonight,\nMahmoud Serag',
-  bAr:'النهارده هو اليوم. أول جلسة لايف في دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي بتبدأ **الليلة الساعة 8:00 مساءً بتوقيت القاهرة** على Google Meet.\n\nهنغطي في الجلسة:\n\n- شكل الدبلومة من Excel لحد Power BI والذكاء الاصطناعي\n- إزاي بتشتغل الجلسات اللايف والتسجيلات والبوابة التعليمية\n- Demo مباشر، وبعده أسئلتكم\n\nقبل ما تدخل:\n\n1. يفضّل تدخل من لابتوب.\n2. ادخل بنفس حساب Google اللي سجّلت بيه.\n3. ادخل قبلها بـ 5 دقايق عشان نبدأ في ميعادنا.\n\n[[button: ادخل الجلسة على Google Meet | [MEET LINK]]]\n\nالجلسة بتتسجّل، لكن الحضور المباشر بيخليك تسأل بنفسك.\n\nنتقابل الليلة،\nمحمود سراج'
+  bEn:'Today is the day. Our first live session of the AI-Powered Data Analytics & BI Diploma starts **tonight at 8:00 PM Cairo time** on Google Meet.\n\nWhat we will cover:\n\n- What the diploma looks like, from Excel to Power BI and AI\n- How the live sessions, recordings and the learner portal work\n- A live demo, then your questions\n\nBefore you join:\n\n1. Use a laptop if you can.\n2. Join with the same Google account you registered with.\n3. Join 5 minutes early so we start on time.\n\n[[button: Join the session on Google Meet | https://meet.google.com/qer-whqk-gpz]]\n\nThe session is recorded, but joining live lets you ask your questions directly.\n\nSee you tonight,\nMahmoud Serag',
+  bAr:'النهارده هو اليوم. أول جلسة لايف في دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي بتبدأ **الليلة الساعة 8:00 مساءً بتوقيت القاهرة** على Google Meet.\n\nهنغطي في الجلسة:\n\n- شكل الدبلومة من Excel لحد Power BI والذكاء الاصطناعي\n- إزاي بتشتغل الجلسات اللايف والتسجيلات والبوابة التعليمية\n- Demo مباشر، وبعده أسئلتكم\n\nقبل ما تدخل:\n\n1. يفضّل تدخل من لابتوب.\n2. ادخل بنفس حساب Google اللي سجّلت بيه.\n3. ادخل قبلها بـ 5 دقايق عشان نبدأ في ميعادنا.\n\n[[button: ادخل الجلسة على Google Meet | https://meet.google.com/qer-whqk-gpz]]\n\nالجلسة بتتسجّل، لكن الحضور المباشر بيخليك تسأل بنفسك.\n\nنتقابل الليلة،\nمحمود سراج'
 },{
   id:'builtin-session-reminder',
   name:'Session reminder (use before every session)',
@@ -827,10 +828,38 @@ const BUILTIN_TPL = [{
   builtin:true,
   sEn:'Reminder: live session [DATE] at [TIME]',
   sAr:'تذكير: جلسة لايف [DATE] الساعة [TIME]',
-  bEn:'A quick reminder about our next live session:\n\n- **Date:** [DATE]\n- **Time:** [TIME] Cairo time\n- **Topic:** [TOPIC]\n\n[[button: Join on Google Meet | [MEET LINK]]]\n\nTo get the most from it:\n\n1. Finish the lectures assigned for this week in the learner portal.\n2. Bring your questions and any exercise you got stuck on.\n3. Join 5 minutes early.\n\nMissed a session? The recording is posted in the portal afterwards.\n\nSee you there,\nMahmoud Serag',
-  bAr:'تذكير سريع بميعاد الجلسة اللايف الجاية:\n\n- **اليوم:** [DATE]\n- **الساعة:** [TIME] بتوقيت القاهرة\n- **الموضوع:** [TOPIC]\n\n[[button: ادخل على Google Meet | [MEET LINK]]]\n\nعشان تستفيد أكتر:\n\n1. خلّص محاضرات الأسبوع في البوابة التعليمية.\n2. جهّز أسئلتك وأي تمرين وقفت عنده.\n3. ادخل قبلها بـ 5 دقايق.\n\nلو فاتتك الجلسة، التسجيل بيتنزل في البوابة بعدها.\n\nنتقابل هناك،\nمحمود سراج'
+  bEn:'A quick reminder about our next live session:\n\n- **Date:** [DATE]\n- **Time:** [TIME] Cairo time\n- **Topic:** [TOPIC]\n\n[[button: Join on Google Meet | https://meet.google.com/qer-whqk-gpz]]\n\nTo get the most from it:\n\n1. Finish the lectures assigned for this week in the learner portal.\n2. Bring your questions and any exercise you got stuck on.\n3. Join 5 minutes early.\n\nMissed a session? The recording is posted in the portal afterwards.\n\nSee you there,\nMahmoud Serag',
+  bAr:'تذكير سريع بميعاد الجلسة اللايف الجاية:\n\n- **اليوم:** [DATE]\n- **الساعة:** [TIME] بتوقيت القاهرة\n- **الموضوع:** [TOPIC]\n\n[[button: ادخل على Google Meet | https://meet.google.com/qer-whqk-gpz]]\n\nعشان تستفيد أكتر:\n\n1. خلّص محاضرات الأسبوع في البوابة التعليمية.\n2. جهّز أسئلتك وأي تمرين وقفت عنده.\n3. ادخل قبلها بـ 5 دقايق.\n\nلو فاتتك الجلسة، التسجيل بيتنزل في البوابة بعدها.\n\nنتقابل هناك،\nمحمود سراج'
 }];
 const isBuiltin = id => BUILTIN_TPL.some(t=>t.id===id);
+/* class schedule used by the session reminder template. time is Cairo time. Edit topics here. */
+const SESSIONS = [
+  {n:1, date:'2026-10-26', en:'8:00 PM', ar:'8:00 مساءً', topic:'', topicAr:''},
+  {n:2, date:'2026-11-02', en:'8:00 PM', ar:'8:00 مساءً', topic:'', topicAr:''},
+  {n:3, date:'2026-11-09', en:'8:00 PM', ar:'8:00 مساءً', topic:'', topicAr:''},
+  {n:4, date:'2026-11-16', en:'8:00 PM', ar:'8:00 مساءً', topic:'', topicAr:''},
+  {n:5, date:'2026-11-23', en:'8:00 PM', ar:'8:00 مساءً', topic:'', topicAr:''},
+  {n:6, date:'2026-11-30', en:'8:00 PM', ar:'8:00 مساءً', topic:'', topicAr:''}
+];
+const sesDay = (d,loc) => new Date(d+'T12:00:00+03:00').toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long',timeZone:'Africa/Cairo'});
+function sesFill(){
+  const t = EM.templates.find(x=>x.id===$('eTpl').value);
+  const wrap = $('eSesWrap');
+  wrap.hidden = !(t && t.id==='builtin-session-reminder');
+  if(wrap.hidden) return;
+  const x = SESSIONS[+$('eSes').value]; if(!x) return;
+  const fill = (str,ar) => str.replace(/\[DATE\]/g, sesDay(x.date, ar?'ar-EG-u-nu-latn':'en-US'))
+    .replace(/\[TIME\]/g, ar?x.ar:x.en).replace(/\[TOPIC\]/g, (ar?x.topicAr:x.topic)||'[TOPIC]');
+  $('eSar').value = fill(t.sAr,true); $('eSen').value = fill(t.sEn,false);
+  $('eBar').value = fill(t.bAr,true); $('eBen').value = fill(t.bEn,false);
+}
+function sesInit(){
+  const today = new Date().toLocaleDateString('en-CA',{timeZone:'Africa/Cairo'});
+  $('eSes').innerHTML = SESSIONS.map((x,i)=>'<option value="'+i+'">Session '+x.n+' · '+esc(sesDay(x.date,'en-US'))+', '+esc(x.en)+'</option>').join('');
+  const nx = SESSIONS.findIndex(x=>x.date>=today);
+  $('eSes').value = String(nx<0 ? SESSIONS.length-1 : nx);
+}
+
 async function loadEmail(){
   const r = await api({action:'admin_email_data', token:TOKEN});
   const note = $('eNote');
@@ -925,8 +954,9 @@ $('eTpl').addEventListener('change', ()=>{
   if(t){ $('eSar').value=t.sAr; $('eSen').value=t.sEn; $('eBar').value=t.bAr; $('eBen').value=t.bEn;
     const a = AUD_FOR(t.best); if(a) $('eAud').value = a;
     if(t.builtin){ $('eSkipEnr').checked = t.skipEnr!==false; $('eSkipSent').checked = true; } }
-  emSync();
+  sesFill(); emSync();
 });
+$('eSes').addEventListener('change', ()=>{ sesFill(); emSchedule(); });
 $('ePrevBtn').addEventListener('click', async ()=>{
   const b = $('ePrevBtn'); b.disabled = true;
   const r = await api(emBody('preview')); b.disabled = false;
@@ -961,6 +991,8 @@ $('eSave').addEventListener('click', async ()=>{
   if(!r.ok){ toast(emErr(r)); return; }
   EM.templates = BUILTIN_TPL.concat(r.templates||[]); renderEmail(); $('eTpl').value = r.id; toast('Template saved');
 });
+
+sesInit();
 
 /* tooltips */
 const tip=$('tip');
