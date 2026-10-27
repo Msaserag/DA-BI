@@ -467,6 +467,7 @@ const I = {
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
   moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
   logout:'<path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M10 16l-4-4 4-4M6 12h10"/>',
+  copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/>',
   send:'<path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z"/>',
   chat:'<path d="M4 19.5 5.3 15A8 8 0 1 1 9 18.7z"/><path d="M9 10.5h6M9 13.5h4"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
@@ -717,7 +718,7 @@ function renderTable(){
       '<td>'+rel(t.last)+'</td><td class="n">'+(t.logins||0)+'</td>'+
       '<td>'+(isStaff() ? esc(t.until||'–') : '<input class="date" type="date" value="'+esc(t.until)+'" data-set="until" data-row="'+t.row+'" aria-label="Access until for '+esc(t.name)+'">')+'</td>'+
       '<td><div class="acts">'+(t.mobile?'<a class="ctl sm wa" href="https://wa.me/'+t.mobile+'" target="_blank" rel="noopener">'+ic('chat')+'Chat</a>':'')+
-      (t.loginWa?'<a class="ctl sm" href="'+t.loginWa+'" target="_blank" rel="noopener" title="Open WhatsApp with the login message">'+ic('key')+'Send login</a>':(t.pwSet?'<span style="font-size:12px;opacity:.7" title="The trainee chose their own password. It is stored as a hash and cannot be seen.">Own password set</span>':''))+'</div></td></tr>';
+      (t.loginWa?'<a class="ctl sm" href="'+t.loginWa+'" target="_blank" rel="noopener" title="Open WhatsApp with the login message">'+ic('key')+'Send login</a><button class="ctl sm" type="button" data-copylogin="'+t.row+'" title="Copy the login message to paste in WhatsApp yourself">'+ic('copy')+'Copy login</button>':(t.pwSet?'<span style="font-size:12px;opacity:.7" title="The trainee chose their own password. It is stored as a hash and cannot be seen.">Own password set</span>':''))+'</div></td></tr>';
     const det = openRows.has(t.row) ? '<tr class="det"><td colspan="8"><dl>'+
       [['Job title',t.job],['Company',t.company],['Country',t.country],['Excel level',t.excel],['Windows + Office',t.laptop],['Mobile',t.mobile],['Registered',(t.submitted||'').replace('T',' ')],['Lectures done',doneN+' of '+total]]
       .map(x=>'<div><dt>'+x[0]+'</dt><dd>'+esc(x[1]||'–')+'</dd></div>').join('')+'</dl><div class="lessons">'+
@@ -725,7 +726,16 @@ function renderTable(){
     return main+det;
   }).join('') : '<tr><td colspan="8" class="empty">No trainees match these filters.</td></tr>';
 }
-$('tb').addEventListener('click',e=>{
+$('tb').addEventListener('click',async e=>{
+  const cb=e.target.closest('[data-copylogin]');
+  if(cb){
+    const t=D.trainees.find(x=>String(x.row)===cb.dataset.copylogin);
+    let txt=''; try{ txt=new URL(t.loginWa).searchParams.get('text')||''; }catch(err){}
+    if(!txt){ toast('No login message available for this trainee.'); return; }
+    try{ await navigator.clipboard.writeText(txt); toast('Login message copied. Paste it in WhatsApp.'); }
+    catch(err){ toast('Copy blocked by the browser; use Send login instead.'); }
+    return;
+  }
   if(e.target.closest('select,input,a,button')) return;
   const tr=e.target.closest('tr.main'); if(!tr) return;
   const r=Number(tr.dataset.row); if(openRows.has(r)) openRows.delete(r); else openRows.add(r); renderTable();
