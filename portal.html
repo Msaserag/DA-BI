@@ -847,7 +847,8 @@ function embedSrc(x){
   if(id && /^[\w-]{6,20}$/.test(id)){
     const tm = (u.searchParams.get('t')||u.searchParams.get('start')||'').match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/);
     if(tm) start = (+tm[1]||0)*3600 + (+tm[2]||0)*60 + (+tm[3]||0);
-    return {kind:'yt', src:'https://www.youtube-nocookie.com/embed/'+id+'?rel=0&modestbranding=1&playsinline=1'+(start?'&start='+start:'')};
+    /* standard youtube.com embed (not youtube-nocookie) so the viewer's signed-in Google account is recognized for private videos */
+    return {kind:'yt', src:'https://www.youtube.com/embed/'+id+'?rel=0&modestbranding=1&playsinline=1'+(start?'&start='+start:'')};
   }
   if(h==='drive.google.com'){
     const m = u.pathname.match(/\/file\/d\/([\w-]+)/) || null;
