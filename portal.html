@@ -303,6 +303,30 @@ html[dir="rtl"] .l-pitch .kicker{letter-spacing:.02em}
 .newbie{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px;font-size:13.5px;color:var(--ink-3)}
 .toast{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:80;background:var(--solid);border:1px solid var(--line-2);color:var(--ink);padding:10px 18px;border-radius:999px;font-size:13.5px;font-weight:700;box-shadow:var(--shadow)}
 .watch.big{height:44px;padding:0 22px;font-size:15px}
+
+/* inline player */
+button.watch{cursor:pointer;font-family:inherit}
+.lesson{scroll-margin-top:84px}
+.lesson.playable{cursor:pointer}
+.lesson.playing{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line-2)}
+.watch.on{background:var(--surface-2);color:var(--ink);border-color:var(--line-2)}
+.player{margin:6px 0 14px;margin-inline-start:30px;padding:14px;border-radius:16px;background:var(--surface);border:1px solid var(--line-2);animation:pin .25s ease-out}
+@keyframes pin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.vframe{position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
+.vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.pact .sp{flex:1}
+.pbtn{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 15px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);font-size:13.5px;font-weight:800;cursor:pointer;text-decoration:none;color:var(--ink);transition:border-color .2s,background .2s}
+.pbtn:hover{border-color:var(--teal);background:var(--surface-2)}
+.pbtn .ico{width:16px;height:16px}
+.pbtn.ok{background:var(--grad-btn);border-color:transparent;color:#fff}
+.pbtn.ok.is{background:var(--chip-teal);color:var(--ink);border-color:var(--teal)}
+.pnote{font-size:12px;color:var(--ink-3);margin:10px 2px 0}
+@media (max-width:640px){
+  .player{margin-inline-start:0;padding:10px}
+  .pact .sp{display:none}
+  .pbtn{flex:1 1 auto;justify-content:center}
+}
 .cfbox{display:flex;justify-content:center;min-height:66px;margin:2px 0 14px}
 
 /* ---- change password (v2.7.0) ---- */
@@ -564,6 +588,8 @@ const T = {
        privNoEmail:'المحاضرات الخاصة متاحة فقط لحساب Google المسجّل لدينا. إذا ظهرت رسالة "Video unavailable"، بدّل الحساب من صورة الملف الشخصي في YouTube.',
        search:'ابحث عن محاضرة...', none:'لا توجد محاضرات مطابقة.', hours:'ساعة', mark:'تحديد كمكتملة',
        bell:'التنبيهات', noAnn:'لا توجد تنبيهات حاليًا.', newL:n=>n+(n===1?' محاضرة جديدة':' محاضرات جديدة'), newBadge:'جديد', view:'عرض كل التنبيهات', dismiss:'تم', openLink:'افتح الرابط',
+       hide:'إغلاق', markDone:'تحديد كمكتملة', markedDone:'مكتملة ✓', nextVid:'المحاضرة التالية', ytOpen:'فتح في YouTube', driveOpen:'فتح في Drive',
+       vNote:'إذا لم يظهر الفيديو، تأكد من تسجيل الدخول إلى YouTube بنفس حساب Google المسجّل لدينا، أو افتحه في نافذة جديدة.',
        recorded:'محاضرة مسجّلة', resource:'ملفات', lecture:'المحاضرة المسجّلة', saved:'تم حفظ تقدّمك', notSaved:'تعذّر حفظ التقدّم، سيُعاد المحاولة تلقائيًا' },
   en:{ title:'Learner Portal | Mahmoud Serag',
        bad_login:'Wrong username or password. Passwords are case-sensitive.',
@@ -590,6 +616,8 @@ const T = {
        privNoEmail:'Private lectures are available only to the Google account registered with us. If you see "Video unavailable", switch accounts from your YouTube profile picture.',
        search:'Search lectures...', none:'No matching lectures.', hours:'h', mark:'Mark as completed',
        bell:'Announcements', noAnn:'No announcements yet.', newL:n=>n+(n===1?' new lecture':' new lectures'), newBadge:'NEW', view:'View all announcements', dismiss:'Got it', openLink:'Open link',
+       hide:'Close', markDone:'Mark as completed', markedDone:'Completed ✓', nextVid:'Next lecture', ytOpen:'Open on YouTube', driveOpen:'Open in Drive',
+       vNote:'If the video does not appear, make sure you are signed in to YouTube with the Google account registered with us, or open it in a new tab.',
        recorded:'Recorded lecture', resource:'Files', lecture:'Recorded lecture', saved:'Progress saved', notSaved:'Could not save progress; retrying automatically' }
 };
 const t = k => T[root.dataset.lang||'ar'][k];
@@ -679,7 +707,7 @@ function enter(r){
 }
 function signOut(code){
   store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');
-  TOKEN = null; S = null; C = null; LASTPW = null; $('pwModal').hidden = true;
+  TOKEN = null; S = null; C = null; LASTPW = null; OPEN = null; $('pwModal').hidden = true;
   $('app').hidden = true; $('boot').hidden = true; $('login').hidden = false;
   if(code) showErr(code);
 }
@@ -804,15 +832,69 @@ let filter = 'all', query = '';
 const isAr = () => root.dataset.lang==='ar';
 function L(o){ return (isAr() ? (o.ar||o.en) : (o.en||o.ar)) || ''; }
 function lessonTitle(x, s){ const v = L(x); return v || (x.type==='Resource' ? t('resource') : (x.type==='Live' ? L(s) : t('lecture'))); }
+/* in-page player: YouTube (any link style) and Google Drive videos play inside the portal; everything else opens in a new tab */
+let OPEN = null;
+function embedSrc(x){
+  if(!x || !x.url || x.type==='Live' || x.type==='Resource') return null;
+  let u; try{ u = new URL(x.url); }catch(e){ return null; }
+  const h = u.hostname.replace(/^www\.|^m\./,'');
+  let id = null, start = 0;
+  if(h==='youtu.be') id = u.pathname.slice(1).split('/')[0];
+  else if(h==='youtube.com' || h==='youtube-nocookie.com'){
+    if(u.pathname==='/watch') id = u.searchParams.get('v');
+    else { const m = u.pathname.match(/^\/(?:embed|live|shorts|v)\/([^/?]+)/); if(m) id = m[1]; }
+  }
+  if(id && /^[\w-]{6,20}$/.test(id)){
+    const tm = (u.searchParams.get('t')||u.searchParams.get('start')||'').match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/);
+    if(tm) start = (+tm[1]||0)*3600 + (+tm[2]||0)*60 + (+tm[3]||0);
+    return {kind:'yt', src:'https://www.youtube-nocookie.com/embed/'+id+'?rel=0&modestbranding=1&playsinline=1'+(start?'&start='+start:'')};
+  }
+  if(h==='drive.google.com'){
+    const m = u.pathname.match(/\/file\/d\/([\w-]+)/) || null;
+    const did = m ? m[1] : u.searchParams.get('id');
+    if(did && /^[\w-]{10,}$/.test(did)) return {kind:'drive', src:'https://drive.google.com/file/d/'+did+'/preview'};
+  }
+  return null;
+}
 function lessonBtn(x, extra){
   if(!x.url) return '<span class="soon">'+t('soon')+'</span>';
+  if(embedSrc(x)){
+    const on = OPEN===x.id;
+    return '<button type="button" class="watch yt'+(on?' on':'')+(extra?' '+extra:'')+'" data-play="'+esc(x.id)+'" aria-expanded="'+on+'">'+ic(on?'down':'yt')+'<span>'+(on?t('hide'):t('watch'))+'</span></button>';
+  }
   const yt = /youtu\.?be/i.test(x.url);
   const label = x.type==='Live' ? t('join') : (x.type==='Resource' ? t('open') : (yt ? t('watch') : t('open')));
   return '<a class="watch '+(yt?'yt':'go')+(extra?' '+extra:'')+'" href="'+esc(x.url)+'" target="_blank" rel="noopener" data-lid="'+esc(x.id)+'">'+ic(yt?'yt':(x.type==='Live'?'live':'ext'))+'<span>'+label+'</span></a>';
 }
+function courseLessons(){ const a=[]; C.chapters.filter(c=>c.id!=='L').forEach(c=>c.sections.forEach(s=>s.lessons.forEach(x=>a.push({x,s,c})))); return a; }
+function nextVideo(id){ const a=courseLessons(); const i=a.findIndex(o=>o.x.id===id); for(let j=i+1;j<a.length;j++) if(embedSrc(a[j].x)) return a[j].x; return null; }
+function playerHtml(x){
+  const em = embedSrc(x); if(!em) return '';
+  const d = !!P[x.id], nx = nextVideo(x.id), id = esc(x.id);
+  return '<div class="player" data-player="'+id+'"><div class="vframe"><iframe src="'+esc(em.src)+'" title="'+esc(lessonTitle(x,{}))+'" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
+    '<div class="pact"><button type="button" class="pbtn ok'+(d?' is':'')+'" data-tick="'+id+'" aria-pressed="'+d+'">'+ic('check')+'<span>'+(d?t('markedDone'):t('markDone'))+'</span></button>'+
+    (nx ? '<button type="button" class="pbtn" data-play="'+esc(nx.id)+'">'+ic('arrow','flip')+'<span>'+t('nextVid')+'</span></button>' : '')+
+    '<span class="sp"></span>'+
+    '<a class="pbtn" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+ic('ext')+'<span>'+(em.kind==='yt'?t('ytOpen'):t('driveOpen'))+'</span></a>'+
+    '<button type="button" class="pbtn" data-play="'+id+'">'+ic('down')+'<span>'+t('hide')+'</span></button></div>'+
+    '<p class="pnote">'+t('vNote')+'</p></div>';
+}
 const typeIcon = x => x.type==='Live'?'live':(x.type==='Resource'?'file':'play');
 const typeLabel = x => x.type==='Live'?t('live'):(x.type==='Resource'?t('resource'):t('recorded'));
 
+/* ring, "continue where you left off" and chapter bars; also called alone when a tick changes so a playing video is not reloaded */
+function paintProgress(){
+  const all = courseLessons();
+  const avail = all.filter(o=>o.x.url);
+  const done = avail.filter(o=>P[o.x.id]).length;
+  const pct = avail.length ? Math.round(done/avail.length*100) : 0;
+  $('pct').textContent = pct+'%'; $('pctTxt').textContent = t('of')(done, avail.length);
+  $('ringVal').style.strokeDashoffset = 326.7*(1-pct/100);
+  const nx = avail.find(o=>!P[o.x.id]);
+  $('nextPanel').innerHTML = '<h3>'+ic('target')+t('next')+'</h3>' + (nx
+    ? '<p class="tt">'+esc(lessonTitle(nx.x, nx.s))+'</p><p class="meta"><span class="n">'+esc(nx.s.no)+'</span> · '+esc(L(nx.s))+'</p>'+lessonBtn(nx.x,'big')
+    : '<p class="tt">'+(avail.length ? t('allDone') : t('nothing'))+'</p><p class="meta">'+(avail.length ? t('allDoneP') : '')+'</p>');
+}
 function render(){
   const first = (S.n||'').split(' ')[0];
   $('courseName').textContent = L(C.course);
@@ -828,17 +910,7 @@ function render(){
   if(C.support){ ['forgot','errWa','support'].forEach(id=>$(id).href = 'https://wa.me/'+C.support); }
 
   const course = C.chapters.filter(c=>c.id!=='L');
-  const all = []; course.forEach(c=>c.sections.forEach(s=>s.lessons.forEach(x=>all.push({x,s,c}))));
-  const avail = all.filter(o=>o.x.url);
-  const done = avail.filter(o=>P[o.x.id]).length;
-  const pct = avail.length ? Math.round(done/avail.length*100) : 0;
-  $('pct').textContent = pct+'%'; $('pctTxt').textContent = t('of')(done, avail.length);
-  $('ringVal').style.strokeDashoffset = 326.7*(1-pct/100);
-
-  const nx = avail.find(o=>!P[o.x.id]);
-  $('nextPanel').innerHTML = '<h3>'+ic('target')+t('next')+'</h3>' + (nx
-    ? '<p class="tt">'+esc(lessonTitle(nx.x, nx.s))+'</p><p class="meta"><span class="n">'+esc(nx.s.no)+'</span> · '+esc(L(nx.s))+'</p>'+lessonBtn(nx.x,'big')
-    : '<p class="tt">'+(avail.length ? t('allDone') : t('nothing'))+'</p><p class="meta">'+(avail.length ? t('allDoneP') : '')+'</p>');
+  paintProgress();
 
   const lc = C.chapters.find(c=>c.id==='L');
   const lv = lc ? [].concat(...lc.sections.map(s=>s.lessons.map(x=>({x,s})))) : [];
@@ -862,11 +934,12 @@ function render(){
       shown += ls.length;
       return '<div class="section"><div class="s-head"><span class="n">'+esc(s.no)+'</span><b>'+esc(L(s))+'</b></div>'+ls.map(x=>{
         const d = !!P[x.id];
-        return '<div class="lesson'+(d?' done':'')+'"><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
+        const emb = !!embedSrc(x);
+        return '<div class="lesson'+(d?' done':'')+(emb?' playable':'')+(OPEN===x.id?' playing':'')+'" data-lrow="'+esc(x.id)+'"'+(emb?' data-play="'+esc(x.id)+'"':'')+'><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
           '<div><div class="lt">'+esc(lessonTitle(x,s))+(isNewLesson(x)?'<span class="newb">'+t('newBadge')+'</span>':'')+'</div><div class="lm"><span>'+ic(typeIcon(x))+typeLabel(x)+'</span>'+
           (x.dur?'<span>'+ic('clock')+'<span class="n">'+x.dur+'</span> '+t('min')+'</span>':'')+
           '<span class="badge '+(x.access==='Public'?'pub':'pri')+'">'+(x.access==='Public'?t('pub'):t('pri'))+'</span></div></div>'+
-          '<div class="act">'+lessonBtn(x)+'</div></div>';
+          '<div class="act">'+lessonBtn(x)+'</div></div>'+(OPEN===x.id ? playerHtml(x) : '');
       }).join('')+'</div>';
     }).join('');
     const isOpen = (c.id in openState) ? openState[c.id] : ci===0;
@@ -880,13 +953,49 @@ function render(){
   if(!shown && (q || filter!=='all')) $('chapters').insertAdjacentHTML('afterbegin','<div class="empty">'+t('none')+'</div>');
 }
 
+/* ticking while a video plays updates the page in place, so the video keeps playing */
+function syncTick(id){
+  const d = !!P[id], q = CSS.escape(id);
+  document.querySelectorAll('[data-tick="'+q+'"]').forEach(b=>{
+    b.setAttribute('aria-pressed', d);
+    if(b.classList.contains('pbtn')){ b.classList.toggle('is', d); const l = b.querySelector('span:last-child'); if(l) l.textContent = d ? t('markedDone') : t('markDone'); }
+  });
+  const row = document.querySelector('[data-lrow="'+q+'"]'); if(row) row.classList.toggle('done', d);
+  paintProgress();
+  document.querySelectorAll('#chapters details.chap').forEach(det=>{
+    const c = C.chapters.find(c=>String(c.id)===det.dataset.id); if(!c) return;
+    const ca = []; c.sections.forEach(s=>s.lessons.forEach(x=>{ if(x.url) ca.push(x); }));
+    const cd = ca.filter(x=>P[x.id]).length, em = det.querySelector('.pbar em'), n = det.querySelector('.pbar .n');
+    if(em) em.style.width = (ca.length ? cd/ca.length*100 : 0)+'%';
+    if(n) n.textContent = cd+'/'+ca.length;
+  });
+}
+function setOpen(id, reset){
+  if(OPEN===id){ OPEN = null; render(); return; }
+  const o = courseLessons().find(o=>o.x.id===id); if(!o) return;
+  OPEN = id;
+  if(reset){ filter = 'all'; query = ''; $('q').value = ''; document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on', x.dataset.f==='all')); }
+  const det = document.querySelector('#chapters details[data-id="'+CSS.escape(String(o.c.id))+'"]'); if(det) det.open = true;
+  markLessonSeen(id); if(window.sgTrack) window.sgTrack('lecture_open', {lecture: id});
+  render();
+  const row = document.querySelector('[data-lrow="'+CSS.escape(id)+'"]');
+  if(row) row.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+}
 document.addEventListener('click', e=>{
   const tk = e.target.closest('[data-tick]');
-  if(tk && S){ const id = tk.dataset.tick; if(P[id]) delete P[id]; else P[id] = 1; markLessonSeen(id); render(); queueSave(); }
+  if(tk && S){
+    const id = tk.dataset.tick; if(P[id]) delete P[id]; else P[id] = 1;
+    const fresh = !!seenLes && seenLes.indexOf(id) < 0;
+    markLessonSeen(id);
+    if(OPEN && filter==='all' && !query && !fresh) syncTick(id); else render();
+    queueSave(); return;
+  }
+  const pl = e.target.closest('[data-play]');
+  if(pl && S && !e.target.closest('a')) setOpen(pl.dataset.play, !!pl.closest('#nextPanel, .player'));
 });
-$('q').addEventListener('input', e=>{ query = e.target.value.trim(); render(); });
+$('q').addEventListener('input', e=>{ query = e.target.value.trim(); OPEN = null; render(); });
 document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on', x===b)); filter = b.dataset.f; render();
+  document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on', x===b)); filter = b.dataset.f; OPEN = null; render();
 }));
 
 /* ---------- cursor + network ---------- */
