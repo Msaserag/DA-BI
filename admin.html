@@ -263,7 +263,8 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
     <h1>Admin dashboard</h1>
     <p>Trainee performance, approvals and announcements for the diploma. Team members: use the password from your invite email.</p>
     <div class="err" id="lerr" hidden></div>
-    <input id="apw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
+    <input id="aun" type="text" name="username" value="admin" autocomplete="username" aria-label="Username" readonly tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <input id="apw" type="password" name="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
     <label class="chk rem"><input type="checkbox" id="arem" checked><span>Remember me on this device</span></label>
     <div class="cfbox" id="cfBox"></div>
     <button class="ctl pri" id="lbtn" type="submit">Sign in</button>
@@ -540,8 +541,11 @@ $('lf').addEventListener('submit', async e=>{
   b.disabled=false; b.textContent='Sign in';
   resetCaptcha();
   if(!r.ok){ $('lerr').textContent = ERR[r.code]||ERR.server_error; $('lerr').hidden=false; return; }
-  TOKEN = r.token; store.set('serag-admin', TOKEN, $('arem').checked); $('apw').value='';
+  TOKEN = r.token; store.set('serag-admin', TOKEN, $('arem').checked);
+  /* Ask the browser to save the password (Chrome/Edge); other browsers use the form heuristics above */
+  try{ if(window.PasswordCredential && navigator.credentials){ navigator.credentials.store(new PasswordCredential({id:$('aun').value, name:'Serag Admin', password:$('apw').value})).catch(()=>{}); } }catch(e){}
   load();
+  setTimeout(()=>{ $('apw').value=''; }, 1500);
 });
 $('out').addEventListener('click',()=>{ store.del('serag-admin'); TOKEN=null; D=null; $('app').hidden=true; $('login').hidden=false; showCaptcha('en'); });
 async function load(silent){
