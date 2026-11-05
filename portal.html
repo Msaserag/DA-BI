@@ -863,7 +863,7 @@ function lessonBtn(x, extra, asLink){
     const on = OPEN===x.id;
     return '<button type="button" class="watch yt'+(on?' on':'')+(extra?' '+extra:'')+'" data-play="'+esc(x.id)+'" aria-expanded="'+on+'">'+ic(on?'down':'yt')+'<span>'+(on?t('hide'):t('watch'))+'</span></button>';
   }
-  const yt = /youtu\.?be/i.test(x.url);
+  const yt = /youtu\.?be/i.test(x.url) || (!!embedSrc(x) && x.type!=='Live' && x.type!=='Resource');
   const label = x.type==='Live' ? t('join') : (x.type==='Resource' ? t('open') : (yt ? t('watch') : t('open')));
   return '<a class="watch '+(yt?'yt':'go')+(extra?' '+extra:'')+'" href="'+esc(x.url)+'" target="_blank" rel="noopener" data-lid="'+esc(x.id)+'">'+ic(yt?'yt':(x.type==='Live'?'live':'ext'))+'<span>'+label+'</span></a>';
 }

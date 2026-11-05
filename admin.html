@@ -91,6 +91,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .lcard input{width:100%;height:48px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);padding:0 14px;font-size:15px;margin-bottom:14px}
 .lcard input:focus{outline:none;border-color:var(--teal)}
 .lcard .ctl{width:100%;height:46px;font-size:15px}
+.lcard .pwrap{position:relative}
+.lcard .pwrap input{padding-inline-end:46px}
+.lcard .pwtog{position:absolute;inset-inline-end:6px;top:6px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:0;background:none;color:var(--ink-3);border-radius:9px;cursor:pointer}
+.lcard .pwtog:hover{color:var(--ink);background:var(--surface-2)}
+.lcard .pwtog:focus-visible{outline:2px solid var(--teal)}
 .lcard .rem{margin:-2px 0 14px}
 .lcard .rem input{width:17px;height:17px;margin:0;padding:0}
 .err{padding:10px 12px;border-radius:10px;background:rgba(255,90,90,.1);border:1px solid rgba(255,90,90,.35);color:var(--bad);font-size:13.5px;margin-bottom:14px}
@@ -264,7 +269,10 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
     <p>Trainee performance, approvals and announcements for the diploma. Team members: use the password from your invite email.</p>
     <div class="err" id="lerr" hidden></div>
     <input id="aun" type="text" name="username" value="admin" autocomplete="username" aria-label="Username" readonly tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-    <input id="apw" type="password" name="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
+    <div class="pwrap">
+      <input id="apw" type="password" name="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
+      <button type="button" class="pwtog" id="pwtog" aria-label="Show password" aria-pressed="false" title="Show password"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g id="pwOn"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g><g id="pwOff" style="display:none"><path d="M3 3l18 18M10.6 5.1A9.7 9.7 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.8 9.8 0 0 0 4.4-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></svg></button>
+    </div>
     <label class="chk rem"><input type="checkbox" id="arem" checked><span>Remember me on this device</span></label>
     <div class="cfbox" id="cfBox"></div>
     <button class="ctl pri" id="lbtn" type="submit">Sign in</button>
@@ -534,6 +542,13 @@ async function api(body){
 const ERR = {forbidden:'Only the owner can do that.', captcha_required:'Complete the security check, then sign in.', captcha_failed:'The security check did not pass. Try it again.', bad_login:'Wrong password.', locked:'Too many attempts. Try again in 15 minutes.', network:'Could not reach the server. Check your connection.', server_error:'Temporary server error. Try again.', session_expired:'Session ended. Sign in again.', conflict:'That row changed in the sheet. Refreshed; try again.', bad_request:'Please fill in a title and a message.'};
 let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
 
+$('pwtog').addEventListener('click',()=>{
+  const show = $('apw').type==='password';
+  $('apw').type = show ? 'text' : 'password';
+  $('pwOn').style.display = show?'none':''; $('pwOff').style.display = show?'':'none';
+  const b=$('pwtog'); b.setAttribute('aria-pressed', show); b.setAttribute('aria-label', show?'Hide password':'Show password'); b.title = show?'Hide password':'Show password';
+  $('apw').focus();
+});
 $('lf').addEventListener('submit', async e=>{
   e.preventDefault(); $('lerr').hidden=true;
   const b=$('lbtn'); b.disabled=true; b.textContent='Checking...';
@@ -542,6 +557,7 @@ $('lf').addEventListener('submit', async e=>{
   resetCaptcha();
   if(!r.ok){ $('lerr').textContent = ERR[r.code]||ERR.server_error; $('lerr').hidden=false; return; }
   TOKEN = r.token; store.set('serag-admin', TOKEN, $('arem').checked);
+  if($('apw').type==='text') $('pwtog').click();
   /* Ask the browser to save the password (Chrome/Edge); other browsers use the form heuristics above */
   try{ if(window.PasswordCredential && navigator.credentials){ navigator.credentials.store(new PasswordCredential({id:$('aun').value, name:'Serag Admin', password:$('apw').value})).catch(()=>{}); } }catch(e){}
   load();
