@@ -857,9 +857,9 @@ function embedSrc(x){
   }
   return null;
 }
-function lessonBtn(x, extra){
+function lessonBtn(x, extra, asLink){
   if(!x.url) return '<span class="soon">'+t('soon')+'</span>';
-  if(embedSrc(x)){
+  if(embedSrc(x) && !asLink){
     const on = OPEN===x.id;
     return '<button type="button" class="watch yt'+(on?' on':'')+(extra?' '+extra:'')+'" data-play="'+esc(x.id)+'" aria-expanded="'+on+'">'+ic(on?'down':'yt')+'<span>'+(on?t('hide'):t('watch'))+'</span></button>';
   }
@@ -916,7 +916,7 @@ function render(){
   const lc = C.chapters.find(c=>c.id==='L');
   const lv = lc ? [].concat(...lc.sections.map(s=>s.lessons.map(x=>({x,s})))) : [];
   $('liveWrap').innerHTML = lv.length ? '<div class="sec-head"><h2>'+t('live')+'</h2></div><div class="live">'+lv.map(o=>
-    '<div class="lv"><span class="k">'+esc(o.s.no)+'</span><b>'+esc(lessonTitle(o.x, o.s))+'</b><span class="d">'+(o.x.date?ic('cal')+' <span class="n">'+esc(o.x.date)+'</span>':t('liveSoon'))+'</span>'+lessonBtn(o.x)+'</div>').join('')+'</div>' : '';
+    '<div class="lv"><span class="k">'+esc(o.s.no)+'</span><b>'+esc(lessonTitle(o.x, o.s))+'</b><span class="d">'+(o.x.date?ic('cal')+' <span class="n">'+esc(o.x.date)+'</span>':t('liveSoon'))+'</span>'+lessonBtn(o.x,'',true)+'</div>').join('')+'</div>' : '';
 
   const q = query.toLowerCase();
   let shown = 0;
