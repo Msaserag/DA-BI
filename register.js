@@ -12,7 +12,7 @@
 
   var COUNTRIES = [['Egypt', 'مصر', 'Egypt'], ['Saudi Arabia', 'السعودية', 'Saudi Arabia'], ['UAE', 'الإمارات', 'UAE'], ['Kuwait', 'الكويت', 'Kuwait'],
     ['Qatar', 'قطر', 'Qatar'], ['Bahrain', 'البحرين', 'Bahrain'], ['Oman', 'عُمان', 'Oman'], ['Jordan', 'الأردن', 'Jordan'], ['Other', 'دولة أخرى', 'Other']];
-  var COHORTS = [['DABI-01', 'DABI-01', 'DABI-01'], ['DABI-02', 'DABI-02', 'DABI-02'], ['In-house (Company)', 'تدريب شركات (In-house)', 'In-house (Company)']];
+  var STARTS = [['now', 'فورًا', 'Immediately'], ['week', 'خلال أسبوع', 'Within a week'], ['month', 'خلال شهر', 'Within a month'], ['explore', 'بستكشف حاليًا', 'Just exploring']];
   var LEVELS = [['Beginner', 'مبتدئ', 'Beginner'], ['Intermediate', 'متوسط', 'Intermediate'], ['Advanced', 'متقدم', 'Advanced']];
   var LAPTOP = [['Yes', 'أيوه', 'Yes'], ['No', 'لأ', 'No'], ['Not sure', 'مش متأكد', 'Not sure']];
 
@@ -20,7 +20,7 @@
     ar: {
       title: 'سجّل في الدبلومة', sub: 'التسجيل بياخد دقيقتين، ومفيش التزام قبل ما نأكد معاك التفاصيل على واتساب.',
       nameEn: 'الاسم بالإنجليزي (زي ما هيظهر في الشهادة)', nameAr: 'الاسم بالعربي (اختياري)', email: 'بريد Google (Gmail) اللي بتستخدمه على YouTube',
-      mobile: 'رقم الواتساب بكود الدولة', country: 'الدولة', cohort: 'الدفعة', job: 'المسمى الوظيفي', company: 'الشركة (اختياري)',
+      mobile: 'رقم الواتساب بكود الدولة', country: 'الدولة', start: 'ناوي تبدأ إمتى؟', job: 'المسمى الوظيفي', company: 'الشركة (اختياري)',
       excel: 'مستواك الحالي في Excel', laptop: 'عندك لابتوب Windows عليه Office 2019 أو أحدث؟', goals: 'عايز تحقق إيه من الدبلومة؟ (اختياري)',
       consent: 'أوافق على استخدام بريد Google الخاص بي لمنحي صلاحية الوصول لفيديوهات الدبلومة الخاصة، وعلى التواصل معي على واتساب أو البريد بخصوص الدبلومة.',
       pick: 'اختر', send: 'أرسل التسجيل', sending: 'جارٍ الإرسال...', close: 'إغلاق',
@@ -37,7 +37,7 @@
     en: {
       title: 'Register for the diploma', sub: 'Registration takes two minutes, and there is no commitment until we confirm the details with you on WhatsApp.',
       nameEn: 'Full name in English (as it should appear on your certificate)', nameAr: 'Full name in Arabic (optional)', email: 'Google (Gmail) email you use on YouTube',
-      mobile: 'WhatsApp number with country code', country: 'Country', cohort: 'Cohort', job: 'Job title', company: 'Company (optional)',
+      mobile: 'WhatsApp number with country code', country: 'Country', start: 'When do you plan to start?', job: 'Job title', company: 'Company (optional)',
       excel: 'Your current Excel level', laptop: 'Do you have a Windows laptop with Microsoft Office 2019 or newer?', goals: 'What do you want to achieve from the diploma? (optional)',
       consent: 'I agree that my Google email will be used to give me access to the private course videos, and that I may be contacted on WhatsApp or email about the diploma.',
       pick: 'Select', send: 'Submit registration', sending: 'Sending...', close: 'Close',
@@ -88,7 +88,7 @@
       '<div class="f1"><label for="sgr-e">' + esc(t.email) + '</label><input id="sgr-e" type="email" autocomplete="email" dir="ltr" required></div>' +
       '<div><label for="sgr-m">' + esc(t.mobile) + '</label><input id="sgr-m" type="tel" autocomplete="tel" dir="ltr" placeholder="+20 1xx xxx xxxx" required></div>' +
       '<div><label for="sgr-c">' + esc(t.country) + '</label><select id="sgr-c">' + opts(COUNTRIES, i) + '</select></div>' +
-      '<div><label for="sgr-co">' + esc(t.cohort) + '</label><select id="sgr-co">' + opts(COHORTS, i) + '</select></div>' +
+      '<div><label for="sgr-co">' + esc(t.start) + '</label><select id="sgr-co">' + opts(STARTS, i) + '</select></div>' +
       '<div><label for="sgr-j">' + esc(t.job) + '</label><input id="sgr-j" autocomplete="organization-title" required></div>' +
       '<div><label for="sgr-cm">' + esc(t.company) + '</label><input id="sgr-cm" autocomplete="organization"></div>' +
       '<div><label for="sgr-x1">' + esc(t.excel) + '</label><select id="sgr-x1">' + opts(LEVELS, i) + '</select></div>' +
@@ -138,7 +138,7 @@
     ev.preventDefault();
     var L = lang(), t = T[L]; $('sgr-err').classList.remove('on');
     var v = { nameEn: $('sgr-n').value.trim(), nameAr: $('sgr-na').value.trim(), email: $('sgr-e').value.trim(), mobile: $('sgr-m').value.trim(),
-      country: $('sgr-c').value, cohort: $('sgr-co').value, job: $('sgr-j').value.trim(), company: $('sgr-cm').value.trim(),
+      country: $('sgr-c').value, start: $('sgr-co').value, job: $('sgr-j').value.trim(), company: $('sgr-cm').value.trim(),
       excel: $('sgr-x1').value, laptop: $('sgr-l').value, goals: $('sgr-g').value.trim(), consent: $('sgr-k').checked };
     if (!/^[A-Za-z][A-Za-z .'\-]{2,60}$/.test(v.nameEn) || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email) || v.mobile.replace(/\D/g, '').length < 8 || !v.job || !v.consent) { showErr(L, 'bad_input'); return; }
     var b = $('sgr-go'); b.disabled = true; b.textContent = t.sending;
@@ -149,7 +149,7 @@
         b.disabled = false; b.textContent = t.send;
         if (window.turnstile && cfId !== null) { try { window.turnstile.reset(cfId); } catch (e) {} cfToken = null; }
         if (!r || !r.ok) { showErr(L, (r && r.code) || 'server_error'); track('register_error', { code: (r && r.code) || 'server_error' }); return; }
-        track('diploma_register', { cohort: v.cohort, src: v.src });
+        track('diploma_register', { start: v.start, src: v.src });
         $('sgr-form').style.display = 'none'; $('sgr-okt').textContent = r.updated ? t.okTxt2 : t.okTxt; $('sgr-ok').classList.add('on');
       });
   }
