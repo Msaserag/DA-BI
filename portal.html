@@ -576,7 +576,7 @@ const T = {
        expired:d=>'انتهت صلاحية الوصول بتاريخ '+d+'. تواصل معنا على واتساب لتمديدها.',
        campaign_ended:'انتهى أسبوع وصولك المجاني. للمتابعة سجّل في الدبلومة الكاملة أو تواصل معنا على واتساب.',
        campT:'وصول مجاني للكراش كورس', campP:'الدرسان الأول والثاني متاحان لمدة أسبوع من أول دخول، وتبقى بقية الدبلومة مقفلة.', campLeft:(d,h,m)=>'متبقي '+d+' يوم '+h+' ساعة '+m+' دقيقة',
-       locked:'مقفل', unlock:'افتح الدبلومة كاملة',
+       lockedLbl:'مقفل', freeLbl:'مجاني', unlock:'افتح الدبلومة كاملة',
        locked:'تم إيقاف المحاولة مؤقتًا بسبب تكرار إدخال بيانات غير صحيحة. حاول مرة أخرى بعد 15 دقيقة أو تواصل معنا على واتساب.',
        session_expired:'انتهت جلستك. يُرجى تسجيل الدخول مرة أخرى.',
        captcha_required:'لحماية حسابك، أكمل خطوة التحقق السريعة أدناه ثم اضغط دخول.',
@@ -607,7 +607,7 @@ const T = {
        expired:d=>'Your access ended on '+d+'. Contact us on WhatsApp to extend it.',
        campaign_ended:'Your free week has ended. Register for the full diploma to continue, or message us on WhatsApp.',
        campT:'Free crash course access', campP:'Lessons 1 and 2 are open for one week from your first sign-in. The rest of the diploma stays locked.', campLeft:(d,h,m)=>d+'d '+h+'h '+m+'m left',
-       locked:'Locked', unlock:'Unlock the full diploma',
+       lockedLbl:'Locked', freeLbl:'Free', unlock:'Unlock the full diploma',
        locked:'Too many incorrect attempts. Try again in 15 minutes or contact us on WhatsApp.',
        session_expired:'Your session has ended. Please sign in again.',
        captcha_required:'To protect your account, complete the quick check below, then press Sign in.',
@@ -966,7 +966,7 @@ function render(){
         return '<div class="lesson'+(x.locked?' locked':'')+(d?' done':'')+(emb?' playable':'')+(OPEN===x.id?' playing':'')+'" data-lrow="'+esc(x.id)+'"'+(emb?' data-play="'+esc(x.id)+'"':'')+'><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
           '<div><div class="lt">'+esc(lessonTitle(x,s))+(isNewLesson(x)?'<span class="newb">'+t('newBadge')+'</span>':'')+'</div><div class="lm"><span>'+ic(typeIcon(x))+typeLabel(x)+'</span>'+
           (x.dur?'<span>'+ic('clock')+'<span class="n">'+x.dur+'</span> '+t('min')+'</span>':'')+
-          '<span class="badge '+(x.access==='Public'&&!x.locked?'pub':'pri')+'">'+(x.locked?t('locked'):(x.access==='Public'?t('pub'):t('pri')))+'</span></div></div>'+
+          '<span class="badge '+((x.access==='Public'||(C.campaign&&x.free))&&!x.locked?'pub':'pri')+'">'+(x.locked?t('lockedLbl'):((C.campaign&&x.free)?t('freeLbl'):(x.access==='Public'?t('pub'):t('pri'))))+'</span></div></div>'+
           '<div class="act">'+lessonBtn(x)+'</div></div>'+(OPEN===x.id ? playerHtml(x) : '');
       }).join('')+'</div>';
     }).join('');
@@ -1078,5 +1078,6 @@ if(reduce) frame(); else (function loop(){ frame(); requestAnimationFrame(loop);
 })();
 </script>
 
+<script src="motion.js" defer></script>
 </body>
 </html>
