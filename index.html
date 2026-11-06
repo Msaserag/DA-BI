@@ -11,6 +11,7 @@
 <script src="./support.js"></script>
 <script src="./motion.js" defer></script>
 <script src="analytics.js" defer></script>
+<script src="./register.js" defer></script>
 </head>
 <body>
 <x-dc>
@@ -38,7 +39,7 @@
         <div style="display:flex;align-items:center;gap:8px;flex:none">
           <button type="button" onClick="{{ toggleLang }}" aria-label="Switch to English" style="height:38px;min-width:42px;padding:0 12px;white-space:nowrap;border-radius:10px;border:1px solid var(--line-2,rgba(255,255,255,.18));background:var(--surface,rgba(255,255,255,.045));color:var(--ink,#FFFFFF);font-family:Outfit,sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;cursor:pointer">EN</button><button type="button" onClick="{{ toggleTheme }}" aria-label="تبديل الوضع الفاتح/الداكن" style="height:38px;width:42px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line-2,rgba(255,255,255,.18));background:var(--surface,rgba(255,255,255,.045));color:var(--ink,#FFFFFF);cursor:pointer"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></sc-if><sc-if value="{{ isLight }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"></path></svg></sc-if></button>
           <a href="portal.html" style="height:38px;display:inline-flex;align-items:center;white-space:nowrap;flex:none;padding:0 14px;border-radius:10px;border:1px solid var(--line-2,rgba(255,255,255,.18));color:var(--ink,#FFFFFF);text-decoration:none;font-size:13.5px;font-weight:700">دخول المتدربين</a>
-          <a href="https://forms.gle/voQJU1H5jLoozL5CA" target="_blank" rel="noopener" style="height:38px;display:inline-flex;align-items:center;white-space:nowrap;flex:none;padding:0 18px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:14px;font-weight:800" style-hover="background:#00E5C3">سجّل الآن</a>
+          <a href="#join" style="height:38px;display:inline-flex;align-items:center;white-space:nowrap;flex:none;padding:0 18px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:14px;font-weight:800" style-hover="background:#00E5C3">سجّل الآن</a>
         </div>
       </div>
     </nav>
@@ -202,7 +203,7 @@
           </sc-if>
           <div style="height:1px;background:var(--line,rgba(255,255,255,.09))"></div>
           <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ inclAr }}" as="i" hint-placeholder-count="5"><div style="display:flex;gap:10px;font-size:14.5px;color:var(--ink-2,rgba(228,236,255,.76))"><span style="color:var(--teal-2,#00E5C3);font-weight:800">✓</span><span>{{ i }}</span></div></sc-for></div>
-          <a href="https://forms.gle/voQJU1H5jLoozL5CA" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;padding:16px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:17px;font-weight:800" style-hover="background:#00E5C3">افتح نموذج التسجيل ←</a>
+          <a href="#join" style="display:flex;justify-content:center;align-items:center;padding:16px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:17px;font-weight:800" style-hover="background:#00E5C3">سجّل الآن ←</a>
           <a href="https://wa.me/201550888810" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;padding:14px;border-radius:999px;border:1px solid var(--line-2,rgba(255,255,255,.18));color:var(--ink,#FFFFFF);text-decoration:none;font-size:15px;font-weight:700" style-hover="border-color:#25D366">عندك سؤال؟ كلّمنا واتساب</a>
           <p style="margin:0;padding:12px 14px;border-radius:12px;background:rgba(255,184,0,.12);border:1px solid rgba(255,184,0,.3);font-size:13.5px;color:var(--ink-2,rgba(228,236,255,.76))">مهم: سجّل بحساب Google (Gmail) اللي هتستخدمه على YouTube، لأن المحاضرات المسجّلة بتتفتح بيه.</p>
           <div style="font-size:14px;color:var(--ink-3,#8C9CC0);text-align:center">مسجّل بالفعل؟ <a href="portal.html" style="font-weight:800;text-decoration:none">دخول المتدربين</a></div>
@@ -256,7 +257,7 @@
         <div style="display:flex;align-items:center;gap:8px;flex:none">
           <button type="button" onClick="{{ toggleLang }}" aria-label="التبديل إلى العربية" style="height:38px;min-width:42px;padding:0 12px;white-space:nowrap;border-radius:10px;border:1px solid var(--line-2,rgba(255,255,255,.18));background:var(--surface,rgba(255,255,255,.045));color:var(--ink,#FFFFFF);font-family:Cairo,sans-serif;font-weight:700;font-size:14px;cursor:pointer">ع</button><button type="button" onClick="{{ toggleTheme }}" aria-label="Toggle light/dark mode" style="height:38px;width:42px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line-2,rgba(255,255,255,.18));background:var(--surface,rgba(255,255,255,.045));color:var(--ink,#FFFFFF);cursor:pointer"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></sc-if><sc-if value="{{ isLight }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"></path></svg></sc-if></button>
           <a href="portal.html" style="height:38px;display:inline-flex;align-items:center;white-space:nowrap;flex:none;padding:0 14px;border-radius:10px;border:1px solid var(--line-2,rgba(255,255,255,.18));color:var(--ink,#FFFFFF);text-decoration:none;font-size:13.5px;font-weight:600">Trainee login</a>
-          <a href="https://forms.gle/voQJU1H5jLoozL5CA" target="_blank" rel="noopener" style="height:38px;display:inline-flex;align-items:center;white-space:nowrap;flex:none;padding:0 18px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:14px;font-weight:700" style-hover="background:#00E5C3">Register</a>
+          <a href="#join" style="height:38px;display:inline-flex;align-items:center;white-space:nowrap;flex:none;padding:0 18px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:14px;font-weight:700" style-hover="background:#00E5C3">Register</a>
         </div>
       </div>
     </nav>
@@ -419,7 +420,7 @@
           </sc-if>
           <div style="height:1px;background:var(--line,rgba(255,255,255,.09))"></div>
           <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ inclEn }}" as="i" hint-placeholder-count="5"><div style="display:flex;gap:10px;font-size:14.5px;color:var(--ink-2,rgba(228,236,255,.76))"><span style="color:var(--teal-2,#00E5C3);font-weight:800">✓</span><span>{{ i }}</span></div></sc-for></div>
-          <a href="https://forms.gle/voQJU1H5jLoozL5CA" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;padding:16px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:17px;font-weight:700" style-hover="background:#00E5C3">Open the registration form →</a>
+          <a href="#join" style="display:flex;justify-content:center;align-items:center;padding:16px;border-radius:999px;background:#00C9A7;color:#04201B;text-decoration:none;font-size:17px;font-weight:700" style-hover="background:#00E5C3">Register now →</a>
           <a href="https://wa.me/201550888810" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;padding:14px;border-radius:999px;border:1px solid var(--line-2,rgba(255,255,255,.18));color:var(--ink,#FFFFFF);text-decoration:none;font-size:15px;font-weight:600" style-hover="border-color:#25D366">Questions? WhatsApp us</a>
           <p style="margin:0;padding:12px 14px;border-radius:12px;background:rgba(255,184,0,.12);border:1px solid rgba(255,184,0,.3);font-size:13.5px;color:var(--ink-2,rgba(228,236,255,.76))">Important: register with the Google (Gmail) account you use on YouTube. The recorded lectures open with it.</p>
           <div style="font-size:14px;color:var(--ink-3,#8C9CC0);text-align:center">Already registered? <a href="portal.html" style="font-weight:700;text-decoration:none">Trainee login</a></div>
