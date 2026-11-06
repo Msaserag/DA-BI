@@ -22,7 +22,7 @@
   <div style="position:sticky;top:0;z-index:50">
     <sc-if value="{{ showRibbon }}" hint-placeholder-val="{{ true }}">
       <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:700;text-align:center">
-        <span>خصم <b style="font-family:Outfit,sans-serif">50%</b> لفترة محدودة · <b style="font-family:Outfit,sans-serif">5,000</b> ج.م بدل <s style="font-family:Outfit,sans-serif;opacity:.7">10,000</s> · <span>{{ untilAr }}</span></span>
+        <span>عرض <b style="font-family:Outfit,sans-serif">Black Friday</b> المبكر · خصم <b style="font-family:Outfit,sans-serif">50%</b> · الأماكن محدودة · <b style="font-family:Outfit,sans-serif">5,000</b> ج.م بدل <s style="font-family:Outfit,sans-serif;opacity:.7">10,000</s> · <span>{{ untilAr }}</span></span>
         <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-family:Cairo,sans-serif;font-variant-numeric:tabular-nums">{{ cdText }}</span>
       </a>
     </sc-if>
@@ -193,7 +193,7 @@
         </div>
         <div style="background:var(--solid,#12244C);border:1px solid var(--line-2,rgba(255,255,255,.18));border-radius:26px;padding:clamp(22px,3vw,34px);box-shadow:var(--shadow,0 24px 60px rgba(0,0,0,.35));display:flex;flex-direction:column;gap:16px">
           <sc-if value="{{ offerActive }}" hint-placeholder-val="{{ true }}">
-            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:800">عرض لفترة محدودة · خصم 50%</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:700">{{ endsAr }}</span></div>
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:800">عرض Black Friday المبكر · خصم 50% · أماكن محدودة</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:700">{{ endsAr }}</span></div>
             <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><b style="font-family:Outfit,sans-serif;font-size:clamp(44px,6vw,60px);line-height:1;font-weight:800">5,000</b><span style="font-size:18px;font-weight:700">ج.م</span><s style="font-family:Outfit,sans-serif;font-size:22px;color:var(--ink-3,#8C9CC0)">10,000</s></div>
             <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;direction:ltr"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="4"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-family:Outfit,sans-serif;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.ar }}</span></div></sc-for></div>
           </sc-if>
@@ -240,7 +240,7 @@
   <div style="position:sticky;top:0;z-index:50">
     <sc-if value="{{ showRibbon }}">
       <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:600;text-align:center">
-        <span>Limited-time offer <b>50% off</b> · <b>5,000 EGP</b> instead of <s style="opacity:.7">10,000</s> · <span>{{ untilEn }}</span></span>
+        <span><b>Black Friday</b> early offer · <b>50% off</b> · limited seats · <b>5,000 EGP</b> instead of <s style="opacity:.7">10,000</s> · <span>{{ untilEn }}</span></span>
         <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-variant-numeric:tabular-nums">{{ cdTextEn }}</span>
       </a>
     </sc-if>
@@ -410,7 +410,7 @@
         </div>
         <div style="background:var(--solid,#12244C);border:1px solid var(--line-2,rgba(255,255,255,.18));border-radius:26px;padding:clamp(22px,3vw,34px);box-shadow:var(--shadow,0 24px 60px rgba(0,0,0,.35));display:flex;flex-direction:column;gap:16px">
           <sc-if value="{{ offerActive }}">
-            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:700">Limited-time offer · 50% off</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:600">{{ endsEn }}</span></div>
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px"><span style="padding:4px 12px;border-radius:999px;background:#FFB800;color:#1A1200;font-size:13px;font-weight:700">Black Friday early offer · 50% off · limited seats</span><span style="font-size:13px;color:var(--gold,#FFB800);font-weight:600">{{ endsEn }}</span></div>
             <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><b style="font-size:clamp(44px,6vw,60px);line-height:1;font-weight:800">5,000</b><span style="font-size:18px;font-weight:600">EGP</span><s style="font-size:22px;color:var(--ink-3,#8C9CC0)">10,000</s></div>
             <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px"><sc-for list="{{ cdCells }}" as="cd" hint-placeholder-count="4"><div style="padding:10px 6px;border-radius:12px;background:var(--surface,rgba(255,255,255,.045));border:1px solid var(--line,rgba(255,255,255,.09));text-align:center"><b style="display:block;font-size:24px;line-height:1.2">{{ cd.v }}</b><span style="font-size:12px;color:var(--ink-3,#8C9CC0)">{{ cd.en }}</span></div></sc-for></div>
           </sc-if>
