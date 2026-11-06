@@ -343,6 +343,11 @@ button.watch{cursor:pointer;font-family:inherit}
 .pwm-actions .btn-p{flex:1}
 .pwm .btn-s{background:var(--surface-2);color:var(--ink);padding:14px 22px;font-size:15px;border:1px solid var(--line-2)}
 @media (max-width:640px){ #chgPw span.ar, #chgPw span.en{display:none!important} }
+
+.camp{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:0 0 18px;padding:16px 18px;border-radius:var(--r);border:1px solid rgba(255,184,0,.45);background:linear-gradient(135deg,var(--chip-gold),var(--chip-teal))}
+.camp b{font-size:16px}.camp p{margin:4px 0 0;color:var(--ink-2);font-size:14px}
+.lesson.locked{opacity:.78}.lesson.locked .lt{color:var(--ink-2)}
+.watch.lockbtn{border-color:rgba(255,184,0,.5);color:var(--gold)}
 </style>
 </head>
 <body>
@@ -569,6 +574,9 @@ const T = {
        pending:'حسابك قيد المراجعة ولم يتم تفعيله بعد. تواصل معنا على واتساب لتفعيل الدخول.',
        suspended:'تم إيقاف الوصول إلى هذا الحساب. تواصل معنا على واتساب للمساعدة.',
        expired:d=>'انتهت صلاحية الوصول بتاريخ '+d+'. تواصل معنا على واتساب لتمديدها.',
+       campaign_ended:'انتهى أسبوع وصولك المجاني. للمتابعة سجّل في الدبلومة الكاملة أو تواصل معنا على واتساب.',
+       campT:'وصول مجاني للكراش كورس', campP:'الدرسان الأول والثاني متاحان لمدة أسبوع من أول دخول، وتبقى بقية الدبلومة مقفلة.', campLeft:(d,h,m)=>'متبقي '+d+' يوم '+h+' ساعة '+m+' دقيقة',
+       locked:'مقفل', unlock:'افتح الدبلومة كاملة',
        locked:'تم إيقاف المحاولة مؤقتًا بسبب تكرار إدخال بيانات غير صحيحة. حاول مرة أخرى بعد 15 دقيقة أو تواصل معنا على واتساب.',
        session_expired:'انتهت جلستك. يُرجى تسجيل الدخول مرة أخرى.',
        captcha_required:'لحماية حسابك، أكمل خطوة التحقق السريعة أدناه ثم اضغط دخول.',
@@ -597,6 +605,9 @@ const T = {
        pending:'Your account is under review and not active yet. Contact us on WhatsApp to activate it.',
        suspended:'Access to this account has been paused. Contact us on WhatsApp for help.',
        expired:d=>'Your access ended on '+d+'. Contact us on WhatsApp to extend it.',
+       campaign_ended:'Your free week has ended. Register for the full diploma to continue, or message us on WhatsApp.',
+       campT:'Free crash course access', campP:'Lessons 1 and 2 are open for one week from your first sign-in. The rest of the diploma stays locked.', campLeft:(d,h,m)=>d+'d '+h+'h '+m+'m left',
+       locked:'Locked', unlock:'Unlock the full diploma',
        locked:'Too many incorrect attempts. Try again in 15 minutes or contact us on WhatsApp.',
        session_expired:'Your session has ended. Please sign in again.',
        captcha_required:'To protect your account, complete the quick check below, then press Sign in.',
@@ -621,7 +632,7 @@ const T = {
        recorded:'Recorded lecture', resource:'Files', lecture:'Recorded lecture', saved:'Progress saved', notSaved:'Could not save progress; retrying automatically' }
 };
 const t = k => T[root.dataset.lang||'ar'][k];
-const WA_CODES = ['pending','suspended','expired','locked','setup'];
+const WA_CODES = ['pending','suspended','expired','locked','setup','campaign_ended'];
 
 /* ---------- language & theme ---------- */
 let S = null, C = null, TOKEN = null, LASTPW = null;
@@ -688,7 +699,7 @@ $('loginForm').addEventListener('submit', async e=>{
   const r = await api({action:'login', u, p, remember: $('remember').checked, cf: CF});
   btn.disabled = false; lbl.innerHTML = old;
   resetCaptcha();
-  if(!r.ok){ showErr(r.code, r.until); if(r.code==='captcha_required' || r.code==='captcha_failed') showCaptcha(root.dataset.lang||'ar'); return; }
+  if(!r.ok){ showErr(r.camp && r.code==='expired' ? 'campaign_ended' : r.code, r.until); if(r.code==='captcha_required' || r.code==='captcha_failed') showCaptcha(root.dataset.lang||'ar'); return; }
   $('cfBox').hidden = true;
   TOKEN = r.token;
   if(window.sgTrack) window.sgTrack('trainee_login');
@@ -704,8 +715,21 @@ function enter(r){
   P = {}; (r.progress||[]).forEach(id=>P[id]=1);
   $('login').hidden = true; $('boot').hidden = true; $('app').hidden = false;
   window.scrollTo(0,0); render();
+  clearInterval(campTimer); if(C.campaign){ campTick(); campTimer = setInterval(campTick, 30000); }
+}
+let campTimer = null;
+function campTick(){
+  if(!S || !C || !C.campaign || !S.ue) return;
+  const ms = new Date(S.ue) - Date.now();
+  if(ms <= 0){ signOut('campaign_ended'); return; }
+  const el = $('campLeft');
+  if(el) el.textContent = t('campLeft')(Math.floor(ms/864e5), Math.floor(ms%864e5/36e5), Math.floor(ms%36e5/6e4));
+}
+function campBanner(){
+  return '<div class="camp"><div><b>'+t('campT')+'</b><p>'+t('campP')+'</p></div><a class="watch go" href="'+esc((C&&C.upgrade)||FORM_URL)+'" target="_blank" rel="noopener">'+ic('arrow')+'<span>'+t('unlock')+'</span></a></div>';
 }
 function signOut(code){
+  clearInterval(campTimer);
   store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');
   TOKEN = null; S = null; C = null; LASTPW = null; OPEN = null; $('pwModal').hidden = true;
   $('app').hidden = true; $('boot').hidden = true; $('login').hidden = false;
@@ -821,7 +845,7 @@ function queueSave(){
     if(r.ok) toast(t('saved'));
     else if(r.code==='network' || r.code==='server_error'){ toast(t('notSaved')); setTimeout(queueSave, 8000); }
     else if(r.code==='password_change_required') openPw(true);
-    else signOut(r.code);
+    else signOut(r.code==='expired' && C && C.campaign ? 'campaign_ended' : r.code);
   }, 900);
 }
 let toastTimer;
@@ -858,6 +882,7 @@ function embedSrc(x){
   return null;
 }
 function lessonBtn(x, extra, asLink){
+  if(x.locked) return '<a class="watch go lockbtn" href="'+esc((C&&C.upgrade)||FORM_URL)+'" target="_blank" rel="noopener">'+ic('lock')+'<span>'+t('unlock')+'</span></a>';
   if(!x.url) return '<span class="soon">'+t('soon')+'</span>';
   if(embedSrc(x) && !asLink){
     const on = OPEN===x.id;
@@ -904,6 +929,7 @@ function render(){
   $('chips').innerHTML =
     (S.c ? '<span class="chip">'+ic('users')+t('cohort')+': <span class="n">'+esc(S.c)+'</span></span>' : '') +
     '<span class="chip">'+ic('cal')+(S.u ? t('until')+': <span class="n">'+esc(S.u)+'</span>' : t('noLimit'))+'</span>';
+  if(C.campaign) $('chips').insertAdjacentHTML('beforeend','<span class="chip new">'+ic('clock')+'<span id="campLeft"></span></span>');
   const newCount = [].concat(...C.chapters.filter(c=>c.id!=='L').map(c=>[].concat(...c.sections.map(s=>s.lessons)))).filter(isNewLesson).length;
   if(newCount) $('chips').insertAdjacentHTML('beforeend','<span class="chip new">'+ic('bell')+t('newL')(newCount)+'</span>');
   renderNotes();
@@ -918,6 +944,7 @@ function render(){
   $('liveWrap').innerHTML = lv.length ? '<div class="sec-head"><h2>'+t('live')+'</h2></div><div class="live">'+lv.map(o=>
     '<div class="lv"><span class="k">'+esc(o.s.no)+'</span><b>'+esc(lessonTitle(o.x, o.s))+'</b><span class="d">'+(o.x.date?ic('cal')+' <span class="n">'+esc(o.x.date)+'</span>':t('liveSoon'))+'</span>'+lessonBtn(o.x,'',true)+'</div>').join('')+'</div>' : '';
 
+  if(C.campaign) $('liveWrap').innerHTML = campBanner();
   const q = query.toLowerCase();
   let shown = 0;
   const openState = {}; document.querySelectorAll('#chapters details').forEach(d=>openState[d.dataset.id]=d.open);
@@ -936,10 +963,10 @@ function render(){
       return '<div class="section"><div class="s-head"><span class="n">'+esc(s.no)+'</span><b>'+esc(L(s))+'</b></div>'+ls.map(x=>{
         const d = !!P[x.id];
         const emb = !!embedSrc(x);
-        return '<div class="lesson'+(d?' done':'')+(emb?' playable':'')+(OPEN===x.id?' playing':'')+'" data-lrow="'+esc(x.id)+'"'+(emb?' data-play="'+esc(x.id)+'"':'')+'><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
+        return '<div class="lesson'+(x.locked?' locked':'')+(d?' done':'')+(emb?' playable':'')+(OPEN===x.id?' playing':'')+'" data-lrow="'+esc(x.id)+'"'+(emb?' data-play="'+esc(x.id)+'"':'')+'><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
           '<div><div class="lt">'+esc(lessonTitle(x,s))+(isNewLesson(x)?'<span class="newb">'+t('newBadge')+'</span>':'')+'</div><div class="lm"><span>'+ic(typeIcon(x))+typeLabel(x)+'</span>'+
           (x.dur?'<span>'+ic('clock')+'<span class="n">'+x.dur+'</span> '+t('min')+'</span>':'')+
-          '<span class="badge '+(x.access==='Public'?'pub':'pri')+'">'+(x.access==='Public'?t('pub'):t('pri'))+'</span></div></div>'+
+          '<span class="badge '+(x.access==='Public'&&!x.locked?'pub':'pri')+'">'+(x.locked?t('locked'):(x.access==='Public'?t('pub'):t('pri')))+'</span></div></div>'+
           '<div class="act">'+lessonBtn(x)+'</div></div>'+(OPEN===x.id ? playerHtml(x) : '');
       }).join('')+'</div>';
     }).join('');
@@ -1046,7 +1073,7 @@ if(reduce) frame(); else (function loop(){ frame(); requestAnimationFrame(loop);
   const r = await api({action:'session', token:TOKEN});
   if(r.ok && r.mustChange){ $('boot').hidden = true; openPw(true); }
   else if(r.ok) enter(r);
-  else signOut(r.code==='network' || r.code==='server_error' ? r.code : (r.code==='session_expired' ? 'session_expired' : r.code));
+  else signOut(r.camp && r.code==='expired' ? 'campaign_ended' : r.code);
 })();
 })();
 </script>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>كراش كورس Excel المجاني | محمود سراج</title>
+<meta name="description" content="كراش كورس مجاني من درسين: PivotTables ثم بناء داشبورد Excel كلاسيكي. سجّل وادخل فورًا، والوصول لمدة أسبوع من أول دخول.">
+<meta property="og:title" content="Free Excel Crash Course | Mahmoud Serag">
+<meta property="og:description" content="Two free lessons: PivotTables and a classic Excel dashboard. 7 days of access from your first sign-in.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://da-bi-diploma.vercel.app/assets/social/crash-og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="../../analytics.js" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<style>
+:root{--bg:#0A1633;--band:#0F2149;--card:#12244C;--ink:#fff;--muted:#A9B8D3;--teal:#14B8A6;--teal2:#00E5C3;--cyan:#22D3EE;--gold:#FFB800;--line:rgba(255,255,255,.12);--bad:#FF8A8A}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Cairo,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.en{font-family:Outfit,sans-serif;direction:ltr;unicode-bidi:isolate}
+header.top{position:relative;overflow:hidden;background:radial-gradient(900px 480px at 100% 0%,rgba(20,184,166,.28),transparent 60%),radial-gradient(700px 420px at 0% 100%,rgba(255,184,0,.14),transparent 60%),var(--band);border-bottom:1px solid var(--line)}
+header.top:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(180deg,#000,transparent 85%);pointer-events:none}
+.bar{position:relative;display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.brand{display:flex;gap:10px;align-items:center;font-weight:700;text-decoration:none}
+.brand small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.bar a.link{color:var(--muted);text-decoration:none;font-size:15px}
+.hero{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;padding:34px 0 64px}
+.pill{display:inline-flex;gap:8px;align-items:center;background:rgba(255,184,0,.14);border:1px solid rgba(255,184,0,.5);color:var(--gold);font-weight:800;border-radius:999px;padding:5px 14px;font-size:14px}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(255,184,0,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,184,0,0)}100%{box-shadow:0 0 0 0 rgba(255,184,0,0)}}
+h1{font-size:clamp(30px,4.6vw,52px);line-height:1.22;font-weight:900;margin:16px 0 8px;text-wrap:balance}
+h1 em{font-style:normal;background:linear-gradient(135deg,var(--teal2),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub-en{display:block;color:var(--cyan);font-size:clamp(16px,2vw,21px);font-weight:600;text-align:right}
+.lead{color:var(--muted);font-size:17px;max-width:560px;margin-top:14px}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.fact{display:flex;gap:8px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:14px;padding:8px 14px;font-size:14.5px}
+.fact b{font-family:Outfit,sans-serif;color:var(--teal2);font-size:18px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.card h2{font-size:22px;line-height:1.3}
+.card p.s{color:var(--muted);font-size:14.5px;margin:4px 0 14px}
+label{display:block;font-size:14px;margin:12px 0 5px;font-weight:600}
+input{width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:#0A1633;color:var(--ink);font-family:inherit;font-size:16px}
+input:focus{outline:2px solid var(--teal);outline-offset:1px}
+.btn{width:100%;margin-top:16px;background:var(--gold);color:#0A1633;font-weight:900;border:0;border-radius:14px;padding:14px 18px;font-family:inherit;font-size:17px;cursor:pointer;transition:transform .15s,filter .15s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.btn[disabled]{opacity:.6;cursor:wait;transform:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.small{font-size:12.5px;color:var(--muted);margin-top:10px}
+.err{display:none;margin-top:12px;color:var(--bad);font-size:14.5px;border:1px solid rgba(255,138,138,.4);background:rgba(255,138,138,.08);border-radius:12px;padding:10px 12px}
+.err.on{display:block}.err a{color:var(--gold)}
+#cf{margin-top:12px}
+.ok{display:none}.ok.on{display:block}
+.cred{margin:14px 0;border:1px dashed rgba(0,229,195,.55);border-radius:14px;padding:12px 14px;background:rgba(0,229,195,.07);direction:ltr;font-family:Consolas,monospace;font-size:16px}
+.cred div{display:flex;justify-content:space-between;gap:12px}.cred span{color:var(--muted)}
+section.blk{padding:64px 0 0}
+.k{color:var(--teal2);font-family:Outfit,sans-serif;font-weight:800;letter-spacing:1.5px;font-size:13px}
+h2.t{font-size:clamp(26px,3.4vw,38px);line-height:1.25;margin:6px 0 24px;font-weight:900}
+.lessons{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.ls{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;overflow:hidden}
+.ls .no{font-family:Outfit,sans-serif;font-weight:800;font-size:54px;line-height:1;color:rgba(34,211,238,.18);position:absolute;inset-inline-end:16px;top:8px}
+.ls h3{font-size:21px;line-height:1.35;margin-bottom:4px;max-width:82%}
+.ls .en{color:var(--cyan);font-size:14.5px;display:block;text-align:right}
+.ls ul{margin:12px 0 0;padding-inline-start:20px;color:var(--muted);font-size:15px}
+.ls li{margin:3px 0}
+.dur{display:inline-flex;gap:6px;margin-top:14px;font-size:13.5px;border:1px solid var(--teal);color:var(--teal2);border-radius:999px;padding:2px 12px;font-family:Outfit,sans-serif}
+.locked{margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.lk{border:1px dashed var(--line);border-radius:16px;padding:14px;color:var(--muted);font-size:14.5px;display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.02)}
+.lk svg{flex:none;margin-top:3px;color:var(--gold)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.st{border:1px solid var(--line);border-radius:20px;padding:20px;background:rgba(255,255,255,.03)}
+.st b.n{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--gold);color:#0A1633;font-family:Outfit,sans-serif;font-weight:800;margin-bottom:10px}
+.st h3{font-size:18px;margin-bottom:4px}.st p{color:var(--muted);font-size:15px}
+.about{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;background:linear-gradient(135deg,#0F2149,#12345A);border:1px solid var(--line);border-radius:24px;padding:24px}
+.about img{width:132px;height:132px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:3px solid var(--teal)}
+.about h3{font-size:22px}.about p{color:var(--muted);margin-top:6px}
+details{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+summary{cursor:pointer;font-weight:700;list-style:none}summary::-webkit-details-marker{display:none}
+summary:after{content:"+";float:inline-end;color:var(--gold);font-weight:900}details[open] summary:after{content:"\2212"}
+details p{color:var(--muted);margin-top:8px;font-size:15.5px}
+.final{margin:64px 0;text-align:center;background:radial-gradient(600px 240px at 50% 0%,rgba(20,184,166,.25),transparent 70%),var(--band);border:1px solid var(--line);border-radius:26px;padding:38px 20px}
+.final h2{font-size:clamp(24px,3.2vw,34px);margin-bottom:6px}.final p{color:var(--muted);margin-bottom:18px}
+.final .btn{width:auto;display:inline-block;padding:14px 34px}
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
+.wa{position:fixed;bottom:20px;inset-inline-start:20px;z-index:30;width:54px;height:54px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 22px rgba(37,211,102,.45)}
+@media (max-width:900px){.hero{grid-template-columns:1fr;padding-bottom:44px}.lessons,.steps{grid-template-columns:1fr}.locked{grid-template-columns:1fr 1fr}.about{grid-template-columns:1fr;text-align:center;justify-items:center}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="brand" href="../../"><svg width="40" height="40" viewBox="0 0 62 62" aria-hidden="true"><rect width="62" height="62" rx="16" fill="#12244C" stroke="#22D3EE" stroke-width="2"/><rect x="12" y="32" width="9" height="18" rx="2" fill="#14B8A6"/><rect x="26" y="22" width="9" height="28" rx="2" fill="#22D3EE"/><rect x="40" y="11" width="9" height="39" rx="2" fill="#FFB800"/></svg><span>محمود سراج | <span class="en">Mahmoud Serag</span><small>Turning Data Into Decisions</small></span></a>
+      <a class="link" href="../../">الدبلومة الكاملة</a>
+    </div>
+    <div class="hero">
+      <div>
+        <span class="pill"><i></i><span>مجاني · أسبوع وصول</span> <span class="en">Free · 7 days</span></span>
+        <h1>من البيانات الخام إلى <em>داشبورد</em> في ساعة ونصف</h1>
+        <span class="sub-en en">Excel crash course: from raw data to a dashboard in 97 minutes</span>
+        <p class="lead">درسان عمليان بالتطبيق على ملف عمل حقيقي. تبدأ بالـ PivotTables ثم تبني داشبورد Excel كلاسيكي تقدر تعرضه على مديرك. سجّل وادخل فورًا.</p>
+        <div class="facts">
+          <div class="fact"><b>2</b> دروس مسجلة</div>
+          <div class="fact"><b>97</b> دقيقة</div>
+          <div class="fact"><b>7</b> أيام وصول</div>
+        </div>
+      </div>
+
+      <div class="card" id="join">
+        <form id="f" novalidate>
+          <h2>ابدأ الكراش كورس الآن</h2>
+          <p class="s">بياناتك تفتح لك الدخول مباشرة بدون انتظار موافقة.</p>
+          <label for="n">الاسم الكامل</label><input id="n" name="name" autocomplete="name" required>
+          <label for="e">البريد الإلكتروني</label><input id="e" name="email" type="email" autocomplete="email" dir="ltr" required>
+          <label for="m">رقم واتساب (مع كود الدولة)</label><input id="m" name="mobile" type="tel" autocomplete="tel" dir="ltr" placeholder="+20 1xx xxx xxxx" required>
+          <div id="cf"></div>
+          <div class="err" id="err" role="alert"></div>
+          <button class="btn" id="go" type="submit">سجّل وادخل الآن</button>
+          <div class="small">يبدأ العد التنازلي لأسبوع الوصول عند أول دخول، ثم يُغلق تلقائيًا. لن نشارك بياناتك مع أي جهة.</div>
+        </form>
+        <div class="ok" id="ok">
+          <h2>تم تفعيل وصولك</h2>
+          <p class="s" id="okTxt">احفظ بيانات الدخول التالية، وأرسلناها أيضًا إلى بريدك.</p>
+          <div class="cred" id="cred"><div><span>Username</span><b id="cu"></b></div><div><span>Password</span><b id="cp"></b></div></div>
+          <a class="btn" id="open" href="../../portal.html" style="display:block;text-align:center;text-decoration:none">ابدأ المشاهدة</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="blk" id="inside">
+    <div class="k">INSIDE THE CRASH COURSE</div>
+    <h2 class="t">ماذا ستتعلم في الدرسين</h2>
+    <div class="lessons">
+      <article class="ls"><span class="no">01</span>
+        <h3>Pivot Table و Pivot Chart</h3><span class="en">Session 1: PivotTables and PivotCharts</span>
+        <ul><li>تحويل جدول بيانات إلى ملخص قابل للقراءة في دقائق</li><li>التجميع والفلترة وإضافة الحقول المحسوبة</li><li>اختيار الرسم البياني المناسب لكل رسالة</li></ul>
+        <span class="dur">38 min</span></article>
+      <article class="ls"><span class="no">02</span>
+        <h3>إنشاء الداشبورد الكلاسيكي</h3><span class="en">Session 2: Classic dashboard creation</span>
+        <ul><li>تصميم صفحة واحدة بمؤشرات ورسوم واضحة</li><li>ربط الفلاتر (Slicers) بكل العناصر</li><li>تنسيق احترافي جاهز للعرض على الإدارة</li></ul>
+        <span class="dur">59 min</span></article>
+    </div>
+    <div class="locked" aria-label="Locked in the full diploma">
+      <div class="lk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span>Power Query و ETL من مصادر مختلفة</span></div>
+      <div class="lk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span>Power Pivot ونمذجة البيانات</span></div>
+      <div class="lk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span>Power BI وDAX</span></div>
+      <div class="lk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span>الذكاء الاصطناعي في التحليل</span></div>
+    </div>
+    <p class="small" style="margin-top:10px">باقي المسار مقفل في الكراش كورس ويُفتح بالتسجيل في الدبلومة الكاملة.</p>
+  </section>
+
+  <section class="blk">
+    <div class="k">HOW IT WORKS</div>
+    <h2 class="t">كيف يعمل الوصول المجاني</h2>
+    <div class="steps">
+      <div class="st"><b class="n">1</b><h3>سجّل بياناتك</h3><p>اسمك وبريدك وواتساب. لا بطاقات ولا رسوم.</p></div>
+      <div class="st"><b class="n">2</b><h3>ادخل فورًا</h3><p>يفتح لك الدرسان مباشرة داخل بوابة المتدربين.</p></div>
+      <div class="st"><b class="n">3</b><h3>أسبوع من أول دخول</h3><p>بعد 7 أيام يُغلق الوصول تلقائيًا، فخطط لمشاهدتك.</p></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="about">
+      <img src="../../assets/trainer.jpg" alt="محمود سراج" width="132" height="132" loading="lazy">
+      <div><h3>محمود سراج</h3><p>مدرب مؤسسي ومستشار ذكاء أعمال بخبرة تتجاوز 17 عامًا، يدرّب فرق الشركات في مصر والسعودية ودول الخليج على تحليل البيانات وPower BI وتحويل الأرقام إلى قرارات.</p></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="k">FAQ</div>
+    <h2 class="t">أسئلة شائعة</h2>
+    <details><summary>هل الكراش كورس مجاني فعلًا؟</summary><p>نعم، الدرسان مجانيان بالكامل لمدة أسبوع من أول دخول.</p></details>
+    <details><summary>ماذا يحدث بعد انتهاء الأسبوع؟</summary><p>يُغلق الوصول تلقائيًا. إذا أعجبك الأسلوب تقدر تسجّل في الدبلومة الكاملة وتكمل المسار.</p></details>
+    <details><summary>ما إصدار Excel المطلوب؟</summary><p>يفضّل Excel 2019 أو Microsoft 365 على Windows لتجربة مطابقة لما يظهر في الشرح.</p></details>
+    <details><summary>أحتاج حساب Google؟</summary><p>لا. الدخول يتم ببيانات تصلك فور التسجيل.</p></details>
+  </section>
+
+  <section class="final">
+    <h2>جاهز تبني أول داشبورد؟</h2>
+    <p>ساعة ونصف تكفي لتبدأ بشكل صحيح.</p>
+    <a class="btn" href="#join">سجّل مجانًا</a>
+  </section>
+</main>
+
+<footer>© Mahmoud Serag | محمود سراج · Turning Data Into Decisions</footer>
+<a class="wa" href="https://wa.me/201550888810" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7a11 11 0 0 1-4.6-4c-.4-.5-1.1-1.4-1.1-2.6s.6-1.8.9-2.1c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4z"/></svg></a>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxx-6Spvj33B1b49E4SHBuVDR1A-zDH3I9RSH2U-YB6JMHMIr9hI0F2txCsgmrFkTM20A/exec";
+const TS_KEY = "0x4AAAAAAFQCuD6m16_FLnIW";
+const q = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
+let CF = null, cfId = null;
+const MSG = {
+  bad_input:"تأكد من الاسم وصيغة البريد ورقم واتساب (8 أرقام على الأقل).",
+  captcha_required:"أكمل خطوة التحقق أولًا.", captcha_failed:"تعذّر التحقق. أعد المحاولة.",
+  busy:"الطلبات كثيرة الآن. حاول مرة أخرى بعد دقائق.",
+  already_trainee:'لديك حساب في الدبلومة بالفعل. <a href="../../portal.html">ادخل ببياناتك الحالية</a>.',
+  network:"تعذّر الاتصال. تحقق من الإنترنت وحاول مرة أخرى.",
+  server_error:"حدث خطأ مؤقت. حاول بعد قليل أو راسلنا على واتساب.",
+  bad_request:"التسجيل قيد الإعداد حاليًا. راسلنا على واتساب."
+};
+function showErr(code){ const e=$("err"); e.innerHTML=MSG[code]||MSG.server_error; e.classList.add("on"); }
+function track(n,p){ try{ window.sgTrack && window.sgTrack(n,p); }catch(e){} }
+function mountCF(){
+  if(window.turnstile && cfId===null){ cfId = turnstile.render("#cf",{sitekey:TS_KEY,theme:"dark",language:"ar",callback:t=>{CF=t},"expired-callback":()=>{CF=null},"error-callback":()=>{CF=null}}); }
+  else if(cfId===null){ setTimeout(mountCF,400); }
+}
+mountCF();
+$("f").addEventListener("submit", async ev=>{
+  ev.preventDefault(); $("err").classList.remove("on");
+  const b=$("go"), old=b.textContent; b.disabled=true; b.textContent="جارٍ التفعيل...";
+  let r;
+  try{
+    const res = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({
+      action:"campaign_signup", name:$("n").value.trim(), email:$("e").value.trim(), mobile:$("m").value.trim(), cf:CF,
+      src:q.get("utm_source")||(document.referrer?new URL(document.referrer).hostname:"direct"), camp:q.get("utm_campaign")||q.get("src")||""})});
+    r = await res.json();
+  }catch(e){ r={ok:false,code:"network"}; }
+  b.disabled=false; b.textContent=old;
+  if(window.turnstile && cfId!==null){ turnstile.reset(cfId); CF=null; }
+  if(!r.ok){ showErr(r.code); track("crash_signup_error",{code:r.code}); return; }
+  track("crash_signup",{src:q.get("utm_source")||"direct"});
+  $("f").style.display="none"; $("ok").classList.add("on");
+  if(r.existing){ $("okTxt").textContent="هذا البريد مسجل بالفعل. أرسلنا بيانات الدخول إلى بريدك."; $("cred").style.display="none"; return; }
+  $("cu").textContent=r.username; $("cp").textContent=r.password;
+  try{ localStorage.setItem("serag-token", r.token); sessionStorage.removeItem("serag-token"); }catch(e){}
+});
+</script>
+</body>
+</html>
