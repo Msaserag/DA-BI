@@ -18,6 +18,7 @@ Each release is tagged in git (for example `v2.2.0`). The Apps Script backend ca
 
 | Version | Date | Changes |
 |---|---|---|
+| v2.9.1 | 2026-11-07 | Motion layer v2 (`motion.js`, no backend change): count-up stats and KPIs, hero dashboard bars grow in with a gentle float and drifting mesh, smooth accordions with a rotating plus, client logos marquee, countdown tick with a gold pulse in the last 24 hours, offer ribbon sweep. Cards, stats band and price card now reveal on scroll. Respects reduced motion. |
 | v2.9.0 | 2026-10-26 | Email tab: send a live session as a Google Calendar invitation and see who accepted, declined, said maybe or has not replied. Needs backend v2.9.0, then run authorizeCalendar and afterUpdate once. |
 | v2.8.2 | 2026-10-26 | Email tab: built-in templates for the first live session notice and a session reminder with a session picker that fills date and time (Arabic and English). |
 | v2.8.1 | 2026-10-25 | Email tab: built-in "Last hours: 50% ends tonight + extra 10%" template (Arabic and English) for webinar registrants, skipping active trainees. No backend change needed. |
