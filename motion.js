@@ -137,7 +137,7 @@
     if (!m) return;
     var sib = b.nextElementSibling;
     if (sib && CD_LABELS[(sib.textContent || '').trim()]) return;          /* live countdown cells */
-    if (b.closest('a,nav,button,summary,[data-nomotion]')) return;          /* ribbon, nav */
+    if (b.closest('a,nav,button,summary,#app,.ring,[data-nomotion]')) return;          /* ribbon, nav */
     var p = b.parentElement; if (!p || (!p.classList.contains('fact') && hasDirectText(p))) return;           /* inline numbers inside sentences */
     var node = textNodeOf(h); if (!node) return;
     var comma = m[1].indexOf(',') > -1, num = parseFloat(m[1].replace(/,/g, ''));
@@ -278,29 +278,9 @@
   }
 
 
-  /* portal: progress percentage tweens to its new value */
-  function initPct() {
-    var el = doc.getElementById('pct'); if (!el || el.__mP) return; el.__mP = 1;
-    var last = 0, busy = false;
-    try {
-      new MutationObserver(function () {
-        if (busy) return;
-        var m = /^(\d+)%$/.exec((el.textContent || '').trim()); if (!m) return;
-        var to = +m[1]; if (to === last) return;
-        var from = last; last = to; busy = true; var t0 = null;
-        function step(ts) {
-          if (t0 === null) t0 = ts;
-          var q = Math.min(1, (ts - t0) / 900), e = 1 - Math.pow(1 - q, 3);
-          el.textContent = Math.round(from + (to - from) * e) + '%';
-          if (q < 1) requestAnimationFrame(step); else { el.textContent = to + '%'; busy = false; }
-        }
-        requestAnimationFrame(step);
-        setTimeout(function () { if (busy) { el.textContent = to + '%'; busy = false; } }, 1800);
-      }).observe(el, { childList: true, characterData: true, subtree: true });
-    } catch (e) {}
-  }
   /* portal: chapter progress bars grow in once */
   function initPbars() {
+    if (settled()) return;
     var els = doc.querySelectorAll('.pbar i em');
     for (var i = 0; i < els.length; i++) {
       var e = els[i]; if (e.__mG) continue; e.__mG = 1; if (!e.animate) continue;
@@ -357,7 +337,6 @@
     initAccordions(doc);
     initCountdown();
     initMarquee();
-    initPct();
     initPbars();
     tagButtons();
     var was = doc.querySelectorAll('.wa,a[aria-label="WhatsApp"]');
