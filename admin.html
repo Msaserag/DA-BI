@@ -227,6 +227,10 @@ tr.main:hover td{background:var(--surface-2)}
   .upd{display:none}
   .det dl{grid-template-columns:1fr 1fr}
 }
+#crashKpis{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.fn{display:grid;grid-template-columns:130px 1fr 90px;gap:12px;align-items:center;padding:7px 0;font-size:13.5px}
+.fn .pb{min-width:0}.fn .pb i{height:10px}.fn b{font-family:var(--fs-num);text-align:end}.fn b small{color:var(--ink-3);font-weight:600;margin-inline-start:4px}
+.cnote{margin:0 0 12px;padding:10px 14px;border-radius:12px;background:var(--chip-gold);color:var(--gold);font-size:13px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .cfbox{display:flex;justify-content:center;min-height:66px;margin:4px 0}
 
@@ -297,6 +301,7 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
     <nav class="tabs" id="tabs">
       <button type="button" data-v="overview" class="on">Overview</button>
       <button type="button" data-v="trainees">Trainees</button>
+      <button type="button" data-v="crash">Crash course</button>
       <button type="button" data-v="lectures">Lectures</button>
       <button type="button" data-v="announce" id="tabAnnounce">Announcements</button>
       <button type="button" data-v="email" id="tabEmail">Email</button>
@@ -339,6 +344,42 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
         </tr></thead>
         <tbody id="tb"></tbody>
       </table></div>
+    </div>
+
+    <!-- CRASH COURSE FOLLOW-UP -->
+    <div class="view" data-view="crash" hidden>
+      <div class="ph">
+        <div><h2>Crash course follow-up</h2><p class="sub">Free Excel crash course: sign-ups, engagement, completion and conversion by channel, with the WhatsApp message ready for each person.</p></div>
+        <div class="filters"><button class="ctl" id="crashCsv" type="button">Export CSV</button></div>
+      </div>
+      <div class="kpis" id="crashKpis"></div>
+      <div class="two">
+        <div class="panel">
+          <div class="ph"><div><h2>Funnel</h2><p class="sub">Share of all sign-ups that reached each step.</p></div></div>
+          <div id="crashFunnel"></div>
+        </div>
+        <div class="panel">
+          <div class="ph"><div><h2>Sign-ups per day</h2><p class="sub">Last 14 days.</p></div></div>
+          <div class="hist" id="crashDaily"></div>
+          <div class="hl" id="crashDailyL"></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:16px">
+        <div class="ph"><div><h2>By channel</h2><p class="sub">Which source brings people who actually finish and upgrade. Source comes from the tracked link (utm_source).</p></div></div>
+        <div class="cnote" id="crashSrcNote" hidden>Source shows as unknown until the backend is updated to v2.8.5 (it sends the Notes column).</div>
+        <div class="tw"><table style="min-width:520px"><thead><tr><th class="ns">Source</th><th class="n">Sign-ups</th><th class="n">Share</th><th class="n">Signed in</th><th class="n">Finished both</th><th class="n">Upgraded</th></tr></thead><tbody id="crashSrc"></tbody></table></div>
+      </div>
+      <div class="panel" style="margin-top:16px">
+        <div class="ph">
+          <div><h2>Follow-up list</h2><p class="sub">Sorted by urgency. Each WhatsApp button opens the right message for that person's stage.</p></div>
+          <div class="filters">
+            <input type="search" id="cfq" placeholder="Search name or email" aria-label="Search crash course users">
+            <select id="cfSeg" aria-label="Stage"><option value="">All stages</option><option value="expiring">Expiring soon</option><option value="nostart">Not started</option><option value="finished">Finished both</option><option value="expired">Expired</option><option value="v2next">Video 2 next</option><option value="stalled">Stalled</option><option value="new">New today</option><option value="inprogress">In progress</option><option value="upgraded">Upgraded</option></select>
+            <select id="cfSrc" aria-label="Source"><option value="">All sources</option></select>
+          </div>
+        </div>
+        <div class="tw"><table style="min-width:980px"><thead><tr><th class="ns">Person</th><th class="ns">Source</th><th class="ns">Signed up</th><th class="ns">Video 1</th><th class="ns">Video 2</th><th class="n">Sign-ins</th><th class="ns">Last sign-in</th><th class="n">Days left</th><th class="ns">Stage</th><th class="ns">Action</th></tr></thead><tbody id="crashTb"></tbody></table></div>
+      </div>
     </div>
 
     <!-- LECTURES -->
@@ -614,7 +655,7 @@ const MSG = {
 /* attention rules */
 function attention(){
   const out=[];
-  D.trainees.forEach(t=>{
+  D.trainees.filter(t=>t.cohort!==CRASH).forEach(t=>{
     if(t.status==='Pending') out.push({t, k:'pend', label:'Pending', icon:'user', d:'Registered '+rel(t.submitted), msg:'L1', approve:true});
     else if(active(t)){
       if(!t.logins && days(t.submitted)>=3) out.push({t, k:'never', label:'Never signed in', icon:'alert', d:'Approved, 0 sign-ins', msg:'T2'});
@@ -633,7 +674,7 @@ function render(){
   if(D.portalUrl) $('sheetLink').href = D.portalUrl;
   if(D.sheetUrl){ $('openSheet').href = D.sheetUrl; $('openSheet').hidden = false; }
   if(D.version) $('upd').textContent += ' · Backend v'+D.version;
-  const T = D.trainees, A = T.filter(active);
+  const T = D.trainees.filter(t=>t.cohort!==CRASH), A = T.filter(active);
   const avg = A.length ? A.reduce((s,t)=>s+t.pct,0)/A.length : 0;
   const k = [
     ['Registrations', T.length, 'all time'],
@@ -667,8 +708,120 @@ function render(){
   ['fc','lcCohort'].forEach(id=>{ const sel=$(id), v=sel.value; sel.innerHTML='<option value="">All cohorts</option>'+cohorts.map(c=>'<option>'+esc(c)+'</option>').join(''); sel.value=v; });
   const ac=$('aCoh'), av=ac.value; ac.innerHTML='<option value="All">All trainees</option>'+cohorts.map(c=>'<option>'+esc(c)+'</option>').join(''); ac.value=av||'All';
 
-  renderTable(); renderLectures(); renderAnn(); renderLog(); renderTools();
+  renderTable(); renderLectures(); renderAnn(); renderLog(); renderTools(); renderCrash();
 }
+
+/* ===== Crash course follow-up (marketing view) ===== */
+const CRASH = 'FREE-CRASH';
+const crashSrc = t => { const m=/(?:Campaign|Registration) source:\s*([^|]+)/i.exec(t.notes||''); return m ? m[1].trim().toLowerCase() : 'unknown'; };
+const crashUp = t => t.cohort!==CRASH && /Upgraded from FREE-CRASH/i.test(t.notes||'');
+const wasCrash = t => t.cohort===CRASH || crashUp(t);
+function crashVideos(){ let v=D.lessons.filter(l=>l.free); if(v.length<2) v=D.lessons.filter(l=>l.no==='1.1'||l.no==='1.2'); return v.slice(0,2).map(l=>l.id); }
+const daysLeft = t => { if(!t.until) return null; const n=NOW(); return Math.round((new Date(String(t.until).slice(0,10)+'T00:00:00')-new Date(n.getFullYear(),n.getMonth(),n.getDate()))/864e5); };
+const SEG = {
+  expiring:['Expiring soon','ends',0], nostart:['Not started','never',1], finished:['Finished both','done',2], expired:['Expired','ends',3],
+  v2next:['Video 2 next','behind',4], stalled:['Stalled','idle',5], new:['New today','pend',6], inprogress:['In progress','pend',7], upgraded:['Upgraded','done',8]
+};
+function crashRows(){
+  const ids=crashVideos(), v1=ids[0], v2=ids[1];
+  return D.trainees.filter(wasCrash).map(t=>{
+    const up=crashUp(t), d1=t.done.indexOf(v1)>-1, d2=t.done.indexOf(v2)>-1, dl=daysLeft(t);
+    let seg;
+    if(up) seg='upgraded';
+    else if(t.state==='expired') seg='expired';
+    else if(!t.logins) seg = days(t.submitted)>=1 ? 'nostart' : 'new';
+    else if(d1&&d2) seg='finished';
+    else if(dl!==null && dl<=2) seg='expiring';
+    else if(d1) seg='v2next';
+    else if(days(t.last)>=2) seg='stalled';
+    else seg='inprogress';
+    return Object.assign({}, t, {src:crashSrc(t), up:up, d1:d1, d2:d2, dl:dl, seg:seg});
+  });
+}
+const CMSG = {
+  nostart:t=>'أهلًا '+first(t.name)+'، سجّلت في الكراش كورس المجاني بس لسه ما دخلتش. الفيديو الأول (38 دقيقة) عن الـ PivotTable وبتطبق على ملف شغل حقيقي.\nالدخول من هنا: '+D.portalUrl+'\nلو واجهتك أي مشكلة في الدخول ابعتلي هنا.',
+  stalled:t=>'أهلًا '+first(t.name)+'، لاحظت إنك بدأت الكراش كورس ولسه ما خلّصتش الفيديو الأول. فيه نقطة وقفت معاك؟ ابعتلي وأساعدك.\nالرابط: '+D.portalUrl,
+  v2next:t=>'أهلًا '+first(t.name)+'، خلّصت الفيديو الأول. فاضل الفيديو التاني (59 دقيقة) وبتبني فيه الداشبورد.\nالرابط: '+D.portalUrl,
+  expiring:t=>'أهلًا '+first(t.name)+'، '+(t.dl<=0?'النهاردة آخر يوم':(t.dl===1?'فاضل يوم واحد':'فاضل يومين'))+' على انتهاء وصولك المجاني للكراش كورس.\nلو وقفت معاك أي نقطة ابعتلي هنا.\nالرابط: '+D.portalUrl,
+  finished:t=>'أهلًا '+first(t.name)+'، خلّصت الفيديوهين وبنيت الداشبورد؟ يا ريت تبعتلي الناتج أو رأيك.\nلو حابب تكمّل المسار (Power Query، نمذجة البيانات، DAX، Power BI والذكاء الاصطناعي مع جلسات مباشرة) ابعتلي "تفاصيل".',
+  expired:t=>'أهلًا '+first(t.name)+'، أسبوعك المجاني خلص. '+(t.d1&&t.d2?'خلّصت الفيديوهين وده شغل ممتاز. ':'')+'لو الأسلوب عجبك، الدبلومة الكاملة بتكمّل المسار مع جلسات مباشرة.\nابعتلي "تفاصيل" وأقولك الأنسب ليك.'
+};
+let cSeg='', cSrc='';
+const cPct = (a,b) => b ? Math.round(a/b*100)+'%' : '–';
+const pad2 = n => String(n).padStart(2,'0');
+const ymdLocal = d => d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+function renderCrash(){
+  const R=crashRows(), N=R.length;
+  const signed=R.filter(t=>t.logins>0), eng=R.filter(t=>t.logins>=2), v1=R.filter(t=>t.d1), both=R.filter(t=>t.d1&&t.d2), up=R.filter(t=>t.up);
+  const act=R.filter(t=>!t.up&&t.state==='ok'), exp=R.filter(t=>!t.up&&t.state==='expired');
+  const soon=act.filter(t=>t.dl!==null&&t.dl<=2), week=R.filter(t=>days(t.submitted)<7);
+  const avgLog = signed.length ? (signed.reduce((s,t)=>s+t.logins,0)/signed.length).toFixed(1) : '0';
+  const k = [
+    ['Sign-ups', N, '+'+week.length+' in the last 7 days'],
+    ['Activation', cPct(signed.length,N), signed.length+' signed in at least once'],
+    ['Engaged', cPct(eng.length,N), eng.length+' signed in 2+ times'],
+    ['Finished video 1', cPct(v1.length,signed.length), v1.length+' of '+signed.length+' who signed in'],
+    ['Finished both', cPct(both.length,signed.length), both.length+' of '+signed.length+' who signed in'],
+    ['Upgraded', cPct(up.length,N), up.length+' moved to the diploma'],
+    ['Active now', act.length, 'free access still valid'],
+    ['Ending within 2 days', soon.length, 'follow up now'],
+    ['Expired', exp.length, 'avg '+avgLog+' sign-ins per user']
+  ];
+  $('crashKpis').innerHTML = k.map(x=>'<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>').join('');
+
+  const st=[['Sign-ups',N],['Signed in',signed.length],['2+ sign-ins',eng.length],['Finished video 1',v1.length],['Finished both',both.length],['Upgraded',up.length]];
+  $('crashFunnel').innerHTML = st.map(s=>'<div class="fn"><span>'+s[0]+'</span><div class="pb"><i><em style="width:'+(N?Math.round(s[1]/N*100):0)+'%"></em></i></div><b>'+s[1]+' <small>'+cPct(s[1],N)+'</small></b></div>').join('');
+
+  const n0=NOW(), base=new Date(n0.getFullYear(),n0.getMonth(),n0.getDate()); const dayKeys=[];
+  for(let i=13;i>=0;i--){ const d=new Date(base); d.setDate(d.getDate()-i); dayKeys.push(ymdLocal(d)); }
+  const dc=dayKeys.map(dk=>R.filter(t=>String(t.submitted).slice(0,10)===dk).length), dm=Math.max(1,...dc);
+  $('crashDaily').innerHTML = dc.map((c,i)=>'<div class="hb" data-tip="'+c+' sign-up'+(c===1?'':'s')+' on '+dayKeys[i]+'"><em>'+c+'</em><i style="height:'+(c/dm*100*0.82)+'%"></i></div>').join('');
+  $('crashDailyL').innerHTML = dayKeys.map(dk=>'<span>'+dk.slice(8)+'</span>').join('');
+
+  const by={}; R.forEach(t=>{ (by[t.src]=by[t.src]||[]).push(t); });
+  const rows=Object.keys(by).sort((a,b)=>by[b].length-by[a].length).map(s=>{
+    const g=by[s], sg=g.filter(t=>t.logins>0), bo=g.filter(t=>t.d1&&t.d2), u=g.filter(t=>t.up);
+    return '<tr><td><b>'+esc(s)+'</b></td><td class="n">'+g.length+'</td><td class="n">'+cPct(g.length,N)+'</td><td class="n">'+cPct(sg.length,g.length)+'</td><td class="n">'+cPct(bo.length,sg.length)+'</td><td class="n">'+u.length+'</td></tr>';
+  }).join('');
+  $('crashSrc').innerHTML = rows || '<tr><td colspan="6"><div class="empty">No sign-ups yet.</div></td></tr>';
+  const hasSrc = R.some(t=>t.src!=='unknown');
+  $('crashSrcNote').hidden = hasSrc || !N;
+
+  const srcs=Array.from(new Set(R.map(t=>t.src))).sort(), sv=cSrc;
+  $('cfSrc').innerHTML='<option value="">All sources</option>'+srcs.map(s=>'<option>'+esc(s)+'</option>').join(''); $('cfSrc').value=srcs.indexOf(sv)>-1?sv:''; cSrc=$('cfSrc').value;
+  const need = R.filter(t=>t.seg==='nostart'||t.seg==='expiring').length;
+  document.querySelector('#tabs [data-v="crash"]').innerHTML='Crash course'+(need?'<span class="cnt">'+need+'</span>':'');
+  renderCrashTable(R);
+}
+function crashFiltered(R){
+  const q=$('cfq').value.trim().toLowerCase();
+  return R.filter(t=>(!cSeg||t.seg===cSeg)&&(!cSrc||t.src===cSrc)&&(!q||(t.name+' '+t.email).toLowerCase().includes(q)))
+    .sort((a,b)=>(SEG[a.seg][2]-SEG[b.seg][2]) || (String(b.submitted)>String(a.submitted)?1:-1));
+}
+function renderCrashTable(R){
+  R=R||crashRows(); const rows=crashFiltered(R);
+  const chk=(on)=>on?'<span class="pill" style="background:var(--chip-teal);color:var(--teal-2)">Done</span>':'<span class="muted">–</span>';
+  $('crashTb').innerHTML = rows.length ? rows.map(t=>{
+    const msg = CMSG[t.seg] ? CMSG[t.seg](t) : '';
+    const link = t.mobile ? 'https://wa.me/'+t.mobile+(msg?'?text='+encodeURIComponent(msg):'') : '';
+    return '<tr class="main"><td class="nm"><b>'+esc(t.name)+'</b><small>'+esc(t.email)+'</small></td>'+
+      '<td>'+esc(t.src)+'</td><td>'+esc(String(t.submitted).slice(0,10))+'</td><td>'+chk(t.d1)+'</td><td>'+chk(t.d2)+'</td>'+
+      '<td class="n">'+(t.logins||0)+'</td><td>'+rel(t.last)+'</td><td class="n">'+(t.up?'–':(t.dl===null?'–':Math.max(0,t.dl)))+'</td>'+
+      '<td><span class="tag t-'+SEG[t.seg][1]+'">'+SEG[t.seg][0]+'</span></td>'+
+      '<td><div class="acts">'+(link?'<a class="ctl sm wa" href="'+link+'" target="_blank" rel="noopener">'+ic('chat')+'WhatsApp'+(msg?'':' chat')+'</a>':'')+'</div></td></tr>';
+  }).join('') : '<tr><td colspan="10"><div class="empty">No one matches these filters.</div></td></tr>';
+}
+function crashCsv(){
+  const rows=crashFiltered(crashRows()); const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const head=['Name','Email','Mobile','Source','Signed up','Sign-ins','Last sign-in','Video 1','Video 2','Progress %','Days left','Segment','Status'];
+  const body=rows.map(t=>[t.name,t.email,t.mobile,t.src,String(t.submitted).slice(0,10),t.logins||0,String(t.last).slice(0,16).replace('T',' '),t.d1?'Done':'',t.d2?'Done':'',Math.round(t.pct*100),t.up?'':(t.dl===null?'':Math.max(0,t.dl)),SEG[t.seg][0],t.state||t.status].map(q).join(','));
+  const blob=new Blob(['﻿'+[head.map(q).join(',')].concat(body).join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='crash-course-followup-'+ymdLocal(new Date())+'.csv'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500);
+}
+$('cfq').addEventListener('input',()=>renderCrashTable());
+$('cfSeg').addEventListener('change',e=>{ cSeg=e.target.value; renderCrashTable(); });
+$('cfSrc').addEventListener('change',e=>{ cSrc=e.target.value; renderCrashTable(); });
+$('crashCsv').addEventListener('click',crashCsv);
 
 /* tools and links */
 const LIVE_URL = 'https://da-bi-diploma.vercel.app', MIRROR_URL = 'https://msaserag.github.io/DA-BI/';
@@ -772,7 +925,7 @@ $('att').addEventListener('click',e=>{ const b=e.target.closest('[data-approve]'
 /* lectures */
 $('lcCohort').addEventListener('change',renderLectures);
 function renderLectures(){
-  const c=$('lcCohort').value, A=D.trainees.filter(t=>active(t)&&(!c||t.cohort===c));
+  const c=$('lcCohort').value, A=D.trainees.filter(t=>active(t)&&(c?t.cohort===c:t.cohort!==CRASH));
   $('lc').innerHTML = D.lessons.length ? D.lessons.map(l=>{
     const n=A.filter(t=>t.done.indexOf(l.id)>-1).length, p=A.length?n/A.length:0;
     return '<div class="lr"><span class="no">'+esc(l.no)+'</span><span>'+esc(l.en)+'</span><div class="bar" data-tip="'+n+' of '+A.length+' active trainees completed '+esc(l.no)+'"><i style="width:'+(p*100)+'%"></i></div><span class="v">'+Math.round(p*100)+'%</span></div>';
