@@ -262,6 +262,57 @@ tr.main:hover td{background:var(--surface-2)}
 .etip{font-size:12.5px;color:var(--ink-3);line-height:1.7}
 .etip code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:5px}
 details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--ink-2)}
+.msg-grid{display:grid;grid-template-columns:minmax(300px,360px) 1fr;gap:20px;align-items:start}
+.ms-search{position:relative}
+.ms-search input{width:100%;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);padding:10px 12px;font-size:14px}
+.ms-search input:focus{outline:none;border-color:var(--teal)}
+.ms-resl{position:absolute;z-index:5;left:0;right:0;top:calc(100% + 4px);background:var(--solid);border:1px solid var(--line-2);border-radius:12px;box-shadow:var(--shadow,0 12px 30px rgba(0,0,0,.25));overflow:hidden}
+.ms-res{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:9px 12px;cursor:pointer;font-size:13.5px}
+.ms-res:hover{background:var(--surface-2)}
+.ms-res span{color:var(--ink-3);font-size:12px}
+.ms-card{margin-top:12px;font-size:13.5px;line-height:1.7}
+.ms-card .d{color:var(--ink-3);font-size:12.5px}
+.ms-card .warn,.warn{color:#B77900;font-weight:700}
+.ms-who{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ms-who b{font-size:15.5px}
+.ms-sug{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--surface-2);font-size:13px}
+.ms-sug.due{border:1px solid rgba(0,201,167,.45)}
+.ms-dues{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow:auto}
+.ms-due{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:none;border-radius:10px;padding:8px 10px;cursor:pointer;color:var(--ink)}
+.ms-due:hover{border-color:var(--teal);background:var(--surface-2)}
+.ms-due b{display:block;font-size:13.5px}
+.ms-due small{color:var(--ink-3);font-size:12px}
+.ms-list{display:flex;flex-direction:column;gap:2px}
+.ms-grp{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:12px 0 4px}
+.ms-grp:first-child{margin-top:0}
+.ms-item{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid transparent;background:none;border-radius:10px;padding:7px 10px;cursor:pointer;color:var(--ink);font-size:13.5px;width:100%}
+.ms-item:hover{background:var(--surface-2)}
+.ms-item.on{border-color:var(--teal);background:var(--surface-2)}
+.ms-item b{font-family:"JetBrains Mono",monospace;font-size:12px;min-width:26px;color:var(--teal)}
+.ms-fields{margin-top:4px}
+.ms-out{border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:6px 8px;font-size:12.5px}
+.ms-note{border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:6px 8px;font-size:12.5px;width:100%;min-width:140px}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:none;padding:7px 14px;font-size:13px;font-weight:700;color:var(--ink-3);cursor:pointer}
+.seg button.on{background:var(--surface-2);color:var(--ink)}
+@media (max-width:980px){.msg-grid{grid-template-columns:1fr}}
+/* feedback */
+.fb-kpis{grid-template-columns:repeat(5,1fr)}
+@media(max-width:900px){.fb-kpis{grid-template-columns:repeat(2,1fr)}}
+.fb-list{display:grid;gap:14px}
+.fb-card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--surface-2);display:grid;gap:12px}
+.fb-card.on{border-color:var(--teal)}
+.fb-head{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+.fb-head b{font-size:15px}.fb-head small{color:var(--ink-3);font-size:12px;margin-inline-start:8px}
+.fb-sc{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2)}
+.fb-sc i{font-style:normal;color:var(--gold);letter-spacing:1px}
+.fb-sc em{font-style:normal;font-family:var(--fs-num);font-weight:700}
+.fb-tx{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.fb-tx div{font-size:13.5px;line-height:1.6}.fb-tx span{display:block;font-size:11.5px;font-weight:800;color:var(--ink-3);margin-bottom:2px}
+.fb-ed{display:grid;grid-template-columns:1fr 1.4fr;gap:10px}
+.fb-ed .full{grid-column:1/-1}
+@media(max-width:700px){.fb-ed{grid-template-columns:1fr}}
+.fb-sug{display:inline-flex;font-size:11px;font-weight:800;padding:2px 9px;border-radius:99px;background:rgba(0,201,167,.15);color:var(--teal-2)}
 </style>
 </head>
 <body>
@@ -301,11 +352,13 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
     <nav class="tabs" id="tabs">
       <button type="button" data-v="overview" class="on">Overview</button>
       <button type="button" data-v="trainees">Trainees</button>
+      <button type="button" data-v="messages">Messages</button>
       <button type="button" data-v="crash">Crash course</button>
       <button type="button" data-v="lectures">Lectures</button>
       <button type="button" data-v="announce" id="tabAnnounce">Announcements</button>
       <button type="button" data-v="email" id="tabEmail">Email</button>
       <button type="button" data-v="activity">Activity</button>
+      <button type="button" data-v="feedback" id="tabFeedback">Feedback</button>
       <button type="button" data-v="tools" id="tabTools">Tools</button>
     </nav>
   </header>
@@ -418,6 +471,63 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
           <div class="ph"><div><h2>Posted</h2><p class="sub">Hide an announcement to remove it from the portal.</p></div></div>
           <div id="annList"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="view" data-view="messages" hidden>
+      <div class="msg-grid">
+        <div class="msg-side">
+          <div class="panel">
+            <div class="ph"><div><h2>Who are you messaging?</h2><p class="sub">Pick a trainee and the message fills itself in.</p></div></div>
+            <div class="ms-search"><input id="msQ" type="search" placeholder="Search name, email, phone or username" autocomplete="off"><div class="ms-resl" id="msRes" hidden></div></div>
+            <div class="ms-card" id="msCard"></div>
+          </div>
+          <div class="panel" style="margin-top:16px">
+            <div class="ph"><div><h2>Due now <span class="muted" id="msDueN"></span></h2><p class="sub">Follow-ups that are due by the playbook cadence. Click one to open the right message.</p></div></div>
+            <div class="ms-dues" id="msDue"></div>
+          </div>
+          <div class="panel" style="margin-top:16px">
+            <div class="ph"><div><h2>Message library</h2><p class="sub">All playbook messages, Arabic and English.</p></div></div>
+            <div class="ms-list" id="msList"></div>
+          </div>
+        </div>
+        <div class="msg-main">
+          <div class="panel">
+            <div class="ph"><div><h2 id="msTitle">Message</h2><p class="sub" id="msWhen"></p></div>
+              <div class="seg" id="msLang" role="group" aria-label="Language"><button type="button" data-lang="ar" class="on">العربية</button><button type="button" data-lang="en">English</button></div></div>
+            <div class="comp ms-fields" id="msFields"></div>
+            <div class="f full" style="margin-top:12px"><label for="msBody">Message (you can edit it before sending)</label><textarea id="msBody" style="min-height:230px"></textarea></div>
+            <p class="etip" id="msNote" style="margin:8px 0 0"></p>
+            <div class="cbar" style="margin-top:12px">
+              <button class="ctl wa" id="msWa" type="button"><span class="ico" data-i="chat"></span>Open in WhatsApp</button>
+              <button class="ctl" id="msCopy" type="button"><span class="ico" data-i="copy"></span>Copy</button>
+              <span class="etip">Both actions are added to the follow-up log automatically.</span>
+            </div>
+          </div>
+          <div class="panel" style="margin-top:16px">
+            <div class="ph"><div><h2>Follow-up log <span class="muted" id="msLogN"></span></h2><p class="sub">Who you contacted, with which message, and what happened. Set the outcome as replies come in; the cadence stops when someone replies.</p></div></div>
+            <div class="cbar" style="margin-bottom:12px">
+              <div class="f" style="min-width:200px;flex:1"><input id="msFq" type="search" placeholder="Filter by name, message or note"></div>
+              <div class="f"><select id="msFo"><option value="">All outcomes</option><option>Sent</option><option>Replied</option><option>Interested</option><option>Paid</option><option>No reply</option><option>Not interested</option></select></div>
+              <label class="chk"><input type="checkbox" id="msMine"><span>Selected trainee only</span></label>
+            </div>
+            <div class="tw"><table style="min-width:760px"><thead><tr><th class="ns">When</th><th class="ns">Trainee</th><th class="ns">Message</th><th class="ns">By</th><th class="ns">Outcome</th><th class="ns">Note</th></tr></thead><tbody id="msLog"></tbody></table></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="view" data-view="feedback" hidden>
+      <div class="kpis fb-kpis" id="fbKpis"></div>
+      <div class="panel" style="margin-top:16px">
+        <div class="ph"><div><h2>Trainee feedback <span class="muted" id="fbN"></span></h2><p class="sub">Nothing appears on the website until you press <b>Show on site</b>. Only responses where the trainee ticked "OK to publish" can be shown. Edit the name, role and quote first if you want.</p></div>
+          <div class="cbar"><div class="f"><select id="fbF" aria-label="Filter">
+            <option value="ready">Ready to review (OK to publish)</option><option value="site">Showing on the site</option><option value="attn">Needs attention (low score)</option><option value="nocons">Did not allow publishing</option><option value="all">All responses</option></select></div>
+            <a class="ctl" href="index.html#voices" target="_blank" rel="noopener">View on site</a></div></div>
+        <div id="fbWarn"></div>
+        <div class="fb-list" id="fbList"></div>
       </div>
     </div>
 
@@ -623,10 +733,11 @@ function applyRole(){
   $('tabAnnounce').hidden = st;
   $('tabTools').hidden = st;
   $('tabEmail').hidden = st;
+  $('tabFeedback').hidden = st;
   $('tbSub').textContent = st ? 'View trainees and follow up on WhatsApp. Click a row for details.' : 'Change Login Status or Access Until right here. Click a row for details.';
-  if(st && (view==='announce' || view==='email' || view==='tools')){ view='overview'; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.v==='overview')); document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view); }
+  if(st && (view==='announce' || view==='email' || view==='tools' || view==='feedback')){ view='overview'; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.v==='overview')); document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view); }
 }
-function set(r){ D = r; $('login').hidden=true; $('app').hidden=false; applyRole(); render(); }
+function set(r){ D = r; $('login').hidden=true; $('app').hidden=false; applyRole(); render(); mAfterSet(); }
 $('refresh').addEventListener('click',()=>load(true).then(()=>toast('Updated')));
 
 /* tabs */
@@ -634,7 +745,9 @@ let view='overview';
 $('tabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; view=b.dataset.v;
   document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
   document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view);
-  if(view==='email') loadEmail(); });
+  if(view==='email') loadEmail();
+  if(view==='messages') mOpen();
+  if(view==='feedback') fOpen(); });
 
 /* helpers */
 const NOW = () => new Date((D && D.now) ? D.now : Date.now());
@@ -651,6 +764,269 @@ const MSG = {
   T7:t=>'مرحبًا '+first(t.name)+'، الوصول لبوابة المتدربين متاح حتى '+t.until+'.\nلو محتاج وقت إضافي لإتمام الدبلومة بلغني.',
   T8:t=>'ألف مبروك يا '+first(t.name)+'! أنهيت دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي.\nهيفرق معايا جدًا لو كتبتلي رأيك في جملتين: إيه أكتر حاجة استفدت بيها في شغلك؟'
 };
+
+
+/* =====================================================================
+   MESSAGES TAB: every follow-up message in one place, filled in from the trainee's own data,
+   one click to WhatsApp or copy, and an automatic follow-up log (sheet "Message Log", backend v2.11.0).
+   ===================================================================== */
+const MLIB = [{"id": "L1", "g": "lead", "en": "Welcome after registration", "ar": "ترحيب بعد التسجيل", "note": "same day as the registration email.", "spot": "new Pending row.", "tar": "مرحبًا {name}، أنا محمود سراج.\nشكرًا على تسجيلك في دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي.\nالدفعة الجاية تبدأ {date}، 42 ساعة: 60% محتوى مسجّل موجّه و 5-6 جلسات Live.\nتحب أبعتلك المواعيد والتكلفة وطريقة الدفع؟", "ten": "Hi {name}, this is Mahmoud Serag.\nThank you for registering for the AI-Powered Data Analytics & BI Diploma.\nThe next cohort starts {date}: 42 hours, 60% guided recorded content and 5-6 live sessions.\nShall I send you the schedule, fees and payment options?"}, {"id": "L2", "g": "lead", "en": "No reply after 2 days", "ar": "لا رد بعد يومين", "note": "2 days after L1 with no reply.", "spot": "still Pending, no WhatsApp reply.", "tar": "أهلًا {name}، بس بطمن إن رسالتي وصلتك.\nلو عندك أي سؤال عن المنهج أو المواعيد أو إزاي الدبلومة هتفيدك في شغلك كـ {job}، أنا موجود.", "ten": "Hi {name}, just checking my message reached you.\nIf you have any questions about the syllabus, schedule, or how the diploma fits your work as a {job}, I'm happy to help."}, {"id": "L3", "g": "lead", "en": "Seats and start date reminder", "ar": "تذكير بالمقاعد وموعد البداية", "note": "about 7 days before the cohort starts.", "spot": "Pending rows for that cohort.", "tar": "مرحبًا {name}، دفعة {cohort} تبدأ {date}.\nالدفعة من 12 لـ 20 متدرب بس، وفاضل {seats} مقاعد.\nلو حابب تأكّد مكانك، ابعتلي \"أكّد\" وهبعتلك خطوات الدفع.", "ten": "Hi {name}, the {cohort} cohort starts {date}.\nEach cohort is capped at 12-20 participants and {seats} seats remain.\nReply \"Confirm\" and I'll send you the payment steps."}, {"id": "L4", "g": "lead", "en": "Last message, keep the door open", "ar": "رسالة أخيرة وإبقاء الباب مفتوحًا", "note": "5 days after L3 with no reply.", "spot": "still Pending after the cohort starts.", "tar": "أهلًا {name}، مش هزعجك تاني بخصوص الدفعة دي.\nتسجيلك محفوظ، وهبلغك بموعد الدفعة الجاية أول ما يتحدد.\nبالتوفيق دايمًا.", "ten": "Hi {name}, I won't message you again about this cohort.\nYour registration is saved, and I'll let you know as soon as the next cohort date is set.\nWishing you all the best."}, {"id": "L5", "g": "lead", "en": "Company or team inquiry", "ar": "استفسار شركة أو فريق", "note": "Cohort = In-house (Company), or Company is filled in.", "spot": "Cohort or Company columns.", "tar": "مرحبًا {name}، شكرًا على اهتمام {company}.\nالدبلومة متاحة كتدريب In-house وممكن نطبّقها على بيانات ومؤشرات شركتكم.\nممكن نحدد مكالمة 15 دقيقة هذا الأسبوع نتفق فيها على عدد المتدربين والأولويات؟", "ten": "Hi {name}, thank you for {company}'s interest.\nThe diploma is available in-house and can be tailored to your company's own data and KPIs.\nCould we book a 15-minute call this week to agree on team size and priorities?"}, {"id": "T2", "g": "trainee", "en": "Hasn't signed in yet", "ar": "لم يسجّل الدخول بعد", "note": "3 days after approval.", "spot": "Approved and Logins is empty or 0.", "tar": "مرحبًا {name}، لاحظت إنك لسه مدخلتش بوابة المتدربين.\nالرابط: {portal}\nاسم المستخدم وكلمة المرور في رسالة التفعيل. لو واجهت أي مشكلة في الدخول ابعتلي صورة من الشاشة وهحلها معاك فورًا.", "ten": "Hi {name}, I noticed you haven't signed in to the learner portal yet.\nLink: {portal}\nYour username and temporary password are in the activation email (or the WhatsApp message I sent). If anything blocks you, send me a screenshot and I'll sort it out right away."}, {"id": "T3", "g": "trainee", "en": "Inactive or falling behind", "ar": "غير نشط أو متأخر", "note": "any time.", "spot": "Last Login older than 7 days, or Progress % under 20% after week 2.", "tar": "أهلًا {name}، إزيك؟ وصلت لـ {percent}% من المحاضرات المتاحة.\nالخطوة الجاية: {lecture} (حوالي {minutes} دقيقة).\nلو في حاجة معطلاك أو محتاج توضيح في جزء معين، قولي ونراجعه في الجلسة الجاية.", "ten": "Hi {name}, how is it going? You've completed {percent}% of the available lectures.\nNext up: {lecture} (about {minutes} minutes).\nIf something is holding you back or a topic needs clarifying, tell me and we'll cover it in the next session."}, {"id": "T4", "g": "trainee", "en": "Live session reminder", "ar": "تذكير بالجلسة المباشرة", "note": "the day before, and again 1 hour before.", "spot": "Live rows in the Content tab.", "tar": "تذكير: الجلسة المباشرة {sno} يوم {day} الساعة {time} بتوقيت القاهرة.\nالموضوع: {topic}\nرابط الجلسة موجود في البوابة تحت \"الجلسات المباشرة\".\nجهّز ملف التطبيق وأي أسئلة عندك.", "ten": "Reminder: Live Session {sno} is on {day} at {time} Cairo time.\nTopic: {topic}\nThe join link is in the portal under \"Live sessions\".\nHave your practice file and questions ready."}, {"id": "T5", "g": "trainee", "en": "New lectures published", "ar": "محاضرات جديدة", "note": "right after you add links in the Content tab.", "spot": "your own update.", "tar": "محاضرات جديدة اتنشرت على البوابة:\n{secno} {sectitle}\nيُفضّل تخلّصها قبل الجلسة المباشرة يوم {day}، عشان نستغل الجلسة في التطبيق.", "ten": "New lectures are live in the portal:\n{secno} {sectitle}\nPlease complete them before the live session on {day}, so we can use that time for hands-on practice."}, {"id": "T6", "g": "trainee", "en": "Milestone congratulations", "ar": "تهنئة بإنجاز", "note": "a trainee finishes a chapter or reaches 50%.", "spot": "Progress % crossing 50%.", "tar": "مبروك يا {name}! خلّصت {percent}% من الدبلومة.\nشغل ممتاز، كمّل بنفس السرعة. الفصل الجاي: {chapter}.", "ten": "Congratulations {name}! You've completed {percent}% of the diploma.\nGreat work; keep the same pace. Next chapter: {chapter}."}, {"id": "T7", "g": "trainee", "en": "Access ending soon", "ar": "اقتراب انتهاء الوصول", "note": "14 days before Access Until.", "spot": "Access Until column.", "tar": "مرحبًا {name}، الوصول لبوابة المتدربين متاح حتى {date}.\nفاضلك {left} محاضرات للإتمام والشهادة. لو محتاج وقت إضافي بلغني.", "ten": "Hi {name}, your learner portal access runs until {date}.\nYou have {left} lectures left to complete the diploma and earn the certificate. Let me know if you need more time."}, {"id": "T8", "g": "trainee", "en": "Completion, certificate and feedback", "ar": "الإتمام والشهادة والرأي", "note": "Progress % reaches 100%.", "spot": "Progress % column.", "tar": "ألف مبروك يا {name}! أنهيت دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي.\nشهادة الإتمام هتوصلك خلال {timeframe}.\nهيفرق معايا جدًا لو كتبتلي رأيك في جملتين: إيه أكتر حاجة استفدت بيها في شغلك؟ وهل تسمح أنشر رأيك باسمك على صفحة الدبلومة؟", "ten": "Congratulations {name}! You've completed the AI-Powered Data Analytics & BI Diploma.\nYour certificate of completion will reach you within {timeframe}.\nIt would mean a lot if you shared your feedback in two sentences: what helped you most in your work? And may I publish it with your name on the diploma page?"}, {"id": "S1", "g": "support", "en": "Forgot password", "ar": "نسيت كلمة المرور", "note": "Do first: clear their Password cell in the Trainees tab. A new temporary password is created and **emailed to them automatically**; they will choose a new personal one at their next sign-in. If they prefer WhatsApp, click Send on WhatsApp, or send:", "spot": "", "tar": "تم إعادة تعيين كلمة المرور.\nاسم المستخدم: {user}\nكلمة المرور الجديدة: {password}\nكلمة المرور حساسة لحالة الأحرف، انسخها زي ما هي.", "ten": "Your password has been reset.\nUsername: {user}\nNew password: {password}\nPasswords are case-sensitive, so copy it exactly."}, {"id": "S2", "g": "support", "en": "\"Video unavailable\" on a private lecture", "ar": "ظهور \"Video unavailable\"", "note": "Do first: check their Google Email is invited on that video (YouTube Studio > Visibility > Share).", "spot": "", "tar": "المحاضرات الخاصة بتفتح بس بحساب Google المسجّل: {email}\nافتح YouTube، اضغط على صورة البروفايل > تبديل الحساب، واختار الحساب ده، وبعدين افتح المحاضرة من البوابة تاني.", "ten": "Private lectures open only with your registered Google account: {email}\nOpen YouTube, tap your profile picture > Switch account, choose that account, then open the lecture from the portal again."}, {"id": "S3", "g": "support", "en": "Access ended or paused", "ar": "انتهى الوصول أو تم إيقافه", "note": "Do first: to extend, change Access Until; to restore, set Login Status back to Approved. The trainee signs in again with the same login.", "spot": "", "tar": "تم تفعيل الوصول مرة تانية حتى {date}.\nادخل بنفس اسم المستخدم وكلمة المرور: {portal}", "ten": "Your access is active again until {date}.\nSign in with the same username and password: {portal}"}];
+const MFIELDS = {name:'Name', date:'Date', job:'Job title', company:'Company', cohort:'Cohort', seats:'Seats left', percent:'Percent done', lecture:'Next lecture', minutes:'Minutes', sno:'Session number', day:'Day', time:'Time (Cairo)', topic:'Topic', secno:'Section no.', sectitle:'Section title', chapter:'Chapter title', left:'Lectures left', timeframe:'Certificate timeframe', user:'Username', password:'Password', email:'Google email', portal:'Portal link'};
+const MSTICKY = ['date','day','time','topic','sno','seats','timeframe','minutes','secno','sectitle','chapter'];
+const MOUT = ['Sent','Replied','Interested','Paid','No reply','Not interested'];
+const MST = {tpl:'L1', row:0, lang:'ar', vals:{}, sticky:{}, q:'', fo:'', fq:'', mine:false, off:false, loaded:false, bound:false};
+try{ MST.lang = localStorage.getItem('serag-msg-lang')==='en' ? 'en' : 'ar'; }catch(e){}
+let MLOG = [];
+const mPerson = () => D && D.trainees.find(t=>t.row===MST.row) || null;
+const mTpl = id => MLIB.find(x=>x.id===(id||MST.tpl));
+const mCmp = s => String(s||'').toLowerCase();
+
+function mAuto(t, tid){
+  const v = {portal:String(D.portalUrl||'').replace(/^https?:\/\//,'')};
+  if(!t) return v;
+  const undone = D.lessons.filter(l=>t.done.indexOf(l.id)<0), nx = undone[0];
+  Object.assign(v, {name:first(t.name), job:t.job||'', company:t.company||'', cohort:t.cohort||'', percent:String(Math.round(t.pct*100)), user:t.user||'', email:t.email||'', left:String(undone.length),
+    lecture: nx ? (MST.lang==='ar' ? (nx.ar||nx.en) : (nx.en||nx.ar)) : ''});
+  if((tid==='T7' || tid==='S3') && t.until) v.date = t.until;
+  return v;
+}
+function mKeys(){ const tp = mTpl(); return ((MST.lang==='ar'?tp.tar:tp.ten).match(/\{[a-z]+\}/g)||[]).map(x=>x.slice(1,-1)).filter((k,i,a)=>a.indexOf(k)===i); }
+function mFill(){
+  const t = mPerson(), auto = mAuto(t, MST.tpl);
+  mKeys().forEach(k=>{ if(MST.vals[k]===undefined) MST.vals[k] = auto[k] || MST.sticky[k] || ''; });
+}
+function mBody(){
+  const tp = mTpl();
+  return (MST.lang==='ar'?tp.tar:tp.ten).replace(/\{([a-z]+)\}/g,(m,k)=> MST.vals[k] ? MST.vals[k] : m);
+}
+function mReset(){ MST.vals = {}; mFill(); }
+
+/* follow-up history and the suggested next message */
+const mHist = t => MLOG.filter(x=>x.email && t.email && mCmp(x.email)===mCmp(t.email));
+function mNext(t){
+  if(t.status!=='Pending' || t.cohort===CRASH) return null;
+  const h = mHist(t), lead = h.filter(x=>/^L[1-4]$/.test(x.tpl));
+  if(h.some(x=>['Replied','Interested','Paid'].indexOf(x.outcome)>-1)) return {id:null, why:'They replied: follow up personally'};
+  if(!lead.length) return {id:(t.company ? 'L5' : 'L1'), due:true, why:'Not contacted yet'};
+  const order = ['L1','L2','L3','L4'], gap = {L2:2, L3:2, L4:5}, i = order.indexOf(lead[0].tpl);
+  if(i===3) return {id:null, why:'Cadence complete: stop after L4'};
+  const nx = order[i+1], d = days(lead[0].at);
+  return d>=gap[nx] ? {id:nx, due:true, why:'No reply '+Math.floor(d)+' days after '+lead[0].tpl} : {id:nx, due:false, why:nx+' is due in '+Math.ceil(gap[nx]-d)+' day(s)'};
+}
+function mSuggest(t){
+  if(t.status==='Pending') return mNext(t);
+  const a = attention().find(x=>x.t===t);
+  return a ? {id:a.msg, due:true, why:a.label} : null;
+}
+function mDue(){
+  return D.trainees.filter(t=>t.cohort!==CRASH).map(t=>({t, s:mSuggest(t)})).filter(x=>{
+    if(!x.s || !x.s.due) return false;
+    const h = mHist(x.t); return !(h.length && days(h[0].at) < 2);
+  });
+}
+function mBadge(){
+  const n = (D && MST.loaded) ? mDue().length : 0;
+  document.querySelector('#tabs [data-v="messages"]').innerHTML = 'Messages'+(n?'<span class="cnt">'+n+'</span>':'');
+}
+
+/* data */
+async function mLoadLog(){
+  const r = await api({action:'admin_msg_log_data', token:TOKEN});
+  if(r.ok){ MLOG = r.entries||[]; MST.off = false; }
+  else if(r.code==='bad_request'){ MST.off = true; }
+  MST.loaded = true; mBadge(); if(view==='messages') mRender();
+}
+async function mLogAdd(t, tid, lang, channel){
+  if(!t || !t.email) return;
+  const e = {email:t.email, name:t.name, mobile:t.mobile, cohort:t.cohort, tpl:tid, lang:lang, channel:channel, outcome:'Sent', note:''};
+  const r = await api(Object.assign({action:'admin_msg_log_add', token:TOKEN}, e));
+  if(r.ok) MLOG.unshift(Object.assign({id:r.id, at:r.at, by:r.by}, e));
+  else if(r.code==='bad_request'){ MST.off = true; MLOG.unshift(Object.assign({id:0, local:true, at:new Date().toISOString().slice(0,16), by:'This browser'}, e)); }
+  else { toast('Could not save to the log'); return; }
+  mBadge(); if(view==='messages') mRender();
+}
+async function mLogSet(id, patch){
+  const x = MLOG.find(z=>z.id===id); if(!x) return;
+  Object.assign(x, patch);
+  if(!id || x.local){ mRender(); return; }
+  const r = await api(Object.assign({action:'admin_msg_log_set', token:TOKEN, id:id, email:x.email}, patch));
+  if(!r.ok) toast('Could not save that change'); else { toast('Saved'); mBadge(); }
+  mRender();
+}
+
+/* render */
+const MGL = {lead:'Leads (still Pending)', trainee:'Active trainees', support:'Support replies'};
+function mRender(){
+  if(!D) return;
+  mFill();
+  const t = mPerson(), tp = mTpl(), sug = t ? mSuggest(t) : null;
+  /* person */
+  const q = mCmp(MST.q);
+  const res = q ? D.trainees.filter(x=>[x.name,x.email,x.mobile,x.user].some(f=>mCmp(f).indexOf(q)>-1)).slice(0,7) : [];
+  $('msRes').innerHTML = res.map(x=>'<button type="button" class="ms-res" data-pick="'+x.row+'"><b>'+esc(x.name)+'</b><span>'+esc(x.cohort||'')+' · '+esc(x.status)+'</span></button>').join('');
+  $('msRes').hidden = !res.length;
+  $('msCard').innerHTML = t
+    ? '<div class="ms-who"><b>'+esc(t.name)+'</b><button type="button" class="ctl sm" data-pick="0">Clear</button></div>'+
+      '<div class="d">'+esc(t.cohort||'No cohort')+' · '+esc(t.status)+(t.job?' · '+esc(t.job):'')+(t.company?' @ '+esc(t.company):'')+'</div>'+
+      '<div class="d">Progress '+pctTxt(t.pct)+' · last sign-in '+rel(t.last)+(t.mobile?'':' · <span class="warn">no WhatsApp number</span>')+'</div>'+
+      '<div class="d">'+(mHist(t).length ? 'Last contact: <b>'+esc(mHist(t)[0].tpl)+'</b> '+rel(mHist(t)[0].at)+' · '+esc(mHist(t)[0].outcome) : 'Not contacted yet')+'</div>'+
+      (sug ? '<div class="ms-sug'+(sug.due?' due':'')+'">'+(sug.id ? (sug.due?'Suggested now: ':'Next: ')+'<button type="button" class="chip" data-tpl="'+sug.id+'">'+sug.id+'</button> ' : '')+esc(sug.why)+'</div>' : '')
+    : '<div class="d">Search a trainee to fill the name, progress and dates automatically. You can also use any message without picking anyone.</div>';
+  /* due now */
+  const due = mDue();
+  $('msDue').innerHTML = due.length ? due.slice(0,12).map(x=>'<button type="button" class="ms-due" data-pick="'+x.t.row+'" data-tpl="'+x.s.id+'"><span class="tag">'+x.s.id+'</span><span><b>'+esc(x.t.name)+'</b><small>'+esc(x.s.why)+'</small></span></button>').join('')
+    : '<div class="d" style="padding:6px 2px">'+(MST.loaded ? 'No follow-ups due right now.' : 'Loading...')+'</div>';
+  $('msDueN').textContent = due.length ? '('+due.length+')' : '';
+  /* templates */
+  $('msList').innerHTML = ['lead','trainee','support'].map(g=>'<div class="ms-grp">'+MGL[g]+'</div>'+MLIB.filter(x=>x.g===g).map(x=>
+    '<button type="button" class="ms-item'+(x.id===MST.tpl?' on':'')+'" data-tpl="'+x.id+'"><b>'+x.id+'</b><span>'+esc(x.en)+'</span></button>').join('')).join('');
+  /* composer */
+  $('msTitle').textContent = tp.id+' · '+tp.en;
+  $('msWhen').innerHTML = tp.note ? (tp.g==='support' ? esc(tp.note) : '<b>When:</b> '+esc(tp.note)+(tp.spot?' <b>Spot it:</b> '+esc(tp.spot):'')) : '';
+  document.querySelectorAll('#msLang button').forEach(b=>b.classList.toggle('on', b.dataset.lang===MST.lang));
+  const keys = mKeys();
+  $('msFields').innerHTML = keys.map(k=>'<div class="f"><label for="mf-'+k+'">'+MFIELDS[k]+'</label><input id="mf-'+k+'" class="mf" data-k="'+k+'" value="'+esc(MST.vals[k]||'')+'" '+(k==='portal'||k==='email'||k==='user'||k==='password'?'dir="ltr"':'')+'></div>').join('');
+  $('msFields').hidden = !keys.length;
+  const body = $('msBody'); body.value = mBody(); body.dir = MST.lang==='ar' ? 'rtl' : 'ltr';
+  $('msWa').disabled = !!(t && !t.mobile);
+  $('msWa').title = t && !t.mobile ? 'This trainee has no WhatsApp number in the sheet' : '';
+  $('msNote').innerHTML = (keys.indexOf('password')>-1 ? 'Passwords are never stored here. For a new login, use Send login in the Trainees tab, or type the password you just created. ' : '')+
+    (MST.off ? '<span class="warn">The follow-up log needs backend v2.11.0, so entries below are kept in this browser only until you update it.</span>' : '');
+  mRenderLog();
+}
+function mRenderLog(){
+  const t = mPerson(), fq = mCmp(MST.fq);
+  let rows = MLOG.slice();
+  if(MST.mine && t) rows = rows.filter(x=>mCmp(x.email)===mCmp(t.email));
+  if(MST.fo) rows = rows.filter(x=>x.outcome===MST.fo);
+  if(fq) rows = rows.filter(x=>[x.name,x.email,x.tpl,x.note].some(f=>mCmp(f).indexOf(fq)>-1));
+  $('msLogN').textContent = rows.length+' of '+MLOG.length;
+  $('msLog').innerHTML = rows.length ? rows.slice(0,120).map(x=>'<tr><td class="ns">'+rel(x.at)+'<div class="d">'+esc(String(x.at).replace('T',' ').slice(0,16))+'</div></td>'+
+    '<td><b>'+esc(x.name)+'</b><div class="d">'+esc(x.cohort||'')+'</div></td><td><span class="tag">'+esc(x.tpl)+'</span> <span class="d">'+esc(String(x.lang||'').toUpperCase())+' · '+esc(x.channel)+'</span></td><td class="d">'+esc(x.by||'')+'</td>'+
+    '<td><select class="ms-out" data-id="'+x.id+'" data-e="'+esc(x.email)+'">'+MOUT.map(o=>'<option'+(o===x.outcome?' selected':'')+'>'+o+'</option>').join('')+'</select></td>'+
+    '<td><input class="ms-note" data-id="'+x.id+'" value="'+esc(x.note||'')+'" placeholder="Add a note" maxlength="300"></td></tr>').join('')
+    : '<tr><td colspan="6" class="empty">'+(MST.loaded ? 'Nothing logged yet. Every WhatsApp or copy action from this tab (and the WhatsApp buttons on Overview) is recorded here.' : 'Loading...')+'</td></tr>';
+}
+function mOpen(){ mRender(); if(!MST.loaded) mLoadLog(); }
+function mCopy(txt){
+  if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(txt).catch(()=>mCopyOld(txt));
+  mCopyOld(txt); return Promise.resolve();
+}
+function mCopyOld(txt){ const a=document.createElement('textarea'); a.value=txt; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{ document.execCommand('copy'); }catch(e){} a.remove(); }
+function mCheck(){
+  const miss = (($('msBody').value.match(/\{([a-z]+)\}/g))||[]).map(x=>MFIELDS[x.slice(1,-1)]||x);
+  if(miss.length){ toast('Fill in: '+miss.filter((x,i,a)=>a.indexOf(x)===i).join(', ')); return false; }
+  return true;
+}
+function mBind(){
+  if(MST.bound) return; MST.bound = true;
+  const root = document.querySelector('[data-view="messages"]');
+  root.addEventListener('click', e=>{
+    const p = e.target.closest('[data-pick]'), tl = e.target.closest('[data-tpl]');
+    if(p){ MST.row = Number(p.dataset.pick); MST.q = ''; $('msQ').value = ''; }
+    if(tl){ MST.tpl = tl.dataset.tpl; }
+    if(p || tl){ mReset(); mRender(); if(tl) $('msBody').scrollIntoView({block:'nearest', behavior:'smooth'}); return; }
+    const lg = e.target.closest('#msLang button');
+    if(lg){ MST.lang = lg.dataset.lang; try{ localStorage.setItem('serag-msg-lang', MST.lang); }catch(x){} mReset(); mRender(); return; }
+    if(e.target.closest('#msCopy')){
+      if(!mCheck()) return;
+      mCopy($('msBody').value).then(()=>toast('Copied'));
+      mLogAdd(mPerson(), MST.tpl, MST.lang, 'copied'); return;
+    }
+    if(e.target.closest('#msWa')){
+      if(!mCheck()) return;
+      const t = mPerson(), txt = $('msBody').value;
+      window.open((t && t.mobile ? 'https://wa.me/'+t.mobile : 'https://wa.me/')+'?text='+encodeURIComponent(txt), '_blank', 'noopener');
+      mLogAdd(t, MST.tpl, MST.lang, 'whatsapp'); return;
+    }
+  });
+  root.addEventListener('input', e=>{
+    const f = e.target.closest('.mf');
+    if(f){ MST.vals[f.dataset.k] = f.value; if(MSTICKY.indexOf(f.dataset.k)>-1) MST.sticky[f.dataset.k] = f.value; $('msBody').value = mBody(); return; }
+    if(e.target.id==='msQ'){ MST.q = e.target.value; mRender(); $('msQ').focus(); return; }
+    if(e.target.id==='msFq'){ MST.fq = e.target.value; mRenderLog(); return; }
+  });
+  root.addEventListener('change', e=>{
+    if(e.target.id==='msFo'){ MST.fo = e.target.value; mRenderLog(); return; }
+    if(e.target.id==='msMine'){ MST.mine = e.target.checked; mRenderLog(); return; }
+    const o = e.target.closest('.ms-out'); if(o){ mLogSet(Number(o.dataset.id), {outcome:o.value}); return; }
+    const n = e.target.closest('.ms-note'); if(n){ mLogSet(Number(n.dataset.id), {note:n.value}); return; }
+  });
+}
+function mAfterSet(){
+  mBind(); mBadge();
+  if(!MST.loaded) mLoadLog(); else mBadge();
+}
+document.addEventListener('click', e=>{
+  const a = e.target.closest('a[data-ml]'); if(!a || !D) return;
+  const p = a.dataset.ml.split('|'), t = D.trainees.find(x=>x.row===Number(p[0]));
+  if(t) mLogAdd(t, p[1], 'ar', 'whatsapp');
+});
+
+
+/* feedback and testimonials (owner only) */
+const FB = {rows:[], loaded:false, off:false};
+const fStars = n => { n = Math.max(0, Math.min(5, Number(n)||0)); return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n); };
+function fOpen(){ if(!FB.loaded) fLoad(); else fRender(); }
+async function fLoad(){
+  const r = await api({action:'admin_survey_data', token:TOKEN});
+  if(r.ok){ FB.rows = r.entries||[]; FB.off = false; }
+  else if(r.code==='bad_request'){ FB.off = true; }
+  else if(r.code!=='session_expired'){ toast('Could not load feedback'); }
+  FB.loaded = true; fRender();
+}
+function fSug(e){ return e.publish && !e.show && Number(e.training)>=4 && Number(e.nps)>=9 && (e.quote||'').length>=20; }
+function fKpis(){
+  const n = FB.rows.length, avg = k => n ? (FB.rows.reduce((a,e)=>a+Number(e[k]||0),0)/n) : 0;
+  const pro = FB.rows.filter(e=>Number(e.nps)>=9).length, det = FB.rows.filter(e=>Number(e.nps)<=6).length;
+  const nps = n ? Math.round((pro-det)/n*100) : 0;
+  const k = (l,v,s) => '<div class="kpi"><span>'+l+'</span><b>'+v+'</b><small>'+s+'</small></div>';
+  $('fbKpis').innerHTML = k('Responses', n, 'since the survey launched')+
+    k('Training rating', n?avg('training').toFixed(1):'–', 'out of 5')+
+    k('Recommend score', n?(nps>0?'+':'')+nps:'–', 'NPS: promoters minus detractors')+
+    k('Ready to review', FB.rows.filter(e=>e.publish && !e.show).length, 'allowed publishing')+
+    k('On the site', FB.rows.filter(e=>e.show).length, 'visible to visitors');
+}
+function fCard(e){
+  const nm = e.name || e.email;
+  return '<div class="fb-card'+(e.show?' on':'')+'" data-id="'+e.id+'" data-email="'+esc(e.email)+'">'+
+    '<div class="fb-head"><div><b>'+esc(nm)+'</b><small>'+esc(e.cohort||'')+' · '+esc(String(e.at).slice(0,10))+' · '+esc(e.lang||'')+' · '+(e.pct===''||e.pct==null?'':esc(e.pct)+'% done')+'</small></div>'+
+    '<div>'+(e.show?'<span class="tag t-ok" style="background:rgba(0,201,167,.15);color:var(--teal-2)">On the site</span>':fSug(e)?'<span class="fb-sug">Suggested</span>':'')+
+      (e.publish?'':' <span class="pill" style="background:rgba(255,122,122,.13);color:var(--bad)">Did not allow publishing</span>')+'</div></div>'+
+    '<div class="fb-sc"><span>Training <i>'+fStars(e.training)+'</i></span><span>Content <em>'+esc(e.content)+'</em></span><span>Live <em>'+esc(e.live)+'</em></span><span>Portal <em>'+esc(e.platform)+'</em></span><span>Videos <em>'+esc(e.video)+'</em></span><span>Recommend <em>'+esc(e.nps)+'/10</em></span></div>'+
+    '<div class="fb-tx"><div><span>LIKED MOST</span>'+(esc(e.liked)||'<i class="muted">No comment</i>')+'</div><div><span>TO IMPROVE (private)</span>'+(esc(e.improve)||'<i class="muted">No comment</i>')+'</div></div>'+
+    (e.publish?'<div class="fb-ed"><div class="f"><label>Shown name</label><input class="fb-d" maxlength="60" value="'+esc(e.display)+'"></div>'+
+      '<div class="f"><label>Role / company (optional)</label><input class="fb-r" maxlength="120" value="'+esc(e.role)+'"></div>'+
+      '<div class="f full"><label>Quote shown on the site</label><textarea class="fb-q" maxlength="400" dir="auto">'+esc(e.quote)+'</textarea></div></div>'+
+      '<div class="cbar"><button type="button" class="ctl pri fb-show" data-on="'+(e.show?0:1)+'">'+(e.show?'Hide from site':'Show on site')+'</button>'+
+      '<button type="button" class="ctl fb-save">Save edits</button><span class="etip">Improvement comments are never published.</span></div>':'')+
+    '</div>';
+}
+function fRender(){
+  if(!D) return;
+  $('fbWarn').innerHTML = FB.off ? '<div class="err">The feedback review needs backend v2.12.0. Paste the new script in Apps Script, deploy a new version, then run afterUpdate once.</div>' : '';
+  fKpis();
+  const f = $('fbF').value;
+  const list = FB.rows.filter(e=>f==='all' || (f==='ready'&&e.publish&&!e.show) || (f==='site'&&e.show) || (f==='attn'&&(Number(e.training)<=3||Number(e.nps)<=6)) || (f==='nocons'&&!e.publish));
+  $('fbN').textContent = '('+list.length+')';
+  $('fbList').innerHTML = list.length ? list.map(fCard).join('') : '<div class="empty">'+(FB.rows.length?'Nothing in this view.':'No responses yet. They appear here as trainees submit the survey.')+'</div>';
+}
+async function fSave(card, show){
+  const body = {action:'admin_survey_set', token:TOKEN, id:Number(card.dataset.id), email:card.dataset.email,
+    display:card.querySelector('.fb-d').value, role:card.querySelector('.fb-r').value, quote:card.querySelector('.fb-q').value};
+  if(show!==undefined) body.show = show;
+  const r = await api(body);
+  if(!r.ok){ toast(r.code==='no_consent'?'This trainee did not allow publishing':r.code==='bad_request'?'Add a shown name and a quote first':'Could not save'); return; }
+  const x = FB.rows.find(z=>z.id===body.id);
+  if(x){ x.display=body.display; x.role=body.role; x.quote=body.quote; if(show!==undefined) x.show=show; }
+  toast(show===true?'Now showing on the site (live within 10 minutes)':show===false?'Hidden from the site':'Saved'); fRender();
+}
+$('fbF').addEventListener('change', fRender);
+$('fbList').addEventListener('click', e=>{
+  const card = e.target.closest('.fb-card'); if(!card) return;
+  if(e.target.closest('.fb-save')) fSave(card);
+  const sh = e.target.closest('.fb-show'); if(sh) fSave(card, sh.dataset.on==='1');
+});
 
 /* attention rules */
 function attention(){
@@ -691,7 +1067,7 @@ function render(){
     const link = wa(a.t, MSG[a.msg](a.t));
     return '<div class="att-row"><span class="tag t-'+a.k+'">'+ic(a.icon)+a.label+'</span><div><b>'+esc(a.t.name)+'</b> <span class="d">· '+esc(a.t.cohort||'')+'</span><div class="d">'+a.d+'</div></div>'+
       '<div class="acts">'+(a.approve && !isStaff()?'<button class="ctl sm" type="button" data-approve="'+a.t.row+'">Approve</button>':'')+
-      (link?'<a class="ctl sm wa" href="'+link+'" target="_blank" rel="noopener">'+ic('chat')+'WhatsApp '+a.msg+'</a>':'')+'</div></div>';
+      (link?'<a class="ctl sm wa" data-ml="'+a.t.row+'|'+a.msg+'" href="'+link+'" target="_blank" rel="noopener">'+ic('chat')+'WhatsApp '+a.msg+'</a>':'')+'</div></div>';
   }).join('') : '<div class="empty">Nothing needs attention right now.</div>';
   const pendN = T.filter(t=>t.status==='Pending').length;
   document.querySelector('#tabs [data-v="trainees"]').innerHTML = 'Trainees'+(pendN?'<span class="cnt">'+pendN+'</span>':'');
