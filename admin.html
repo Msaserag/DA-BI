@@ -296,6 +296,13 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
 .seg button{border:0;background:none;padding:7px 14px;font-size:13px;font-weight:700;color:var(--ink-3);cursor:pointer}
 .seg button.on{background:var(--surface-2);color:var(--ink)}
 @media (max-width:980px){.msg-grid{grid-template-columns:1fr}}
+/* message groups */
+.ms-grow{display:flex;gap:6px;align-items:stretch}
+.ms-grow .ms-due{flex:1;min-width:0}
+.ms-grow .ctl{height:auto;min-width:38px}
+.ms-due.on{border-color:var(--teal);background:var(--surface-2)}
+.ms-add{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;display:grid;gap:10px}
+.ms-add summary{cursor:pointer;font-weight:800;font-size:13.5px;color:var(--teal-2)}
 /* feedback */
 .fb-kpis{grid-template-columns:repeat(5,1fr)}
 @media(max-width:900px){.fb-kpis{grid-template-columns:repeat(2,1fr)}}
@@ -484,8 +491,23 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
             <div class="ms-card" id="msCard"></div>
           </div>
           <div class="panel" style="margin-top:16px">
-            <div class="ph"><div><h2>Due now <span class="muted" id="msDueN"></span></h2><p class="sub">Follow-ups that are due by the playbook cadence. Click one to open the right message.</p></div></div>
+            <div class="ph"><div><h2>Due now <span class="muted" id="msDueN"></span></h2><p class="sub">Follow-ups due by the playbook cadence. Anyone you messaged in the last 2 days is held back so nobody gets double-messaged; they return here when their next step is due. To message someone again sooner, use Recently contacted below or search for them.</p></div></div>
             <div class="ms-dues" id="msDue"></div>
+          </div>
+          <div class="panel" style="margin-top:16px">
+            <div class="ph"><div><h2>Recently contacted <span class="muted" id="msRecN"></span></h2><p class="sub">Last 14 days. Click Send again to reopen the same message for that person, or pick another message from the library.</p></div></div>
+            <div class="ms-dues" id="msRec"></div>
+          </div>
+          <div class="panel" style="margin-top:16px">
+            <div class="ph"><div><h2>WhatsApp groups <span class="muted" id="msGrpN"></span></h2><p class="sub">Save your group invite links. Pick a group, choose a Group post message, and the text is copied while the group opens, ready to paste.</p></div></div>
+            <div class="ms-dues" id="msGrp"></div>
+            <details class="ms-add"><summary>Add a group</summary>
+              <div class="f"><label for="gName">Group name</label><input id="gName" maxlength="60" placeholder="e.g. Diploma Cohort 1"></div>
+              <div class="f"><label for="gLink">Invite link</label><input id="gLink" dir="ltr" placeholder="https://chat.whatsapp.com/..."></div>
+              <div class="f"><label for="gCoh">Cohort (optional)</label><input id="gCoh" maxlength="40"></div>
+              <button class="ctl pri" id="gSave" type="button">Save group</button>
+            </details>
+            <p class="etip" id="gNote" style="margin:8px 0 0"></p>
           </div>
           <div class="panel" style="margin-top:16px">
             <div class="ph"><div><h2>Message library</h2><p class="sub">All playbook messages, Arabic and English.</p></div></div>
@@ -502,6 +524,8 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
             <div class="cbar" style="margin-top:12px">
               <button class="ctl wa" id="msWa" type="button"><span class="ico" data-i="chat"></span>Open in WhatsApp</button>
               <button class="ctl" id="msCopy" type="button"><span class="ico" data-i="copy"></span>Copy</button>
+              <div class="seg" id="msApp" role="group" aria-label="Open with"><button type="button" data-app="wa">WhatsApp</button><button type="button" data-app="biz">Business</button></div>
+              <span class="etip" id="msAppTip"></span>
               <span class="etip">Both actions are added to the follow-up log automatically.</span>
             </div>
           </div>
@@ -756,7 +780,21 @@ function rel(s){ if(!s) return '<span class="muted">Never</span>'; const d=days(
 const first = n => String(n||'').split(' ')[0];
 const active = t => t.state==='ok';
 const pctTxt = p => Math.round(p*100)+'%';
-function wa(t, text){ return t.mobile ? 'https://wa.me/'+t.mobile+'?text='+encodeURIComponent(text) : ''; }
+/* Which WhatsApp app the buttons open on a phone: regular WhatsApp or WhatsApp Business (set in the Messages tab, saved per device).
+   A plain wa.me link cannot choose, so on a phone the Business choice uses the Business app's own link. Computers always use wa.me. */
+let WAAPP = 'wa';
+try{ WAAPP = localStorage.getItem('serag-wa-app')==='biz' ? 'biz' : 'wa'; }catch(e){}
+const WAUA = /Android/i.test(navigator.userAgent) ? 'android' : (/iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'ios' : '');
+function waUrl(num, text){
+  const n = String(num||'').replace(/\D/g,''), q = text ? encodeURIComponent(text) : '';
+  if(WAAPP==='biz' && WAUA && n){
+    if(WAUA==='android') return 'intent://send?phone='+n+(q?'&text='+q:'')+'#Intent;scheme=whatsapp;package=com.whatsapp.w4b;end';
+    return 'whatsapp-business://send?phone='+n+(q?'&text='+q:'');
+  }
+  return 'https://wa.me/'+n+(q?'?text='+q:'');
+}
+const waTgt = u => /^https?:/.test(u) ? ' target="_blank" rel="noopener"' : '';
+function wa(t, text){ return t.mobile ? waUrl(t.mobile, text) : ''; }
 const MSG = {
   L1:t=>'مرحبًا '+first(t.name)+'، أنا محمود سراج.\nشكرًا على تسجيلك في دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي.\nتحب أبعتلك المواعيد والتكلفة وطريقة الدفع؟',
   T2:t=>'مرحبًا '+first(t.name)+'، لاحظت إنك لسه مدخلتش بوابة المتدربين.\nالرابط: '+D.portalUrl+'\nاسم المستخدم: '+t.user+'\nلو واجهت أي مشكلة في الدخول ابعتلي صورة من الشاشة وهحلها معاك فورًا.',
@@ -771,12 +809,19 @@ const MSG = {
    one click to WhatsApp or copy, and an automatic follow-up log (sheet "Message Log", backend v2.11.0).
    ===================================================================== */
 const MLIB = [{"id": "L1", "g": "lead", "en": "Welcome after registration", "ar": "ترحيب بعد التسجيل", "note": "same day as the registration email.", "spot": "new Pending row.", "tar": "مرحبًا {name}، أنا محمود سراج.\nشكرًا على تسجيلك في دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي.\nالدفعة الجاية تبدأ {date}، 42 ساعة: 60% محتوى مسجّل موجّه و 5-6 جلسات Live.\nتحب أبعتلك المواعيد والتكلفة وطريقة الدفع؟", "ten": "Hi {name}, this is Mahmoud Serag.\nThank you for registering for the AI-Powered Data Analytics & BI Diploma.\nThe next cohort starts {date}: 42 hours, 60% guided recorded content and 5-6 live sessions.\nShall I send you the schedule, fees and payment options?"}, {"id": "L2", "g": "lead", "en": "No reply after 2 days", "ar": "لا رد بعد يومين", "note": "2 days after L1 with no reply.", "spot": "still Pending, no WhatsApp reply.", "tar": "أهلًا {name}، بس بطمن إن رسالتي وصلتك.\nلو عندك أي سؤال عن المنهج أو المواعيد أو إزاي الدبلومة هتفيدك في شغلك كـ {job}، أنا موجود.", "ten": "Hi {name}, just checking my message reached you.\nIf you have any questions about the syllabus, schedule, or how the diploma fits your work as a {job}, I'm happy to help."}, {"id": "L3", "g": "lead", "en": "Seats and start date reminder", "ar": "تذكير بالمقاعد وموعد البداية", "note": "about 7 days before the cohort starts.", "spot": "Pending rows for that cohort.", "tar": "مرحبًا {name}، دفعة {cohort} تبدأ {date}.\nالدفعة من 12 لـ 20 متدرب بس، وفاضل {seats} مقاعد.\nلو حابب تأكّد مكانك، ابعتلي \"أكّد\" وهبعتلك خطوات الدفع.", "ten": "Hi {name}, the {cohort} cohort starts {date}.\nEach cohort is capped at 12-20 participants and {seats} seats remain.\nReply \"Confirm\" and I'll send you the payment steps."}, {"id": "L4", "g": "lead", "en": "Last message, keep the door open", "ar": "رسالة أخيرة وإبقاء الباب مفتوحًا", "note": "5 days after L3 with no reply.", "spot": "still Pending after the cohort starts.", "tar": "أهلًا {name}، مش هزعجك تاني بخصوص الدفعة دي.\nتسجيلك محفوظ، وهبلغك بموعد الدفعة الجاية أول ما يتحدد.\nبالتوفيق دايمًا.", "ten": "Hi {name}, I won't message you again about this cohort.\nYour registration is saved, and I'll let you know as soon as the next cohort date is set.\nWishing you all the best."}, {"id": "L5", "g": "lead", "en": "Company or team inquiry", "ar": "استفسار شركة أو فريق", "note": "Cohort = In-house (Company), or Company is filled in.", "spot": "Cohort or Company columns.", "tar": "مرحبًا {name}، شكرًا على اهتمام {company}.\nالدبلومة متاحة كتدريب In-house وممكن نطبّقها على بيانات ومؤشرات شركتكم.\nممكن نحدد مكالمة 15 دقيقة هذا الأسبوع نتفق فيها على عدد المتدربين والأولويات؟", "ten": "Hi {name}, thank you for {company}'s interest.\nThe diploma is available in-house and can be tailored to your company's own data and KPIs.\nCould we book a 15-minute call this week to agree on team size and priorities?"}, {"id": "T2", "g": "trainee", "en": "Hasn't signed in yet", "ar": "لم يسجّل الدخول بعد", "note": "3 days after approval.", "spot": "Approved and Logins is empty or 0.", "tar": "مرحبًا {name}، لاحظت إنك لسه مدخلتش بوابة المتدربين.\nالرابط: {portal}\nاسم المستخدم وكلمة المرور في رسالة التفعيل. لو واجهت أي مشكلة في الدخول ابعتلي صورة من الشاشة وهحلها معاك فورًا.", "ten": "Hi {name}, I noticed you haven't signed in to the learner portal yet.\nLink: {portal}\nYour username and temporary password are in the activation email (or the WhatsApp message I sent). If anything blocks you, send me a screenshot and I'll sort it out right away."}, {"id": "T3", "g": "trainee", "en": "Inactive or falling behind", "ar": "غير نشط أو متأخر", "note": "any time.", "spot": "Last Login older than 7 days, or Progress % under 20% after week 2.", "tar": "أهلًا {name}، إزيك؟ وصلت لـ {percent}% من المحاضرات المتاحة.\nالخطوة الجاية: {lecture} (حوالي {minutes} دقيقة).\nلو في حاجة معطلاك أو محتاج توضيح في جزء معين، قولي ونراجعه في الجلسة الجاية.", "ten": "Hi {name}, how is it going? You've completed {percent}% of the available lectures.\nNext up: {lecture} (about {minutes} minutes).\nIf something is holding you back or a topic needs clarifying, tell me and we'll cover it in the next session."}, {"id": "T4", "g": "trainee", "en": "Live session reminder", "ar": "تذكير بالجلسة المباشرة", "note": "the day before, and again 1 hour before.", "spot": "Live rows in the Content tab.", "tar": "تذكير: الجلسة المباشرة {sno} يوم {day} الساعة {time} بتوقيت القاهرة.\nالموضوع: {topic}\nرابط الجلسة موجود في البوابة تحت \"الجلسات المباشرة\".\nجهّز ملف التطبيق وأي أسئلة عندك.", "ten": "Reminder: Live Session {sno} is on {day} at {time} Cairo time.\nTopic: {topic}\nThe join link is in the portal under \"Live sessions\".\nHave your practice file and questions ready."}, {"id": "T5", "g": "trainee", "en": "New lectures published", "ar": "محاضرات جديدة", "note": "right after you add links in the Content tab.", "spot": "your own update.", "tar": "محاضرات جديدة اتنشرت على البوابة:\n{secno} {sectitle}\nيُفضّل تخلّصها قبل الجلسة المباشرة يوم {day}، عشان نستغل الجلسة في التطبيق.", "ten": "New lectures are live in the portal:\n{secno} {sectitle}\nPlease complete them before the live session on {day}, so we can use that time for hands-on practice."}, {"id": "T6", "g": "trainee", "en": "Milestone congratulations", "ar": "تهنئة بإنجاز", "note": "a trainee finishes a chapter or reaches 50%.", "spot": "Progress % crossing 50%.", "tar": "مبروك يا {name}! خلّصت {percent}% من الدبلومة.\nشغل ممتاز، كمّل بنفس السرعة. الفصل الجاي: {chapter}.", "ten": "Congratulations {name}! You've completed {percent}% of the diploma.\nGreat work; keep the same pace. Next chapter: {chapter}."}, {"id": "T7", "g": "trainee", "en": "Access ending soon", "ar": "اقتراب انتهاء الوصول", "note": "14 days before Access Until.", "spot": "Access Until column.", "tar": "مرحبًا {name}، الوصول لبوابة المتدربين متاح حتى {date}.\nفاضلك {left} محاضرات للإتمام والشهادة. لو محتاج وقت إضافي بلغني.", "ten": "Hi {name}, your learner portal access runs until {date}.\nYou have {left} lectures left to complete the diploma and earn the certificate. Let me know if you need more time."}, {"id": "T8", "g": "trainee", "en": "Completion, certificate and feedback", "ar": "الإتمام والشهادة والرأي", "note": "Progress % reaches 100%.", "spot": "Progress % column.", "tar": "ألف مبروك يا {name}! أنهيت دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي.\nشهادة الإتمام هتوصلك خلال {timeframe}.\nهيفرق معايا جدًا لو كتبتلي رأيك في جملتين: إيه أكتر حاجة استفدت بيها في شغلك؟ وهل تسمح أنشر رأيك باسمك على صفحة الدبلومة؟", "ten": "Congratulations {name}! You've completed the AI-Powered Data Analytics & BI Diploma.\nYour certificate of completion will reach you within {timeframe}.\nIt would mean a lot if you shared your feedback in two sentences: what helped you most in your work? And may I publish it with your name on the diploma page?"}, {"id": "S1", "g": "support", "en": "Forgot password", "ar": "نسيت كلمة المرور", "note": "Do first: clear their Password cell in the Trainees tab. A new temporary password is created and **emailed to them automatically**; they will choose a new personal one at their next sign-in. If they prefer WhatsApp, click Send on WhatsApp, or send:", "spot": "", "tar": "تم إعادة تعيين كلمة المرور.\nاسم المستخدم: {user}\nكلمة المرور الجديدة: {password}\nكلمة المرور حساسة لحالة الأحرف، انسخها زي ما هي.", "ten": "Your password has been reset.\nUsername: {user}\nNew password: {password}\nPasswords are case-sensitive, so copy it exactly."}, {"id": "S2", "g": "support", "en": "\"Video unavailable\" on a private lecture", "ar": "ظهور \"Video unavailable\"", "note": "Do first: check their Google Email is invited on that video (YouTube Studio > Visibility > Share).", "spot": "", "tar": "المحاضرات الخاصة بتفتح بس بحساب Google المسجّل: {email}\nافتح YouTube، اضغط على صورة البروفايل > تبديل الحساب، واختار الحساب ده، وبعدين افتح المحاضرة من البوابة تاني.", "ten": "Private lectures open only with your registered Google account: {email}\nOpen YouTube, tap your profile picture > Switch account, choose that account, then open the lecture from the portal again."}, {"id": "S3", "g": "support", "en": "Access ended or paused", "ar": "انتهى الوصول أو تم إيقافه", "note": "Do first: to extend, change Access Until; to restore, set Login Status back to Approved. The trainee signs in again with the same login.", "spot": "", "tar": "تم تفعيل الوصول مرة تانية حتى {date}.\nادخل بنفس اسم المستخدم وكلمة المرور: {portal}", "ten": "Your access is active again until {date}.\nSign in with the same username and password: {portal}"}];
-const MFIELDS = {name:'Name', date:'Date', job:'Job title', company:'Company', cohort:'Cohort', seats:'Seats left', percent:'Percent done', lecture:'Next lecture', minutes:'Minutes', sno:'Session number', day:'Day', time:'Time (Cairo)', topic:'Topic', secno:'Section no.', sectitle:'Section title', chapter:'Chapter title', left:'Lectures left', timeframe:'Certificate timeframe', user:'Username', password:'Password', email:'Google email', portal:'Portal link'};
-const MSTICKY = ['date','day','time','topic','sno','seats','timeframe','minutes','secno','sectitle','chapter'];
+const MFIELDS = {link:'Link', name:'Name', date:'Date', job:'Job title', company:'Company', cohort:'Cohort', seats:'Seats left', percent:'Percent done', lecture:'Next lecture', minutes:'Minutes', sno:'Session number', day:'Day', time:'Time (Cairo)', topic:'Topic', secno:'Section no.', sectitle:'Section title', chapter:'Chapter title', left:'Lectures left', timeframe:'Certificate timeframe', user:'Username', password:'Password', email:'Google email', portal:'Portal link'};
+const MSTICKY = ['link','date','day','time','topic','sno','seats','timeframe','minutes','secno','sectitle','chapter'];
 const MOUT = ['Sent','Replied','Interested','Paid','No reply','Not interested'];
-const MST = {tpl:'L1', row:0, lang:'ar', vals:{}, sticky:{}, q:'', fo:'', fq:'', mine:false, off:false, loaded:false, bound:false};
+const MST = {tpl:'L1', row:0, grp:null, lang:'ar', vals:{}, sticky:{}, q:'', fo:'', fq:'', mine:false, off:false, loaded:false, bound:false};
 try{ MST.lang = localStorage.getItem('serag-msg-lang')==='en' ? 'en' : 'ar'; }catch(e){}
-let MLOG = [];
+let MLOG = [], MGRP = [];
+MLIB.push(
+ {id:'G1', g:'group', en:'Live session reminder', ar:'تذكير بالجلسة المباشرة', note:'the day before and 1 hour before a live session.', spot:'',
+  tar:'تذكير 🔔 الجلسة المباشرة {day} {date} الساعة {time}\nالموضوع: {topic}\nرابط الانضمام: {link}\nالجلسة هتتسجل لمن لا يستطيع الحضور.', ten:'Reminder 🔔 Live session on {day} {date} at {time}\nTopic: {topic}\nJoin link: {link}\nThe session will be recorded for anyone who cannot attend.'},
+ {id:'G2', g:'group', en:'New content is live', ar:'محتوى جديد في البوابة', note:'when new lectures or resources are published.', spot:'',
+  tar:'محتوى جديد في بوابة المتدربين ✅\n{topic}\nادخلوا من هنا: {portal}', ten:'New content is live in the trainee portal ✅\n{topic}\nOpen it here: {portal}'},
+ {id:'G3', g:'group', en:'Weekly check-in', ar:'متابعة أسبوعية', note:'once a week, same day and time.', spot:'',
+  tar:'أسبوع جديد وخطوة جديدة 💪\nاكتبوا هنا أي سؤال أو عقبة وهنساعدكم. وللي أنهى محاضرة جديدة، شاركنا إنجازك!\nالبوابة: {portal}', ten:'New week, new step 💪\nPost any question or blocker here and we will help. And if you finished a new lecture, share your win!\nPortal: {portal}'});
 const mPerson = () => D && D.trainees.find(t=>t.row===MST.row) || null;
 const mTpl = id => MLIB.find(x=>x.id===(id||MST.tpl));
 const mCmp = s => String(s||'').toLowerCase();
@@ -855,7 +900,47 @@ async function mLogSet(id, patch){
 }
 
 /* render */
-const MGL = {lead:'Leads (still Pending)', trainee:'Active trainees', support:'Support replies'};
+const MGL = {lead:'Leads (still Pending)', trainee:'Active trainees', support:'Support replies', group:'Group posts'};
+/* WhatsApp groups: saved on the server (backend v2.14.0), or in this browser until the backend is updated */
+const mGroup = () => MST.grp ? MGRP.find(g=>g.id===MST.grp) || null : null;
+const mGP = g => ({email:'group:'+g.name.toLowerCase(), name:g.name+' (group)', mobile:'', cohort:g.cohort||''});
+function mGrpLocal(){ try{ return JSON.parse(localStorage.getItem('serag-wa-groups')||'[]'); }catch(e){ return []; } }
+function mGrpStore(){ try{ localStorage.setItem('serag-wa-groups', JSON.stringify(MGRP)); }catch(e){} }
+async function mGrpLoad(){
+  const r = await api({action:'admin_groups_data', token:TOKEN});
+  if(r.ok){ MGRP = r.groups||[]; MST.gOff = false; }
+  else if(r.code==='bad_request'){ MST.gOff = true; MGRP = mGrpLocal(); }
+  MST.gLoaded = true; if(view==='messages') mRender();
+}
+function mGrpLink(v){ const m = String(v||'').match(/chat\.whatsapp\.com\/([A-Za-z0-9]{10,40})/); return m ? 'https://chat.whatsapp.com/'+m[1] : ''; }
+async function mGrpSave(){
+  const name = $('gName').value.trim(), link = mGrpLink($('gLink').value), cohort = $('gCoh').value.trim();
+  if(!name){ toast('Type a group name'); return; }
+  if(!link){ toast('That does not look like a WhatsApp group invite link'); return; }
+  if(MST.gOff){
+    MGRP.push({id:'l'+Date.now(), name, link, cohort, note:''}); mGrpStore();
+  } else {
+    const r = await api({action:'admin_group_save', token:TOKEN, name, link, cohort});
+    if(!r.ok){ toast(r.code==='bad_request' ? 'Check the name and link' : 'Could not save the group'); return; }
+    await mGrpLoad();
+  }
+  $('gName').value = $('gLink').value = $('gCoh').value = ''; toast('Group saved'); mRender();
+}
+async function mGrpDel(id){
+  const g = MGRP.find(x=>x.id===id); if(!g || !confirm('Remove the group "'+g.name+'" from this list? (The WhatsApp group itself is not affected.)')) return;
+  if(MST.gOff){ MGRP = MGRP.filter(x=>x.id!==id); mGrpStore(); }
+  else { const r = await api({action:'admin_group_del', token:TOKEN, id:id, name:g.name}); if(!r.ok){ toast('Could not remove it'); return; } await mGrpLoad(); }
+  if(MST.grp===id) MST.grp = null; mRender();
+}
+function mRecent(){
+  const seen = {}, out = [];
+  MLOG.forEach(x=>{
+    if(!x.email || /^group:/.test(x.email) || seen[x.email]) return; seen[x.email] = 1;
+    const t = D.trainees.find(z=>mCmp(z.email)===mCmp(x.email));
+    if(t && days(x.at)<=14) out.push({t, x});
+  });
+  return out;
+}
 function mRender(){
   if(!D) return;
   mFill();
@@ -865,7 +950,10 @@ function mRender(){
   const res = q ? D.trainees.filter(x=>[x.name,x.email,x.mobile,x.user].some(f=>mCmp(f).indexOf(q)>-1)).slice(0,7) : [];
   $('msRes').innerHTML = res.map(x=>'<button type="button" class="ms-res" data-pick="'+x.row+'"><b>'+esc(x.name)+'</b><span>'+esc(x.cohort||'')+' · '+esc(x.status)+'</span></button>').join('');
   $('msRes').hidden = !res.length;
-  $('msCard').innerHTML = t
+  const gp = mGroup();
+  $('msCard').innerHTML = gp
+    ? '<div class="ms-who"><b>'+esc(gp.name)+'</b><button type="button" class="ctl sm" data-grp="">Clear</button></div><div class="d">WhatsApp group'+(gp.cohort?' · '+esc(gp.cohort):'')+'</div><div class="d">Choose a Group post message. The text is copied and the group opens, so you paste it and send.</div>'
+    : t
     ? '<div class="ms-who"><b>'+esc(t.name)+'</b><button type="button" class="ctl sm" data-pick="0">Clear</button></div>'+
       '<div class="d">'+esc(t.cohort||'No cohort')+' · '+esc(t.status)+(t.job?' · '+esc(t.job):'')+(t.company?' @ '+esc(t.company):'')+'</div>'+
       '<div class="d">Progress '+pctTxt(t.pct)+' · last sign-in '+rel(t.last)+(t.mobile?'':' · <span class="warn">no WhatsApp number</span>')+'</div>'+
@@ -877,8 +965,19 @@ function mRender(){
   $('msDue').innerHTML = due.length ? due.slice(0,12).map(x=>'<button type="button" class="ms-due" data-pick="'+x.t.row+'" data-tpl="'+x.s.id+'"><span class="tag">'+x.s.id+'</span><span><b>'+esc(x.t.name)+'</b><small>'+esc(x.s.why)+'</small></span></button>').join('')
     : '<div class="d" style="padding:6px 2px">'+(MST.loaded ? 'No follow-ups due right now.' : 'Loading...')+'</div>';
   $('msDueN').textContent = due.length ? '('+due.length+')' : '';
+  /* recently contacted */
+  const rec = mRecent();
+  $('msRec').innerHTML = rec.length ? rec.slice(0,10).map(o=>'<button type="button" class="ms-due" data-pick="'+o.t.row+'" data-tpl="'+esc(o.x.tpl)+'"><span class="tag">'+esc(o.x.tpl)+'</span><span><b>'+esc(o.t.name)+'</b><small>'+rel(o.x.at).replace(/<[^>]+>/g,'')+' · '+esc(o.x.outcome)+' · Send again</small></span></button>').join('')
+    : '<div class="d" style="padding:6px 2px">'+(MST.loaded ? 'Nobody contacted in the last 14 days.' : 'Loading...')+'</div>';
+  $('msRecN').textContent = rec.length ? '('+rec.length+')' : '';
+  /* groups */
+  $('msGrp').innerHTML = MGRP.length ? MGRP.map(g=>'<div class="ms-grow"><button type="button" class="ms-due'+(g.id===MST.grp?' on':'')+'" data-grp="'+esc(g.id)+'"><span class="tag">GRP</span><span><b>'+esc(g.name)+'</b><small>'+esc(g.cohort||'WhatsApp group')+'</small></span></button>'+
+      '<a class="ctl" href="'+esc(g.link)+'" target="_blank" rel="noopener" title="Open the group">Open</a><button type="button" class="ctl" data-gdel="'+esc(g.id)+'" aria-label="Remove group" title="Remove from list">&times;</button></div>').join('')
+    : '<div class="d" style="padding:6px 2px">'+(MST.gLoaded ? 'No groups saved yet. Add your first one below.' : 'Loading...')+'</div>';
+  $('msGrpN').textContent = MGRP.length ? '('+MGRP.length+')' : '';
+  $('gNote').innerHTML = MST.gOff ? '<span class="warn">Groups are saved in this browser only until the backend is updated to v2.14.0. After updating, add them again to keep them on every device.</span>' : '';
   /* templates */
-  $('msList').innerHTML = ['lead','trainee','support'].map(g=>'<div class="ms-grp">'+MGL[g]+'</div>'+MLIB.filter(x=>x.g===g).map(x=>
+  $('msList').innerHTML = ['lead','trainee','support','group'].map(g=>'<div class="ms-grp">'+MGL[g]+'</div>'+MLIB.filter(x=>x.g===g).map(x=>
     '<button type="button" class="ms-item'+(x.id===MST.tpl?' on':'')+'" data-tpl="'+x.id+'"><b>'+x.id+'</b><span>'+esc(x.en)+'</span></button>').join('')).join('');
   /* composer */
   $('msTitle').textContent = tp.id+' · '+tp.en;
@@ -888,8 +987,11 @@ function mRender(){
   $('msFields').innerHTML = keys.map(k=>'<div class="f"><label for="mf-'+k+'">'+MFIELDS[k]+'</label><input id="mf-'+k+'" class="mf" data-k="'+k+'" value="'+esc(MST.vals[k]||'')+'" '+(k==='portal'||k==='email'||k==='user'||k==='password'?'dir="ltr"':'')+'></div>').join('');
   $('msFields').hidden = !keys.length;
   const body = $('msBody'); body.value = mBody(); body.dir = MST.lang==='ar' ? 'rtl' : 'ltr';
-  $('msWa').disabled = !!(t && !t.mobile);
-  $('msWa').title = t && !t.mobile ? 'This trainee has no WhatsApp number in the sheet' : '';
+  document.querySelectorAll('#msApp button').forEach(b=>b.classList.toggle('on', b.dataset.app===WAAPP));
+  $('msAppTip').textContent = WAUA ? (WAAPP==='biz' ? 'Opens WhatsApp Business on this phone.' : 'Opens regular WhatsApp on this phone.') : 'This choice applies when you use a phone; computers open WhatsApp Web.';
+  $('msWa').innerHTML = gp ? ic('chat')+'Copy and open group' : ic('chat')+'Open in WhatsApp';
+  $('msWa').disabled = !gp && !!(t && !t.mobile);
+  $('msWa').title = !gp && t && !t.mobile ? 'This trainee has no WhatsApp number in the sheet' : '';
   $('msNote').innerHTML = (keys.indexOf('password')>-1 ? 'Passwords are never stored here. For a new login, use Send login in the Trainees tab, or type the password you just created. ' : '')+
     (MST.off ? '<span class="warn">The follow-up log needs backend v2.11.0, so entries below are kept in this browser only until you update it.</span>' : '');
   mRenderLog();
@@ -907,7 +1009,7 @@ function mRenderLog(){
     '<td><input class="ms-note" data-id="'+x.id+'" value="'+esc(x.note||'')+'" placeholder="Add a note" maxlength="300"></td></tr>').join('')
     : '<tr><td colspan="6" class="empty">'+(MST.loaded ? 'Nothing logged yet. Every WhatsApp or copy action from this tab (and the WhatsApp buttons on Overview) is recorded here.' : 'Loading...')+'</td></tr>';
 }
-function mOpen(){ mRender(); if(!MST.loaded) mLoadLog(); }
+function mOpen(){ mRender(); if(!MST.loaded) mLoadLog(); if(!MST.gLoaded) mGrpLoad(); }
 function mCopy(txt){
   if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(txt).catch(()=>mCopyOld(txt));
   mCopyOld(txt); return Promise.resolve();
@@ -923,7 +1025,13 @@ function mBind(){
   const root = document.querySelector('[data-view="messages"]');
   root.addEventListener('click', e=>{
     const p = e.target.closest('[data-pick]'), tl = e.target.closest('[data-tpl]');
-    if(p){ MST.row = Number(p.dataset.pick); MST.q = ''; $('msQ').value = ''; }
+    const ap = e.target.closest('#msApp button');
+    if(ap){ WAAPP = ap.dataset.app; try{ localStorage.setItem('serag-wa-app', WAAPP); }catch(x){} render(); mRender(); toast(WAAPP==='biz' ? 'WhatsApp Business selected' : 'WhatsApp selected'); return; }
+    const gr = e.target.closest('[data-grp]'), gd = e.target.closest('[data-gdel]');
+    if(gd){ mGrpDel(gd.dataset.gdel); return; }
+    if(gr){ MST.grp = gr.dataset.grp || null; MST.row = 0; if(MST.grp && mTpl().g!=='group') MST.tpl = 'G1'; mReset(); mRender(); if(MST.grp) $('msBody').scrollIntoView({block:'nearest', behavior:'smooth'}); return; }
+    if(e.target.closest('#gSave')){ mGrpSave(); return; }
+    if(p){ MST.row = Number(p.dataset.pick); MST.grp = null; MST.q = ''; $('msQ').value = ''; }
     if(tl){ MST.tpl = tl.dataset.tpl; }
     if(p || tl){ mReset(); mRender(); if(tl) $('msBody').scrollIntoView({block:'nearest', behavior:'smooth'}); return; }
     const lg = e.target.closest('#msLang button');
@@ -931,12 +1039,14 @@ function mBind(){
     if(e.target.closest('#msCopy')){
       if(!mCheck()) return;
       mCopy($('msBody').value).then(()=>toast('Copied'));
-      mLogAdd(mPerson(), MST.tpl, MST.lang, 'copied'); return;
+      const g0 = mGroup(); mLogAdd(g0 ? mGP(g0) : mPerson(), MST.tpl, MST.lang, 'copied'); return;
     }
     if(e.target.closest('#msWa')){
       if(!mCheck()) return;
-      const t = mPerson(), txt = $('msBody').value;
-      window.open((t && t.mobile ? 'https://wa.me/'+t.mobile : 'https://wa.me/')+'?text='+encodeURIComponent(txt), '_blank', 'noopener');
+      const t = mPerson(), txt = $('msBody').value, g1 = mGroup();
+      if(g1){ const pr = mCopy(txt); window.open(g1.link, '_blank', 'noopener'); pr.then(()=>toast('Message copied. Paste it in the group')); mLogAdd(mGP(g1), MST.tpl, MST.lang, 'whatsapp'); return; }
+      const wu = waUrl(t && t.mobile ? t.mobile : '', txt).replace('wa.me//','wa.me/');
+      if(/^https?:/.test(wu)) window.open(wu, '_blank', 'noopener'); else location.href = wu;
       mLogAdd(t, MST.tpl, MST.lang, 'whatsapp'); return;
     }
   });
@@ -1067,7 +1177,7 @@ function render(){
     const link = wa(a.t, MSG[a.msg](a.t));
     return '<div class="att-row"><span class="tag t-'+a.k+'">'+ic(a.icon)+a.label+'</span><div><b>'+esc(a.t.name)+'</b> <span class="d">· '+esc(a.t.cohort||'')+'</span><div class="d">'+a.d+'</div></div>'+
       '<div class="acts">'+(a.approve && !isStaff()?'<button class="ctl sm" type="button" data-approve="'+a.t.row+'">Approve</button>':'')+
-      (link?'<a class="ctl sm wa" data-ml="'+a.t.row+'|'+a.msg+'" href="'+link+'" target="_blank" rel="noopener">'+ic('chat')+'WhatsApp '+a.msg+'</a>':'')+'</div></div>';
+      (link?'<a class="ctl sm wa" data-ml="'+a.t.row+'|'+a.msg+'" href="'+link+'"'+waTgt(link)+'>'+ic('chat')+'WhatsApp '+a.msg+'</a>':'')+'</div></div>';
   }).join('') : '<div class="empty">Nothing needs attention right now.</div>';
   const pendN = T.filter(t=>t.status==='Pending').length;
   document.querySelector('#tabs [data-v="trainees"]').innerHTML = 'Trainees'+(pendN?'<span class="cnt">'+pendN+'</span>':'');
@@ -1179,12 +1289,12 @@ function renderCrashTable(R){
   const chk=(on)=>on?'<span class="pill" style="background:var(--chip-teal);color:var(--teal-2)">Done</span>':'<span class="muted">–</span>';
   $('crashTb').innerHTML = rows.length ? rows.map(t=>{
     const msg = CMSG[t.seg] ? CMSG[t.seg](t) : '';
-    const link = t.mobile ? 'https://wa.me/'+t.mobile+(msg?'?text='+encodeURIComponent(msg):'') : '';
+    const link = t.mobile ? waUrl(t.mobile, msg) : '';
     return '<tr class="main"><td class="nm"><b>'+esc(t.name)+'</b><small>'+esc(t.email)+'</small></td>'+
       '<td>'+esc(t.src)+'</td><td>'+esc(String(t.submitted).slice(0,10))+'</td><td>'+chk(t.d1)+'</td><td>'+chk(t.d2)+'</td>'+
       '<td class="n">'+(t.logins||0)+'</td><td>'+rel(t.last)+'</td><td class="n">'+(t.up?'–':(t.dl===null?'–':Math.max(0,t.dl)))+'</td>'+
       '<td><span class="tag t-'+SEG[t.seg][1]+'">'+SEG[t.seg][0]+'</span></td>'+
-      '<td><div class="acts">'+(link?'<a class="ctl sm wa" href="'+link+'" target="_blank" rel="noopener">'+ic('chat')+'WhatsApp'+(msg?'':' chat')+'</a>':'')+'</div></td></tr>';
+      '<td><div class="acts">'+(link?'<a class="ctl sm wa" href="'+link+'"'+waTgt(link)+'>'+ic('chat')+'WhatsApp'+(msg?'':' chat')+'</a>':'')+'</div></td></tr>';
   }).join('') : '<tr><td colspan="10"><div class="empty">No one matches these filters.</div></td></tr>';
 }
 function crashCsv(){
@@ -1266,7 +1376,7 @@ function renderTable(){
       '<td><div class="pb" data-tip="'+doneN+' of '+total+' lectures"><i><em style="width:'+Math.round(t.pct*100)+'%"></em></i><span>'+pctTxt(t.pct)+'</span></div></td>'+
       '<td>'+rel(t.last)+'</td><td class="n">'+(t.logins||0)+'</td>'+
       '<td>'+(isStaff() ? esc(t.until||'–') : '<input class="date" type="date" value="'+esc(t.until)+'" data-set="until" data-row="'+t.row+'" aria-label="Access until for '+esc(t.name)+'">')+'</td>'+
-      '<td><div class="acts">'+(t.mobile?'<a class="ctl sm wa" href="https://wa.me/'+t.mobile+'" target="_blank" rel="noopener">'+ic('chat')+'Chat</a>':'')+
+      '<td><div class="acts">'+(t.mobile?'<a class="ctl sm wa" href="'+waUrl(t.mobile)+'"'+waTgt(waUrl(t.mobile))+'>'+ic('chat')+'Chat</a>':'')+
       (t.loginWa?'<a class="ctl sm" href="'+t.loginWa+'" target="_blank" rel="noopener" title="Open WhatsApp with the login message">'+ic('key')+'Send login</a><button class="ctl sm" type="button" data-copylogin="'+t.row+'" title="Copy the login message to paste in WhatsApp yourself">'+ic('copy')+'Copy login</button>':(t.pwSet?'<span style="font-size:12px;opacity:.7" title="The trainee chose their own password. It is stored as a hash and cannot be seen.">Own password set</span>':''))+'</div></td></tr>';
     const det = openRows.has(t.row) ? '<tr class="det"><td colspan="8"><dl>'+
       [['Job title',t.job],['Company',t.company],['Country',t.country],['Excel level',t.excel],['Windows + Office',t.laptop],['Mobile',t.mobile],['Registered',(t.submitted||'').replace('T',' ')],['Lectures done',doneN+' of '+total]]
