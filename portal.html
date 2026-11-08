@@ -342,7 +342,37 @@ button.watch{cursor:pointer;font-family:inherit}
 .pwm-actions{display:flex;gap:10px;align-items:center}
 .pwm-actions .btn-p{flex:1}
 .pwm .btn-s{background:var(--surface-2);color:var(--ink);padding:14px 22px;font-size:15px;border:1px solid var(--line-2)}
-@media (max-width:640px){ #chgPw span.ar, #chgPw span.en{display:none!important} }
+@media (max-width:640px){ #chgPw span.ar, #chgPw span.en, #rateBtn span.ar, #rateBtn span.en{display:none!important} }
+#rateBtn[hidden]{display:none}
+#rateBtn .ico{color:var(--gold)}
+.sv-card{max-width:560px;position:relative}
+.sv-x{position:absolute;top:14px;inset-inline-end:14px;width:36px;height:36px;border:0;background:none;color:var(--ink-3);cursor:pointer;border-radius:8px;display:grid;place-items:center;font-size:22px;line-height:1}
+.sv-x:hover{background:var(--surface-2);color:var(--ink)}
+.sv-card h2{padding-inline-end:36px}
+.sv-card h3{font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-2);margin:20px 0 12px}
+.sv-q{margin-bottom:16px}
+.sv-q b{display:block;font-size:14.5px;font-weight:700;color:var(--ink-2);margin-bottom:8px}
+.sv-q b i{font-style:normal;color:var(--ink-3);font-weight:600;font-size:12.5px;margin-inline-start:6px}
+.sv-stars{display:flex;gap:6px}
+.sv-stars button{width:44px;height:44px;border:1px solid var(--line-2);background:var(--surface);border-radius:12px;color:var(--ink-3);cursor:pointer;display:grid;place-items:center;transition:border-color .15s,color .15s,background .15s,transform .15s}
+.sv-stars button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
+.sv-stars button.on{color:var(--gold);border-color:rgba(255,184,0,.55);background:rgba(255,184,0,.1)}
+.sv-stars button.on svg{fill:currentColor}
+.sv-stars button:hover{transform:translateY(-1px);border-color:var(--gold)}
+.sv-stars button:focus-visible,.sv-nps button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.sv-nps{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;direction:ltr}
+.sv-nps button{height:40px;border:1px solid var(--line-2);background:var(--surface);border-radius:10px;font-weight:800;font-size:13.5px;color:var(--ink-2);cursor:pointer;padding:0;transition:background .15s,border-color .15s,color .15s}
+.sv-nps button:hover{border-color:var(--teal)}
+.sv-nps button.on{background:var(--grad-btn);color:#fff;border-color:transparent}
+.sv-ends{display:flex;justify-content:space-between;direction:ltr;font-size:12px;color:var(--ink-3);margin-top:6px}
+.sv-card textarea{width:100%;min-height:76px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);padding:12px 14px;font:inherit;font-size:15px;resize:vertical}
+.sv-card textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,201,167,.18)}
+.sv-chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink-2);margin:4px 0 18px;cursor:pointer}
+.sv-chk input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal);flex:none}
+.sv-thanks{text-align:center;padding:18px 4px 6px}
+.sv-thanks .ico{width:52px;height:52px;color:var(--ok);display:block;margin:0 auto 12px}
+.sv-thanks .ico svg{width:52px;height:52px}
+@media (max-width:640px){ .sv-stars button{width:42px;height:42px} .sv-nps button{height:38px;font-size:12.5px} }
 
 .camp{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:0 0 18px;padding:16px 18px;border-radius:var(--r);border:1px solid rgba(255,184,0,.45);background:linear-gradient(135deg,var(--chip-gold),var(--chip-teal))}
 .camp b{font-size:16px}.camp p{margin:4px 0 0;color:var(--ink-2);font-size:14px}
@@ -421,6 +451,7 @@ button.watch{cursor:pointer;font-family:inherit}
       <button class="ctl themeBtn" type="button" aria-label="Switch theme"><span class="ico themeIco" data-i="sun"></span></button>
       <button class="ctl bell" id="bell" type="button" aria-label="Announcements" aria-expanded="false"><span class="ico" data-i="bell"></span><span class="bn n" id="bellN" hidden></span></button>
       <div class="who"><span class="avatar" id="avatar"></span><span class="nm" id="whoName"></span></div>
+      <button class="ctl" id="rateBtn" type="button" hidden aria-label="Rate us"><span class="ico" data-i="star"></span><span class="ar">قيّمنا</span><span class="en">Rate us</span></button>
       <button class="ctl" id="chgPw" type="button" aria-label="Change password"><span class="ico" data-i="key"></span><span class="ar">كلمة المرور</span><span class="en">Password</span></button>
       <button class="ctl" id="logout" type="button" aria-label="Sign out"><span class="ico" data-i="logout"></span><span class="ar">خروج</span><span class="en">Sign out</span></button>
     </div>
@@ -470,6 +501,27 @@ button.watch{cursor:pointer;font-family:inherit}
   </main>
 </section>
 
+<div class="pwm" id="svModal" hidden role="dialog" aria-modal="true" aria-labelledby="svTitle">
+  <form class="pwm-card sv-card" id="svForm" novalidate>
+    <button class="sv-x" id="svX" type="button" aria-label="Close">&times;</button>
+    <div id="svBody">
+      <h2 id="svTitle"><span class="ar">رأيك يهمّنا</span><span class="en">Your feedback matters</span></h2>
+      <p class="lead"><span class="ar">دقيقة واحدة تساعدنا على تطوير التدريب والبوابة. التقييمات الخمسة وسؤال التوصية مطلوبة، والباقي اختياري.</span><span class="en">One minute helps us improve the training and the portal. The five ratings and the recommendation question are required; the rest is optional.</span></p>
+      <div id="svQs"></div>
+      <div class="err" id="svErr" hidden><span class="ico" data-i="alert"></span><div><span id="svErrTxt"></span></div></div>
+      <div class="pwm-actions">
+        <button class="btn btn-s" id="svLater" type="button"><span class="ar">لاحقًا</span><span class="en">Maybe later</span></button>
+        <button class="btn btn-p" id="svBtn" type="submit"><span class="lbl"><span class="ar">إرسال التقييم</span><span class="en">Submit feedback</span></span></button>
+      </div>
+    </div>
+    <div class="sv-thanks" id="svThanks" hidden>
+      <span class="ico" data-i="check"></span>
+      <h2><span class="ar">شكرًا لك</span><span class="en">Thank you</span></h2>
+      <p class="lead"><span class="ar">وصلنا تقييمك، وسنستخدمه لتحسين التجربة للجميع.</span><span class="en">We received your feedback and will use it to improve the experience for everyone.</span></p>
+      <button class="btn btn-p" id="svDone" type="button"><span class="ar">إغلاق</span><span class="en">Close</span></button>
+    </div>
+  </form>
+</div>
 <div class="pwm" id="pwModal" hidden role="dialog" aria-modal="true" aria-labelledby="pwTitle">
   <form class="pwm-card" id="pwForm" novalidate autocomplete="off">
     <div id="pwFirst">
@@ -560,6 +612,7 @@ const I = {
   yt:'<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10.5 9.3 4.5 2.7-4.5 2.7z" fill="currentColor"/>',
   bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
   megaphone:'<path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
+  star:'<path d="m12 3.5 2.6 5.3 5.9.9-4.25 4.1 1 5.8L12 16.8 6.75 19.6l1-5.8L3.5 9.7l5.9-.9z"/>',
   ext:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>'
 };
 const ic = (k,cls) => '<span class="ico'+(cls?' '+cls:'')+'" data-i="'+k+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'</svg></span>';
@@ -715,6 +768,7 @@ function enter(r){
   P = {}; (r.progress||[]).forEach(id=>P[id]=1);
   $('login').hidden = true; $('boot').hidden = true; $('app').hidden = false;
   window.scrollTo(0,0); render();
+  svInit();
   clearInterval(campTimer); if(C.campaign){ campTick(); campTimer = setInterval(campTick, 30000); }
 }
 let campTimer = null;
@@ -729,7 +783,7 @@ function campBanner(){
   return '<div class="camp"><div><b>'+t('campT')+'</b><p>'+t('campP')+'</p></div><a class="watch go" href="'+esc((C&&C.upgrade)||FORM_URL)+'" target="_blank" rel="noopener">'+ic('arrow')+'<span>'+t('unlock')+'</span></a></div>';
 }
 function signOut(code){
-  clearInterval(campTimer);
+  clearInterval(campTimer); svReset();
   store.del('localStorage','serag-token'); store.del('sessionStorage','serag-token');
   TOKEN = null; S = null; C = null; LASTPW = null; OPEN = null; $('pwModal').hidden = true;
   $('app').hidden = true; $('boot').hidden = true; $('login').hidden = false;
@@ -795,6 +849,128 @@ $('pwForm').addEventListener('submit', async e=>{
   toast(t('pw_done'));
 });
 
+/* ---------- feedback survey (auto-shows once, then via "Rate us" until submitted) ---------- */
+const SV_QS = [
+  {h:{ar:'تجربة التدريب',en:'Training experience'}},
+  {k:'training', ar:'كيف تقيّم التدريب بشكل عام؟', en:'How would you rate the training overall?'},
+  {k:'content', ar:'ما مدى وضوح المحتوى وفائدته لعملك؟', en:'How clear and useful is the content for your work?'},
+  {k:'live', ar:'ما مدى استفادتك من الجلسات المباشرة والتطبيق العملي؟', en:'How valuable are the live sessions and hands-on practice?'},
+  {h:{ar:'تجربة المنصة',en:'Platform experience'}},
+  {k:'platform', ar:'ما مدى سهولة استخدام البوابة؟', en:'How easy is the portal to use?'},
+  {k:'video', ar:'ما مدى سلاسة مشاهدة المحاضرات وفتح الملفات؟', en:'How smooth is watching lectures and opening files?'},
+  {h:{ar:'رأيك العام',en:'Overall'}},
+  {k:'nps', nps:true, ar:'ما احتمال أن توصي بهذه الدبلومة لزميل أو صديق؟', en:'How likely are you to recommend this diploma to a colleague or friend?', lo:{ar:'غير محتمل',en:'Not likely'}, hi:{ar:'محتمل جدًا',en:'Very likely'}},
+  {k:'liked', text:true, opt:true, ar:'ما أكثر شيء أعجبك؟', en:'What did you like most?'},
+  {k:'improve', text:true, opt:true, ar:'ما الذي تقترح تحسينه؟', en:'What should we improve?'}
+];
+const SVT = {
+  ar:{need:'أكمل التقييمات المطلوبة (باللون المميّز) قبل الإرسال.', thanks:'شكرًا لتقييمك', opt:'اختياري', stars:['ضعيف','مقبول','جيد','جيد جدًا','ممتاز']},
+  en:{need:'Please complete the required ratings before submitting.', thanks:'Thanks for your feedback', opt:'optional', stars:['Poor','Fair','Good','Very good','Excellent']}
+};
+const SV = {done:false, ready:false, ans:{}, timer:null, busy:false};
+const svT = k => SVT[root.dataset.lang||'ar'][k];
+function svBuild(){
+  let h = '';
+  SV_QS.forEach(q=>{
+    if(q.h){ h += '<h3><span class="ar">'+q.h.ar+'</span><span class="en">'+q.h.en+'</span></h3>'; return; }
+    const lab = '<b id="svl-'+q.k+'"><span class="ar">'+q.ar+'</span><span class="en">'+q.en+'</span>'+(q.opt?'<i><span class="ar">اختياري</span><span class="en">optional</span></i>':'')+'</b>';
+    if(q.text){
+      h += '<div class="sv-q"><label for="sv-'+q.k+'"><b><span class="ar">'+q.ar+'</span><span class="en">'+q.en+'</span><i><span class="ar">اختياري</span><span class="en">optional</span></i></b></label><textarea id="sv-'+q.k+'" maxlength="600" rows="3"></textarea></div>';
+    } else if(q.nps){
+      let b = ''; for(let i=0;i<=10;i++) b += '<button type="button" role="radio" aria-checked="false" data-k="nps" data-v="'+i+'">'+i+'</button>';
+      h += '<div class="sv-q" data-q="nps">'+lab+'<div class="sv-nps" role="radiogroup" aria-labelledby="svl-nps">'+b+'</div><div class="sv-ends"><span class="ar">'+q.lo.ar+'</span><span class="en">'+q.lo.en+'</span><span class="ar">'+q.hi.ar+'</span><span class="en">'+q.hi.en+'</span></div></div>';
+    } else {
+      let b = ''; for(let i=1;i<=5;i++) b += '<button type="button" role="radio" aria-checked="false" data-k="'+q.k+'" data-v="'+i+'" aria-label="'+i+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I.star+'</svg></button>';
+      h += '<div class="sv-q" data-q="'+q.k+'">'+lab+'<div class="sv-stars" role="radiogroup" aria-labelledby="svl-'+q.k+'">'+b+'</div></div>';
+    }
+  });
+  h += '<label class="sv-chk"><input type="checkbox" id="sv-publish"><span><span class="ar">يمكنكم نشر رأيي مع اسمي على صفحة الدبلومة.</span><span class="en">You may publish my feedback with my name on the diploma page.</span></span></label>';
+  $('svQs').innerHTML = h;
+  SV.ans = {};
+}
+function svPick(btn){
+  const k = btn.dataset.k, v = +btn.dataset.v;
+  SV.ans[k] = v;
+  btn.parentNode.querySelectorAll('button').forEach(b=>{
+    const bv = +b.dataset.v, on = k==='nps' ? bv===v : bv<=v;
+    b.classList.toggle('on', on); b.setAttribute('aria-checked', bv===v ? 'true':'false');
+  });
+  const box = btn.closest('.sv-q'); if(box) box.style.removeProperty('outline');
+  $('svErr').hidden = true;
+}
+function svShow(){
+  if(!S || SV.done || (C && C.campaign)) return;
+  clearTimeout(SV.timer);
+  svBuild();
+  $('svBody').hidden = false; $('svThanks').hidden = true; $('svErr').hidden = true;
+  $('svModal').hidden = false;
+  document.body.style.overflow = 'hidden';
+  setTimeout(()=>{ const f = $('svQs').querySelector('button'); f && f.focus(); }, 80);
+}
+function svClose(){
+  $('svModal').hidden = true; document.body.style.overflow = '';
+  if(S) store.set('localStorage', sk('sv-shown'), '1');
+}
+function svSetBtn(){ $('rateBtn').hidden = !(S && SV.ready && !SV.done && !(C && C.campaign)); }
+/* auto prompt: once per trainee, after the first real interaction (first tick) or ~90 seconds in, never over another dialog */
+function svSchedule(ms){
+  clearTimeout(SV.timer);
+  if(!S || !SV.ready || SV.done || (C && C.campaign) || store.get('localStorage', sk('sv-shown'))) return;
+  SV.timer = setTimeout(()=>{
+    if(!$('pwModal').hidden || !$('svModal').hidden || document.hidden){ svSchedule(15000); return; }
+    svShow();
+  }, ms);
+}
+async function svInit(){
+  SV.ready = false; SV.done = false; svSetBtn();
+  const r = await api({action:'survey_status', token:TOKEN});
+  if(!r.ok) return;                       // survey is optional: stay silent if the backend is not updated yet
+  SV.ready = true; SV.done = !!r.done;
+  svSetBtn(); svSchedule(90000);
+}
+function svNudge(){ if(SV.ready && !SV.done) svSchedule(4000); }
+function svReset(){ clearTimeout(SV.timer); SV.ready = false; SV.done = false; $('rateBtn').hidden = true; $('svModal').hidden = true; document.body.style.overflow = ''; }
+$('rateBtn').addEventListener('click', svShow);
+$('svX').addEventListener('click', svClose);
+$('svLater').addEventListener('click', svClose);
+$('svDone').addEventListener('click', ()=>{ $('svModal').hidden = true; document.body.style.overflow = ''; });
+$('svQs').addEventListener('click', e=>{ const b = e.target.closest('button[data-k]'); if(b) svPick(b); });
+$('svQs').addEventListener('keydown', e=>{
+  const b = e.target.closest('button[data-k]'); if(!b) return;
+  const grp = [...b.parentNode.querySelectorAll('button')], i = grp.indexOf(b);
+  const rtl = root.dir==='rtl' && !b.closest('.sv-nps');
+  let n = null;
+  if(e.key==='ArrowRight') n = i + (rtl?-1:1); else if(e.key==='ArrowLeft') n = i + (rtl?1:-1);
+  if(n!==null && grp[n]){ e.preventDefault(); grp[n].focus(); svPick(grp[n]); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('svModal').hidden && !SV.busy) svClose(); });
+$('svForm').addEventListener('submit', async e=>{
+  e.preventDefault(); if(SV.busy) return;
+  const need = SV_QS.filter(q=>q.k && !q.text && SV.ans[q.k]==null);
+  document.querySelectorAll('#svQs .sv-q').forEach(b=>b.style.removeProperty('outline'));
+  if(need.length){
+    need.forEach(q=>{ const b = $('svQs').querySelector('[data-q="'+q.k+'"]'); if(b) b.style.outline = '2px solid var(--gold)'; b && (b.style.outlineOffset = '6px'); b && (b.style.borderRadius = '10px'); });
+    $('svErrTxt').textContent = svT('need'); $('svErr').hidden = false;
+    const f = $('svQs').querySelector('[data-q="'+need[0].k+'"]'); f && f.scrollIntoView({block:'center', behavior:'smooth'});
+    return;
+  }
+  const btn = $('svBtn'), lbl = btn.querySelector('.lbl'), old = lbl.innerHTML;
+  SV.busy = true; btn.disabled = true; lbl.textContent = t('checking');
+  const a = SV.ans;
+  const r = await api({action:'survey_submit', token:TOKEN, lang:root.dataset.lang||'ar',
+    training:a.training, content:a.content, live:a.live, platform:a.platform, video:a.video, nps:a.nps,
+    liked:$('sv-liked').value.trim(), improve:$('sv-improve').value.trim(), publish:$('sv-publish').checked});
+  SV.busy = false; btn.disabled = false; lbl.innerHTML = old;
+  if(r.ok || r.code==='already'){
+    SV.done = true; svSetBtn(); clearTimeout(SV.timer);
+    if(window.sgTrack) window.sgTrack('survey_submitted');
+    $('svBody').hidden = true; $('svThanks').hidden = false; $('svDone').focus();
+    return;
+  }
+  if(['session_expired','pending','suspended','expired'].indexOf(r.code) > -1){ $('svModal').hidden = true; document.body.style.overflow = ''; signOut(r.code); return; }
+  $('svErrTxt').textContent = t(r.code) || t('server_error'); $('svErr').hidden = false;
+});
+
 /* ---------- notifications ---------- */
 let ANN = [], seenAnn = [], seenLes = null;
 const sk = k => 'serag-'+k+'-'+String((S&&(S.e||S.n))||'').toLowerCase();
@@ -842,7 +1018,7 @@ function queueSave(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async ()=>{
     const r = await api({action:'progress', token:TOKEN, done:Object.keys(P)});
-    if(r.ok) toast(t('saved'));
+    if(r.ok){ toast(t('saved')); svNudge(); }
     else if(r.code==='network' || r.code==='server_error'){ toast(t('notSaved')); setTimeout(queueSave, 8000); }
     else if(r.code==='password_change_required') openPw(true);
     else signOut(r.code==='expired' && C && C.campaign ? 'campaign_ended' : r.code);
