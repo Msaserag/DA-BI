@@ -166,6 +166,54 @@ html[dir="rtl"] .panel h3{letter-spacing:0}
 .note{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink-2);line-height:1.7}
 .note .ico{width:22px;height:22px;color:var(--gold);margin-top:2px}
 .note b{color:var(--ink);direction:ltr;unicode-bidi:isolate}
+/* ===== learning streak + goals (v2.15.0) ===== */
+.gm{margin-top:-16px;align-items:start}
+.streak{position:relative;overflow:hidden;border:0;color:#fff;background:linear-gradient(120deg,#0046CC 0%,#0057FF 38%,#00A88C 100%)}
+.streak::after{content:"";position:absolute;inset-inline-end:-60px;top:-80px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+.st-top{display:flex;align-items:flex-start;gap:12px;position:relative;z-index:1}
+.st-flame{flex:none;width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.16);display:grid;place-items:center;color:#FFD15C}
+.st-flame .ico{width:24px;height:24px}
+.st-flame.lit{background:#FFB800;color:#3A2400}
+.st-top h3{margin:0;color:rgba(255,255,255,.78)}
+.st-count{font-size:24px;font-weight:900;line-height:1.25;margin:2px 0 0}
+.st-xp{margin-inline-start:auto;flex:none;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;background:rgba(6,18,48,.34);font-weight:800;font-size:13.5px}
+.st-xp .ico{width:14px;height:14px;color:#FFD15C}
+.st-sub{position:relative;z-index:1;margin:10px 0 16px;font-size:13.5px;line-height:1.7;color:rgba(255,255,255,.86);max-width:60ch}
+.st-week{position:relative;z-index:1;display:flex;list-style:none;margin:0;padding:0}
+.st-week li{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.66)}
+.st-week li + li::before{content:"";position:absolute;top:15px;height:3px;border-radius:3px;background:rgba(255,255,255,.2);inset-inline-start:calc(-50% + 19px);width:calc(100% - 38px)}
+.st-week li.on + li.on::before{background:#fff}
+.st-dot{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;color:transparent;position:relative}
+.st-dot .ico{width:16px;height:16px}
+.st-week li.on .st-dot{background:#fff;color:#0057FF}
+.st-week li.today{color:#fff}
+.st-week li.today .st-dot{box-shadow:0 0 0 2px rgba(255,255,255,.28);outline:2px dashed #fff;outline-offset:3px}
+.st-week li.goal .st-dot{background:none;border:2px dashed rgba(255,255,255,.55);color:rgba(255,255,255,.8)}
+.st-week li.goal.on .st-dot{background:#FFB800;border-color:#FFB800;color:#3A2400}
+.st-best{position:relative;z-index:1;margin:14px 0 0;font-size:12.5px;color:rgba(255,255,255,.74);font-weight:700}
+.goals h3{justify-content:space-between}
+.goals h3 > span{display:inline-flex;align-items:center;gap:8px}
+.gl-more{border:0;background:none;padding:0;cursor:pointer;font:inherit;font-size:12.5px;font-weight:800;letter-spacing:0;text-transform:none;color:var(--teal-2);display:inline-flex;align-items:center;gap:4px}
+.gl-more .ico{width:14px;height:14px;transition:transform .2s}
+.gl-more[aria-expanded="true"] .ico{transform:rotate(180deg)}
+.gl-sub{margin:0 0 14px;font-size:13.5px;color:var(--ink-2);line-height:1.7}
+.gl-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.gl-item + .gl-item{margin-top:8px}
+.gl-ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--chip-blue);color:var(--blue-2)}
+.gl-ic .ico{width:19px;height:19px}
+.gl-item.won .gl-ic{background:var(--chip-gold);color:var(--gold)}
+.gl-t{font-weight:800;font-size:14.5px;line-height:1.45;margin:0}
+.gl-xp{display:inline-flex;align-items:center;gap:5px;margin-top:4px;padding:1px 9px;border-radius:99px;background:var(--chip-gold);color:var(--gold);font-size:11.5px;font-weight:800}
+.gl-xp .ico{width:11px;height:11px}
+.gl-n{text-align:end;font-weight:900;font-size:19px;color:var(--blue-2);line-height:1.1}
+.gl-n small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:700;margin-top:3px}
+.gl-item.won .gl-n{color:var(--teal-2)}
+.gl-bar{grid-column:1/-1;height:6px;border-radius:9px;background:var(--line-2);overflow:hidden}
+.gl-bar em{display:block;height:100%;border-radius:9px;background:var(--grad);transition:width .5s}
+.gl-all{margin-top:8px}
+@media (max-width:640px){ .st-count{font-size:21px} .st-dot{width:28px;height:28px} .st-week li{font-size:10px} .st-week li + li::before{top:13px;inset-inline-start:calc(-50% + 16px);width:calc(100% - 32px)} }
+@media (prefers-reduced-motion: reduce){ .gl-bar em,.gl-more .ico{transition:none} }
+
 
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
 .sec-head h2{font-size:clamp(22px,2.4vw,28px);font-weight:900;margin:0}
@@ -501,6 +549,11 @@ button.watch{cursor:pointer;font-family:inherit}
       </div>
     </div>
 
+    <div class="grid2 gm" id="game">
+      <div class="panel streak" id="streakPanel"></div>
+      <div class="panel goals" id="goalsPanel"></div>
+    </div>
+
     <div id="liveWrap"></div>
 
     <div class="sec-head">
@@ -635,6 +688,9 @@ const I = {
   bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
   megaphone:'<path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
   star:'<path d="m12 3.5 2.6 5.3 5.9.9-4.25 4.1 1 5.8L12 16.8 6.75 19.6l1-5.8L3.5 9.7l5.9-.9z"/>',
+  flame:'<path d="M12 3c.6 3.2 5 5.4 5 10.2a5 5 0 0 1-10 0c0-1.9.8-3.3 1.9-4.5.3 1.5 1 2.3 1.9 2.7C10.4 8.6 10.8 5.6 12 3z"/>',
+  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M9.5 17h5"/>',
+  bolt:'<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>',
   ext:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>'
 };
 const ic = (k,cls) => '<span class="ico'+(cls?' '+cls:'')+'" data-i="'+k+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'</svg></span>';
@@ -786,7 +842,7 @@ $('loginForm').addEventListener('submit', async e=>{
 });
 function enter(r){
   S = r.user; C = r.content; ANN = r.announcements || [];
-  loadSeen();
+  loadSeen(); gameLoad();
   P = {}; (r.progress||[]).forEach(id=>P[id]=1);
   $('login').hidden = true; $('boot').hidden = true; $('app').hidden = false;
   window.scrollTo(0,0); render();
@@ -953,6 +1009,7 @@ function tourSteps(){
                en:['Welcome to your learning portal','A quick tour (under a minute) shows you where to continue, how to track progress and how to reach support.']},
     {sel:'#ring', ar:['تقدّمك','الدائرة بتتحدّث تلقائيًا كل ما تعلّم محاضرة كمكتملة. هدفك توصل 100%.'], en:['Your progress','This ring updates as you mark lectures complete. Aim for 100%.']},
     {sel:'#nextPanel', ar:['كمّل من حيث توقفت','هنا بتلاقي المحاضرة التالية المقترحة، اضغط عليها وكمّل علطول.'], en:['Pick up where you left off','Your next suggested lecture is here. One tap and you are back in.']},
+    {sel:'#streakPanel', ar:['سلسلة تعلّمك ونقاطك','كل يوم تدرس فيه يُضاف إلى سلسلتك، وكل محاضرة تُكملها تمنحك نقاط XP. تابع أهدافك وإنجازاتك من اللوحة المجاورة.'], en:['Your streak and XP','Every day you study adds to your streak, and every lecture you complete earns XP. Track your goals and milestones in the panel next to it.']},
     {sel:'#liveWrap .live', skipIf:camp, ar:['الجلسات المباشرة','مواعيد الجلسات المباشرة وروابط الانضمام بتظهر هنا، فحافظ على متابعتها.'], en:['Live sessions','Dates and join links for the live sessions appear here, so check back often.']},
     {sel:'.sec-head .tools', ar:['ابحث وفلتر','دوّر على أي محاضرة بالاسم، أو اعرض المتبقي والمكتمل بس.'], en:['Search and filter','Find any lecture by name, or show only what is remaining or completed.']},
     {sel:'#chapters .chap', open:true, ar:['فصول الدبلومة','المحتوى مقسّم لفصول وأقسام. اضغط على الفصل لفتحه وشوف محاضراته.'], en:['Course chapters','Content is split into chapters and sections. Tap a chapter to open its lectures.']},
@@ -1137,7 +1194,7 @@ document.addEventListener('click', e=>{
   if(!$('notes').hidden && !e.target.closest('#notes') && !e.target.closest('#bell')){ $('notes').hidden = true; $('bell').setAttribute('aria-expanded', false); renderNotes(); }
   const sb = e.target.closest('[data-seen]'); if(sb){ seenAnn.push(sb.dataset.seen); saveSeen(); renderNotes(); }
   if(e.target.closest('[data-open-notes]')) $('bell').click();
-  const lk = e.target.closest('a.watch[data-lid]'); if(lk){ markLessonSeen(lk.dataset.lid); if(window.sgTrack) window.sgTrack('lecture_open', {lecture: lk.dataset.lid}); setTimeout(render, 300); }
+  const lk = e.target.closest('a.watch[data-lid]'); if(lk){ markLessonSeen(lk.dataset.lid); gameTouch(); if(window.sgTrack) window.sgTrack('lecture_open', {lecture: lk.dataset.lid}); setTimeout(render, 300); }
 });
 
 /* ---------- progress (saved to your account) ---------- */
@@ -1146,7 +1203,7 @@ function queueSave(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async ()=>{
     const r = await api({action:'progress', token:TOKEN, done:Object.keys(P)});
-    if(r.ok){ toast(t('saved')); svNudge(); }
+    if(r.ok){ toast(GT || t('saved')); GT = null; svNudge(); }
     else if(r.code==='network' || r.code==='server_error'){ toast(t('notSaved')); setTimeout(queueSave, 8000); }
     else if(r.code==='password_change_required') openPw(true);
     else signOut(r.code==='expired' && C && C.campaign ? 'campaign_ended' : r.code);
@@ -1154,6 +1211,119 @@ function queueSave(){
 }
 let toastTimer;
 function toast(m){ const el=$('toast'); el.textContent=m; el.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.hidden=true, 2200); }
+
+/* ---------- learning streak, XP and goals (v2.15.0) ----------
+   Lecture XP and progress badges come from the saved progress, so they follow the account.
+   Study days and the weekly count are kept in this browser (per trainee). */
+const GS = {
+  ar:{ stH:'سلسلة تعلّمك', stSub:'تعلّم كل يوم لتبني سلسلتك. الاستمرارية هي مفتاح التطور، وحتى 5 دقائق تُحتسب.',
+       days:n=>n+(n===1?' يوم متتالٍ':(n===2?' يومان متتاليان':(n>=3&&n<=10?' أيام متتالية':' يومًا متتاليًا'))),
+       startToday:'ابدأ سلسلتك اليوم', keep:'ادرس اليوم لتحافظ على سلسلتك', doneToday:'أحسنت، سجّلت نشاط اليوم', best:n=>'أفضل سلسلة: '+n,
+       wd:['الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت','الأحد'], goal:'الهدف',
+       glH:'الأهداف والإنجازات', glSub:'تابع تقدّمك نحو الشارات والإنجازات من هنا. أكمل التحديات لتكسب نقاط XP وتفتح المكافآت.',
+       more:'عرض المزيد', less:'عرض أقل', bonus:n=>n+' نقاط إضافية', xpOnly:n=>n+' نقطة', won:'تم',
+       week:n=>'أكمل '+n+' محاضرات هذا الأسبوع',
+       b_first:'أكمل أول محاضرة', b_s3:'سلسلة 3 أيام متتالية', b_s7:'سلسلة 7 أيام متتالية', b_chap:'أنهِ فصلًا كاملًا',
+       b_p25:'أكمل 25% من المحتوى', b_p50:'أكمل 50% من المحتوى', b_p100:'أكمل 100% من المحتوى',
+       unlocked:(n,x)=>'إنجاز جديد: '+n+' ('+x+' نقطة)', weekWon:x=>'أنجزت هدف الأسبوع ('+x+' نقاط إضافية)' },
+  en:{ stH:'Your learning streak', stSub:'Keep learning every day to build your streak! Consistency is the key to growth, and even 5 minutes counts.',
+       days:n=>n+' Day Streak',
+       startToday:'Start your streak today', keep:'Study today to keep your streak', doneToday:'Well done, today is counted', best:n=>'Best streak: '+n,
+       wd:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], goal:'Goal',
+       glH:'Goals & objectives', glSub:'Track your progress toward badges and milestones here. Complete challenges to earn XP and unlock rewards.',
+       more:'See more', less:'See less', bonus:n=>n+' bonus XP', xpOnly:n=>n+' XP', won:'Done',
+       week:n=>'Complete '+n+' lectures this week',
+       b_first:'Complete your first lecture', b_s3:'Reach a 3-day streak', b_s7:'Reach a 7-day streak', b_chap:'Finish a full chapter',
+       b_p25:'Complete 25% of the content', b_p50:'Complete 50% of the content', b_p100:'Complete 100% of the content',
+       unlocked:(n,x)=>'Milestone unlocked: '+n+' (+'+x+' XP)', weekWon:x=>'Weekly objective complete (+'+x+' XP)' }
+};
+const gs = k => GS[root.dataset.lang||'ar'][k];
+const XP_LECTURE = 10, XP_DAY = 5, WEEK_TARGET = 5, WEEK_BONUS = 10;
+const BADGES = [
+  {id:'first', xp:20,  ico:'play',  val:m=>[Math.min(m.done,1),1]},
+  {id:'s3',    xp:30,  ico:'flame',  val:m=>[Math.min(m.best,3),3]},
+  {id:'p25',   xp:50,  ico:'target', val:m=>[Math.min(m.pct,25),25], pc:1},
+  {id:'chap',  xp:50,  ico:'book',   val:m=>[m.chap?1:0,1]},
+  {id:'s7',    xp:70,  ico:'flame',  val:m=>[Math.min(m.best,7),7]},
+  {id:'p50',   xp:100, ico:'target', val:m=>[Math.min(m.pct,50),50], pc:1},
+  {id:'p100',  xp:200, ico:'trophy', val:m=>[Math.min(m.pct,100),100], pc:1}
+];
+let G = null, GT = null, glOpen = false;
+const dKey = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const dAdd = (d,n) => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()+n); return x; };
+const weekStart = d => dAdd(d, -((d.getDay()+6)%7));   // Monday
+function gameLoad(){
+  let o = null; try{ o = JSON.parse(store.get('localStorage', sk('game'))||'null'); }catch(e){}
+  G = (o && typeof o==='object') ? o : {};
+  if(!Array.isArray(G.days)) G.days = [];
+  if(!G.done || typeof G.done!=='object') G.done = {};
+  if(!G.wk || typeof G.wk!=='object') G.wk = {};
+  G.best = +G.best || 0; G.init = !!G.init;
+  if(!Array.isArray(G.b)) G.b = [];
+}
+function gameSave(){ if(G){ if(G.days.length > 400) G.days = G.days.slice(-400); store.set('localStorage', sk('game'), JSON.stringify(G)); } }
+/* any study action today (opening a lecture or ticking one) counts as a study day */
+function gameTouch(){
+  if(!G) return; const k = dKey(new Date());
+  if(G.days.indexOf(k) < 0){ G.days.push(k); G.days.sort(); }
+  G.best = Math.max(G.best, gameStreak()); gameSave();
+}
+function gameTick(id, on){ if(!G) return; if(on){ G.done[id] = dKey(new Date()); gameTouch(); } else { delete G.done[id]; gameSave(); } }
+function gameStreak(){
+  const set = {}; G.days.forEach(k=>set[k]=1);
+  let d = new Date(); if(!set[dKey(d)]) d = dAdd(d,-1);
+  let n = 0; while(set[dKey(d)]){ n++; d = dAdd(d,-1); }
+  return n;
+}
+function gameModel(avail){
+  const now = new Date(), ws = weekStart(now), wkKey = dKey(ws), weKey = dKey(dAdd(ws,6));
+  const done = avail.filter(o=>P[o.x.id]);
+  const pct = avail.length ? Math.round(done.length/avail.length*100) : 0;
+  const chap = C.chapters.filter(c=>c.id!=='L').some(c=>{ const a=[]; c.sections.forEach(s=>s.lessons.forEach(x=>{ if(x.url) a.push(x); })); return a.length && a.every(x=>P[x.id]); });
+  const week = done.filter(o=>{ const k = G.done[o.x.id]; return k && k >= wkKey && k <= weKey; }).length;
+  const streak = gameStreak(); G.best = Math.max(G.best, streak);
+  const m = {done:done.length, pct, chap, week, streak, best:G.best, wkKey, today:dKey(now), ws};
+  let fresh = null;
+  if(week >= WEEK_TARGET && !G.wk[wkKey]){ G.wk[wkKey] = 1; if(G.init) fresh = gs('weekWon')(WEEK_BONUS); }
+  m.badges = BADGES.map(b=>{ const v = b.val(m); const won = v[0] >= v[1] && v[1] > 0;
+    if(won && G.b.indexOf(b.id) < 0){ G.b.push(b.id); if(G.init) fresh = gs('unlocked')(gs('b_'+b.id), b.xp); }
+    return {b, v, won}; });
+  m.xp = m.done*XP_LECTURE + G.days.length*XP_DAY + Object.keys(G.wk).length*WEEK_BONUS + m.badges.filter(x=>x.won).reduce((a,x)=>a+x.b.xp,0);
+  G.init = true; gameSave();
+  if(fresh){ GT = fresh; toast(fresh); }
+  return m;
+}
+function glItem(icon, title, xpLabel, cur, max, won, pc){
+  const p = max ? Math.min(100, Math.round(cur/max*100)) : 0;
+  return '<div class="gl-item'+(won?' won':'')+'"><span class="gl-ic">'+ic(won?'check':icon)+'</span>'+
+    '<div><p class="gl-t">'+esc(title)+'</p><span class="gl-xp">'+ic('bolt')+'<span>'+esc(xpLabel)+'</span></span></div>'+
+    '<div class="gl-n"><span class="n">'+p+'%</span><small class="n">'+(won ? esc(gs('won')) : (pc ? cur+'% / '+max+'%' : cur+'/'+max))+'</small></div>'+
+    '<div class="gl-bar"><em style="width:'+p+'%"></em></div></div>';
+}
+function paintGame(avail){
+  if(!G || !$('game')) return;
+  const m = gameModel(avail), set = {}; G.days.forEach(k=>set[k]=1);
+  const todayOn = !!set[m.today], wkWon = !!G.wk[m.wkKey];
+  let wk = '';
+  for(let i=0;i<7;i++){ const k = dKey(dAdd(m.ws,i));
+    wk += '<li class="'+(set[k]?'on':'')+(k===m.today?' today':'')+'"><span class="st-dot">'+ic('check')+'</span><span>'+gs('wd')[i]+'</span></li>'; }
+  wk += '<li class="goal'+(wkWon?' on':'')+'"><span class="st-dot">'+ic('trophy')+'</span><span>'+gs('goal')+'</span></li>';
+  $('streakPanel').innerHTML =
+    '<div class="st-top"><span class="st-flame'+(m.streak?' lit':'')+'">'+ic('flame')+'</span>'+
+    '<div><h3>'+gs('stH')+'</h3><p class="st-count">'+gs('days')(m.streak)+'</p></div>'+
+    '<span class="st-xp">'+ic('star')+'<span class="n">'+m.xp+' XP</span></span></div>'+
+    '<p class="st-sub">'+gs('stSub')+'</p>'+
+    '<ol class="st-week" aria-label="'+esc(gs('stH'))+'">'+wk+'</ol>'+
+    '<p class="st-best">'+(todayOn ? gs('doneToday') : (m.streak ? gs('keep') : gs('startToday')))+(m.best>1 ? ' · '+gs('best')(m.best) : '')+'</p>';
+  const next = m.badges.find(x=>!x.won);
+  const row = x => glItem(x.b.ico, gs('b_'+x.b.id), gs('xpOnly')(x.b.xp), x.v[0], x.v[1], x.won, x.b.pc);
+  $('goalsPanel').innerHTML =
+    '<h3><span>'+ic('target')+gs('glH')+'</span><button type="button" class="gl-more" id="glMore" aria-expanded="'+glOpen+'" aria-controls="glAll">'+(glOpen?gs('less'):gs('more'))+ic('down')+'</button></h3>'+
+    '<p class="gl-sub">'+gs('glSub')+'</p>'+
+    glItem('target', gs('week')(WEEK_TARGET), gs('bonus')(WEEK_BONUS), Math.min(m.week,WEEK_TARGET), WEEK_TARGET, wkWon, 0)+
+    (glOpen ? '<div class="gl-all" id="glAll">'+m.badges.map(row).join('')+'</div>' : (next ? row(next) : ''));
+}
+document.addEventListener('click', e=>{ if(e.target.closest('#glMore')){ glOpen = !glOpen; paintProgress(); const b = $('glMore'); if(b) b.focus(); } });
 
 /* ---------- render ---------- */
 let filter = 'all', query = '';
@@ -1224,6 +1394,7 @@ function paintProgress(){
   $('nextPanel').innerHTML = '<h3>'+ic('target')+t('next')+'</h3>' + (nx
     ? '<p class="tt">'+esc(lessonTitle(nx.x, nx.s))+'</p><p class="meta"><span class="n">'+esc(nx.s.no)+'</span> · '+esc(L(nx.s))+'</p>'+lessonBtn(nx.x,'big')
     : '<p class="tt">'+(avail.length ? t('allDone') : t('nothing'))+'</p><p class="meta">'+(avail.length ? t('allDoneP') : '')+'</p>');
+  paintGame(avail);
 }
 function render(){
   const first = (S.n||'').split(' ')[0];
@@ -1308,7 +1479,7 @@ function setOpen(id, reset){
   OPEN = id;
   if(reset){ filter = 'all'; query = ''; $('q').value = ''; document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on', x.dataset.f==='all')); }
   const det = document.querySelector('#chapters details[data-id="'+CSS.escape(String(o.c.id))+'"]'); if(det) det.open = true;
-  markLessonSeen(id); if(window.sgTrack) window.sgTrack('lecture_open', {lecture: id});
+  markLessonSeen(id); gameTouch(); if(window.sgTrack) window.sgTrack('lecture_open', {lecture: id});
   render();
   const row = document.querySelector('[data-lrow="'+CSS.escape(id)+'"]');
   if(row) row.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
@@ -1317,6 +1488,7 @@ document.addEventListener('click', e=>{
   const tk = e.target.closest('[data-tick]');
   if(tk && S){
     const id = tk.dataset.tick; if(P[id]) delete P[id]; else P[id] = 1;
+    gameTick(id, !!P[id]);
     const fresh = !!seenLes && seenLes.indexOf(id) < 0;
     markLessonSeen(id);
     if(OPEN && filter==='all' && !query && !fresh) syncTick(id); else render();
