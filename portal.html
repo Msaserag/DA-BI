@@ -741,7 +741,7 @@ const T = {
        search:'ابحث عن محاضرة...', none:'لا توجد محاضرات مطابقة.', hours:'ساعة', mark:'تحديد كمكتملة',
        bell:'التنبيهات', noAnn:'لا توجد تنبيهات حاليًا.', newL:n=>n+(n===1?' محاضرة جديدة':' محاضرات جديدة'), newBadge:'جديد', view:'عرض كل التنبيهات', dismiss:'تم', openLink:'افتح الرابط',
        hide:'إغلاق', markDone:'تحديد كمكتملة', markedDone:'مكتملة ✓', nextVid:'المحاضرة التالية', ytOpen:'فتح في YouTube', driveOpen:'فتح في Drive',
-       vNote:'إذا لم يظهر الفيديو، تأكد من تسجيل الدخول إلى YouTube بنفس حساب Google المسجّل لدينا، أو افتحه في نافذة جديدة.',
+       vNote:'إذا لم يظهر الفيديو، تأكد من تسجيل الدخول إلى YouTube بنفس حساب Google المسجّل لدينا.',
        recorded:'محاضرة مسجّلة', resource:'ملفات', lecture:'المحاضرة المسجّلة', saved:'تم حفظ تقدّمك', notSaved:'تعذّر حفظ التقدّم، سيُعاد المحاولة تلقائيًا' },
   en:{ title:'Learner Portal | Mahmoud Serag',
        bad_login:'Wrong username or password. Passwords are case-sensitive.',
@@ -772,7 +772,7 @@ const T = {
        search:'Search lectures...', none:'No matching lectures.', hours:'h', mark:'Mark as completed',
        bell:'Announcements', noAnn:'No announcements yet.', newL:n=>n+(n===1?' new lecture':' new lectures'), newBadge:'NEW', view:'View all announcements', dismiss:'Got it', openLink:'Open link',
        hide:'Close', markDone:'Mark as completed', markedDone:'Completed ✓', nextVid:'Next lecture', ytOpen:'Open on YouTube', driveOpen:'Open in Drive',
-       vNote:'If the video does not appear, make sure you are signed in to YouTube with the Google account registered with us, or open it in a new tab.',
+       vNote:'If the video does not appear, make sure you are signed in to YouTube with the Google account registered with us.',
        recorded:'Recorded lecture', resource:'Files', lecture:'Recorded lecture', saved:'Progress saved', notSaved:'Could not save progress; retrying automatically' }
 };
 const t = k => T[root.dataset.lang||'ar'][k];
@@ -1388,7 +1388,6 @@ function playerHtml(x){
     '<div class="pact"><button type="button" class="pbtn ok'+(d?' is':'')+'" data-tick="'+id+'" aria-pressed="'+d+'">'+ic('check')+'<span>'+(d?t('markedDone'):t('markDone'))+'</span></button>'+
     (nx ? '<button type="button" class="pbtn" data-play="'+esc(nx.id)+'">'+ic('arrow','flip')+'<span>'+t('nextVid')+'</span></button>' : '')+
     '<span class="sp"></span>'+
-    '<a class="pbtn" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+ic('ext')+'<span>'+(em.kind==='yt'?t('ytOpen'):t('driveOpen'))+'</span></a>'+
     '<button type="button" class="pbtn" data-play="'+id+'">'+ic('down')+'<span>'+t('hide')+'</span></button></div>'+
     '<p class="pnote">'+t('vNote')+'</p></div>';
 }
