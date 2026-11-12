@@ -142,7 +142,7 @@
       excel: $('sgr-x1').value, laptop: $('sgr-l').value, goals: $('sgr-g').value.trim(), consent: $('sgr-k').checked };
     if (!/^[A-Za-z][A-Za-z .'\-]{2,60}$/.test(v.nameEn) || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email) || v.mobile.replace(/\D/g, '').length < 8 || !v.job || !v.consent) { showErr(L, 'bad_input'); return; }
     var b = $('sgr-go'); b.disabled = true; b.textContent = t.sending;
-    v.action = 'diploma_register'; v.cf = cfToken; v.src = q.get('utm_source') || (document.referrer ? hostOf(document.referrer) : 'direct'); v.camp = q.get('utm_campaign') || q.get('src') || '';
+    v.action = 'diploma_register'; v.cf = cfToken; v.src = q.get('utm_source') || (document.referrer ? hostOf(document.referrer) : 'direct'); v.camp = q.get('utm_campaign') || q.get('src') || ((window.sgOffer && window.sgOffer.active()) ? window.sgOffer.tag : '');
     fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(v) })
       .then(function (r) { return r.json(); }).catch(function () { return { ok: false, code: 'network' }; })
       .then(function (r) {

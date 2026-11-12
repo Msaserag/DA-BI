@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl" data-lang="ar">
 <head>
 <meta name="robots" content="noindex,nofollow">
+<script src="offer.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي | محمود سراج</title>
@@ -379,7 +380,7 @@ html[dir="rtl"] .les:hover{transform:translateX(-4px)}
 (function(){
 "use strict";
 /* Price shown on the page. Change here when the offer changes. */
-var PRICE = 10000, WA = 'https://wa.me/201550888810';
+var OFF = !!(window.sgOffer && window.sgOffer.active()), PRICE = 10000, SHOWN = OFF ? window.sgOffer.sale : PRICE, WA = 'https://wa.me/201550888810';
 var root = document.documentElement;
 var $ = function(id){ return document.getElementById(id); };
 var store = {get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
@@ -440,7 +441,7 @@ var fmt = function(n){ return n.toLocaleString('en-US'); };
 function ecard(){
   var bars = [34,46,40,58,52,70,64,82,74,90].map(function(h,i){ return '<i style="height:'+h+'%;--i:'+i+'"></i>'; }).join('');
   return '<a class="prev" href="free/" aria-label="Free preview"><div class="bars">'+bars+'</div><div class="pl"><span><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span></div><div class="cap">'+b(['شاهد معاينة مجانية للكورس','Watch a free course preview'])+'</div></a>'+
-  '<div class="eb"><div class="price"><b>'+fmt(PRICE)+'</b><span>'+b(['جنيه مصري','EGP'])+'</span></div><p class="price-note">'+b(['دفع واحد للدبلومة كاملة','One payment for the full diploma'])+'</p>'+
+  '<div class="eb"><div class="price"><b>'+fmt(SHOWN)+'</b><span>'+b(['جنيه مصري','EGP'])+'</span>'+(OFF?'<s style="opacity:.6;font-weight:700">'+fmt(PRICE)+'</s>':'')+'</div>'+(OFF?'<p class="price-note" style="color:#FFB800;font-weight:800">'+b(['عرض Black Friday: خصم 50% لفترة محدودة','Black Friday offer: 50% off for a limited time'])+'</p>':'')+'<p class="price-note">'+b(['دفع واحد للدبلومة كاملة','One payment for the full diploma'])+'</p>'+
   '<a class="btn btn-p" href="#join">'+b(['سجّل في الدبلومة','Enroll in the diploma'])+'</a>'+
   '<a class="btn btn-o" href="free/">'+ic('play')+b(['ابدأ الكراش كورس المجاني','Start the free crash course'])+'</a>'+
   '<div class="guar">'+ic('shield')+b(['لا التزام قبل تأكيد التفاصيل على واتساب','No commitment until we confirm details on WhatsApp'])+'</div>'+
@@ -449,7 +450,7 @@ function ecard(){
 }
 function build(){
   $('ecardTop').innerHTML = ecard(); $('ecardSide').innerHTML = ecard();
-  $('mPrice').textContent = fmt(PRICE);
+  $('mPrice').textContent = fmt(SHOWN);
   $('learn').innerHTML = LEARN.map(function(x){ return '<li>'+ic('check')+'<span>'+b(x)+'</span></li>'; }).join('');
   $('stats').innerHTML = STATS.map(function(s){ return '<div class="st"><b>'+s[0]+'</b><span>'+b([s[1],s[2]])+'</span></div>'; }).join('');
   var total = CH.reduce(function(a,c){ return a+c.l.length; },0);
