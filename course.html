@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-lang="ar">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي | محمود سراج</title>
+<meta name="description" content="Course page: 42 hours of blended learning covering Excel, Power BI, Generative AI and MCP on real business cases.">
+<meta property="og:title" content="AI-Powered Data Analytics & BI Diploma | Mahmoud Serag">
+<meta property="og:image" content="https://da-bi-diploma.vercel.app/assets/social/bf-og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<script src="analytics.js" defer></script>
+<script src="motion.js" defer></script>
+<script src="register.js" defer></script>
+<style>
+/* ================= TOKENS (dark-first brand) ================= */
+:root{
+  color-scheme: dark;
+  --bg:#0A1633; --bg-alt:#0C1B3D; --band:#0F2149;
+  --surface:rgba(255,255,255,.045); --surface-2:rgba(255,255,255,.08); --solid:#12244C;
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.18);
+  --ink:#FFFFFF; --ink-2:rgba(228,236,255,.76); --ink-3:#8C9CC0;
+  --blue:#0057FF; --blue-2:#3AA0FF; --teal:#00C9A7; --teal-2:#00E5C3; --gold:#FFB800;
+  --grad:linear-gradient(135deg,#0099FF 0%,#00C9A7 100%);
+  --grad-btn:linear-gradient(135deg,#00C9A7,#0057FF);
+  --nav:rgba(10,22,51,.78);
+  --shadow:0 24px 60px rgba(0,0,0,.35);
+  --mesh-1:rgba(0,87,255,.20); --mesh-2:rgba(0,201,167,.13);
+  --node:rgba(120,190,255,.55); --link:rgba(80,160,255,.16); --link-hot:rgba(0,229,195,.55);
+  --chip-blue:rgba(0,87,255,.18); --chip-teal:rgba(0,201,167,.16); --chip-gold:rgba(255,184,0,.16);
+  --bad:#FF7A7A; --ok:#00E5C3;
+  --fs-body:"Cairo","Segoe UI",Tahoma,system-ui,sans-serif;
+  --fs-num:"Outfit","Cairo",system-ui,sans-serif;
+  --fs-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:18px; --r-lg:28px;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){color-scheme: light;
+  --bg:#F3F6FC; --bg-alt:#E9EFF9; --band:#FFFFFF;
+  --surface:#FFFFFF; --surface-2:#F1F5FC; --solid:#FFFFFF;
+  --line:rgba(13,27,62,.09); --line-2:rgba(13,27,62,.17);
+  --ink:#0D1B3E; --ink-2:#3A4A6D; --ink-3:#66769A;
+  --blue:#0050E6; --blue-2:#0057FF; --teal:#00A88C; --teal-2:#00876F; --gold:#B57A00;
+  --grad:linear-gradient(135deg,#0057FF 0%,#00A88C 100%);
+  --grad-btn:linear-gradient(135deg,#00A88C,#0050E6);
+  --nav:rgba(255,255,255,.85);
+  --shadow:0 20px 50px rgba(13,27,62,.10);
+  --mesh-1:rgba(0,87,255,.07); --mesh-2:rgba(0,168,140,.07);
+  --node:rgba(0,80,230,.35); --link:rgba(0,80,230,.10); --link-hot:rgba(0,168,140,.55);
+  --chip-blue:rgba(0,87,255,.09); --chip-teal:rgba(0,168,140,.10); --chip-gold:rgba(200,140,0,.11);
+  --bad:#D64545; --ok:#00876F;}}
+:root[data-theme="light"]{color-scheme: light;
+  --bg:#F3F6FC; --bg-alt:#E9EFF9; --band:#FFFFFF;
+  --surface:#FFFFFF; --surface-2:#F1F5FC; --solid:#FFFFFF;
+  --line:rgba(13,27,62,.09); --line-2:rgba(13,27,62,.17);
+  --ink:#0D1B3E; --ink-2:#3A4A6D; --ink-3:#66769A;
+  --blue:#0050E6; --blue-2:#0057FF; --teal:#00A88C; --teal-2:#00876F; --gold:#B57A00;
+  --grad:linear-gradient(135deg,#0057FF 0%,#00A88C 100%);
+  --grad-btn:linear-gradient(135deg,#00A88C,#0050E6);
+  --nav:rgba(255,255,255,.85);
+  --shadow:0 20px 50px rgba(13,27,62,.10);
+  --mesh-1:rgba(0,87,255,.07); --mesh-2:rgba(0,168,140,.07);
+  --node:rgba(0,80,230,.35); --link:rgba(0,80,230,.10); --link-hot:rgba(0,168,140,.55);
+  --chip-blue:rgba(0,87,255,.09); --chip-teal:rgba(0,168,140,.10); --chip-gold:rgba(200,140,0,.11);
+  --bad:#D64545; --ok:#00876F;}
+:root[data-theme="dark"]{color-scheme:dark}
+
+
+*,*::before,*::after{box-sizing:border-box}
+html{overflow-x:clip;scroll-behavior:smooth;scroll-padding-top:128px}
+[hidden]{display:none!important}
+body{margin:0;font-family:var(--fs-body);background:var(--bg);color:var(--ink);line-height:1.7;overflow-x:clip;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+html[data-lang="ar"] .en, html[data-lang="en"] .ar{display:none!important}
+.n{font-family:var(--fs-num);direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+.ico{display:inline-grid;place-items:center;flex:0 0 auto;width:18px;height:18px}
+.ico svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:2px solid var(--teal-2);outline-offset:3px;border-radius:8px}
+html[dir="rtl"] .flip svg{transform:scaleX(-1)}
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 15% 5%,var(--mesh-1),transparent 60%),radial-gradient(ellipse 55% 45% at 90% 85%,var(--mesh-2),transparent 60%)}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding-inline:24px}
+
+/* nav */
+.top{position:sticky;top:0;z-index:60;background:var(--nav);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:11px 24px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.brand b{font-family:var(--fs-num);font-size:20px;font-weight:700;line-height:1}
+.sp{flex:1}
+.ctl{height:38px;min-width:38px;padding:0 13px;display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);cursor:pointer;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:border-color .2s,background .2s}
+.ctl:hover{border-color:var(--teal);background:var(--surface-2)}
+.lang-mark{font-family:var(--fs-num);letter-spacing:.04em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:999px;cursor:pointer;font-weight:800;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn-p{background:var(--grad-btn);color:#fff;padding:14px 26px;font-size:16px;box-shadow:0 8px 26px rgba(0,201,167,.28)}
+.btn-p:hover{transform:translateY(-2px)}
+.btn-o{background:var(--surface);color:var(--ink);padding:13px 24px;font-size:15px;border:1px solid var(--line-2)}
+.btn-o:hover{border-color:var(--teal)}
+.top .btn-p{height:38px;padding:0 18px;font-size:14px;box-shadow:none}
+
+/* hero */
+.hero{position:relative;z-index:1;padding-block:34px 44px;background:var(--band);border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:40px;align-items:start}
+.crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--ink-3);font-weight:600;margin-bottom:16px}
+.crumbs a{text-decoration:none}.crumbs a:hover{color:var(--teal-2)}
+.crumbs .ico{width:13px;height:13px}
+.tag{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 12px;border-radius:999px;font-size:12.5px;font-weight:800;background:var(--chip-gold);color:var(--gold);margin-bottom:14px}
+.hero h1{font-size:clamp(28px,3.8vw,44px);font-weight:900;line-height:1.3;margin:0 0 12px;text-wrap:balance}
+.hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{font-size:17px;color:var(--ink-2);max-width:62ch;margin:0 0 20px}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin:0 0 22px;padding:0;list-style:none}
+.meta li{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink-2)}
+.meta .ico{color:var(--teal-2)}
+.by{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--ink-3);font-weight:600}
+.by img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:top center;border:2px solid var(--line-2)}
+.by b{color:var(--ink);display:block;font-size:15px;line-height:1.3}
+
+/* enroll card */
+.ecard{position:sticky;top:84px;background:var(--solid);border:1px solid var(--line-2);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden}
+.prev{position:relative;display:block;aspect-ratio:16/9;background:linear-gradient(135deg,#0A1633,#0F2E6B 55%,#00A88C);text-decoration:none;overflow:hidden}
+.prev .bars{position:absolute;inset:auto 0 0 0;height:62%;display:flex;align-items:flex-end;gap:7px;padding:0 22px 18px;opacity:.55}
+.prev .bars i{flex:1;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#3AA0FF,#00C9A7)}
+.prev .pl{position:absolute;inset:0;display:grid;place-items:center}
+.prev .pl span{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.95);color:#0A1633;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .2s}
+.prev:hover .pl span{transform:scale(1.08)}
+.prev .pl svg{width:26px;height:26px;fill:currentColor;stroke:none;margin-inline-start:3px}
+.prev .cap{position:absolute;inset-inline:0;bottom:0;padding:26px 16px 10px;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,.6),transparent);text-align:center}
+.eb{padding:22px}
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.price b{font-family:var(--fs-num);font-size:44px;font-weight:800;line-height:1}
+.price span{font-size:16px;font-weight:700;color:var(--ink-3)}
+.price-note{font-size:13px;color:var(--ink-3);margin:0 0 16px}
+.eb .btn{width:100%;margin-bottom:10px}
+.guar{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;color:var(--ink-3);margin:2px 0 16px}
+.guar .ico{width:15px;height:15px;color:var(--teal-2)}
+.eb h4{font-size:14px;font-weight:800;margin:0 0 10px}
+.incl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.incl li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-2)}
+.incl .ico{width:17px;height:17px;color:var(--teal-2);margin-top:3px}
+.ewa{display:flex;justify-content:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13.5px}
+.ewa a{color:var(--teal-2);font-weight:800;text-decoration:none;display:inline-flex;gap:7px;align-items:center}
+
+/* tabs */
+.tabs{position:sticky;top:61px;z-index:40;background:var(--nav);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.tabs-in{max-width:1200px;margin:0 auto;padding-inline:24px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs-in::-webkit-scrollbar{display:none}
+.tabs a{flex:none;padding:14px 16px;font-size:14.5px;font-weight:800;color:var(--ink-3);text-decoration:none;border-bottom:3px solid transparent;transition:color .2s,border-color .2s}
+.tabs a:hover{color:var(--ink)}
+.tabs a.on{color:var(--ink);border-bottom-color:var(--teal)}
+
+/* content */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:40px;padding-block:8px 60px}
+.sec{padding-block:36px 6px}
+.sec h2{font-size:clamp(22px,2.6vw,30px);font-weight:900;margin:0 0 6px;line-height:1.35}
+.sec > .sub{color:var(--ink-3);font-size:14.5px;margin:0 0 20px}
+.learn{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 22px;padding:24px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);list-style:none;margin:0}
+.learn li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:var(--ink-2)}
+.learn .ico{width:18px;height:18px;color:var(--teal-2);margin-top:3px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+.st{padding:16px;border-radius:14px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.st b{direction:ltr;unicode-bidi:isolate;display:block;font-family:var(--fs-num);font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.2}
+.st span{font-size:12.5px;color:var(--ink-3);font-weight:700}
+
+/* curriculum */
+.chead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.chead .tot{font-size:14px;color:var(--ink-3);font-weight:700}
+.chead button{height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);cursor:pointer;font-size:13px;font-weight:800}
+.chead button:hover{border-color:var(--teal)}
+.free{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:14px 16px;border-radius:14px;margin-bottom:16px;background:linear-gradient(135deg,var(--chip-blue),var(--chip-teal));border:1px solid rgba(0,201,167,.3);font-size:14px;color:var(--ink-2)}
+.free .ico{color:var(--teal-2);width:22px;height:22px}
+.free b{color:var(--ink)}
+.free a{margin-inline-start:auto;color:var(--teal-2);font-weight:800;text-decoration:none;white-space:nowrap}
+.chaps{display:flex;flex-direction:column;gap:12px}
+.chap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.chap[open]{border-color:var(--line-2)}
+.chap summary{list-style:none;display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;padding:16px 20px;cursor:pointer}
+.chap summary::-webkit-details-marker{display:none}
+.ch-no{width:52px;height:52px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ch-no small{font-family:var(--fs-num);font-size:9px;font-weight:700;letter-spacing:.12em;opacity:.85}
+.ch-no b{font-family:var(--fs-num);font-size:21px;font-weight:800}
+.k1 .ch-no{background:var(--chip-blue);color:var(--blue-2)}
+.k2 .ch-no{background:var(--chip-teal);color:var(--teal-2)}
+.k3 .ch-no{background:var(--chip-gold);color:var(--gold)}
+.ch-t h4{margin:0 0 3px;font-size:17px;font-weight:800;line-height:1.4}
+.ch-t span{font-size:12.5px;color:var(--ink-3);font-weight:700}
+.ch-h{font-family:var(--fs-num);font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;border:1px solid var(--line-2);white-space:nowrap}
+.ch-arrow{width:22px;height:22px;color:var(--ink-3);transition:transform .3s}
+.chap[open] .ch-arrow{transform:rotate(180deg)}
+.ch-body{padding:0 20px 18px}
+.goal{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border-radius:12px;border:1px dashed var(--line-2);font-size:13.5px;color:var(--ink-2);margin-bottom:8px}
+.goal .ico{color:var(--gold);width:16px;height:16px;margin-top:3px}
+.les{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;padding:11px 8px;border-top:1px solid var(--line);font-size:14.5px;font-weight:600}
+.les:first-of-type{border-top:0}
+.les .no{font-family:var(--fs-mono);font-size:12px;color:var(--ink-3);min-width:30px}
+.les .ico{width:17px;height:17px;color:var(--ink-3)}
+.les .lk{width:15px;height:15px;opacity:.7}
+.k1 .les .ico:first-child{color:var(--blue-2)}.k2 .les .ico:first-child{color:var(--teal-2)}.k3 .les .ico:first-child{color:var(--gold)}
+
+/* who + trainer + faq */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.box{padding:22px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.box h3{margin:0 0 12px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:9px}
+.box ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.box li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-2);align-items:flex-start}
+.box li .ico{width:17px;height:17px;margin-top:3px}
+.yes h3 .ico,.yes li .ico{color:var(--teal-2)}
+.no h3 .ico,.no li .ico{color:var(--bad)}
+.ins{display:grid;grid-template-columns:200px 1fr;gap:26px;align-items:start;padding:24px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.ins img{width:200px;aspect-ratio:4/5;object-fit:cover;object-position:top center;border-radius:18px;border:1px solid var(--line-2)}
+.ins h3{margin:0 0 4px;font-size:22px;font-weight:900}
+.ins .role{color:var(--teal-2);font-weight:700;font-size:14.5px;margin:0 0 12px}
+.ins p{font-size:15px;color:var(--ink-2);margin:0 0 14px;line-height:1.9}
+.creds{display:flex;flex-wrap:wrap;gap:7px}
+.creds span{font-family:var(--fs-num);font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:8px;background:var(--chip-blue);color:var(--blue-2);border:1px solid rgba(58,160,255,.3)}
+.faq{display:flex;flex-direction:column;gap:10px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.faq summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:800;font-size:15px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .ico{transition:transform .25s;color:var(--ink-3)}
+.faq details[open] summary .ico{transform:rotate(180deg)}
+.faq details p{margin:0;padding:0 18px 16px;color:var(--ink-2);font-size:14.5px}
+.foot{position:relative;z-index:1;border-top:1px solid var(--line);padding-block:26px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-3)}
+.foot a{text-decoration:none;color:var(--ink-2);font-weight:700}
+
+/* mobile enroll bar */
+.mbar{display:none}
+@media (max-width:1000px){
+  .hero-grid,.cols{grid-template-columns:1fr}
+  .hero-grid .ecard{display:none}
+  .cols .side{display:none}
+  .mbar{display:flex;position:fixed;inset-inline:0;bottom:0;z-index:70;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--nav);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line-2)}
+  .mbar .p{display:flex;flex-direction:column;line-height:1.2}
+  .mbar .p b{font-family:var(--fs-num);font-size:22px;font-weight:800}
+  .mbar .p small{font-size:11.5px;color:var(--ink-3);font-weight:700}
+  .mbar .btn{flex:1;padding:12px 18px;font-size:15px}
+  body{padding-bottom:78px}
+  .tabs{top:61px}
+}
+@media (max-width:700px){
+  .wrap,.top-in,.tabs-in{padding-inline:16px}
+  .learn,.two{grid-template-columns:1fr}
+  .ins{grid-template-columns:1fr}
+  .ins img{width:150px}
+  .chap summary{grid-template-columns:auto 1fr auto;padding:14px}
+  .ch-h{grid-column:2;grid-row:2;justify-self:start}
+  .ch-body{padding:0 12px 14px}
+  .top .hide-s{display:none}
+}
+
+/* interaction polish (motion.js handles scroll reveal, count-up, accordions and CTA shine) */
+.les{border-radius:10px;transition:background .2s,transform .2s,padding .2s}
+.les:hover{background:var(--surface-2);transform:translateX(4px)}
+html[dir="rtl"] .les:hover{transform:translateX(-4px)}
+.les:hover .lk{opacity:1;color:var(--gold)}
+.chap summary{transition:background .2s}
+.chap summary:hover{background:var(--surface-2)}
+.learn li,.incl li{transition:transform .2s}
+.learn li:hover{transform:translateY(-2px)}
+.st{transition:transform .25s,border-color .25s}
+.st:hover{transform:translateY(-4px);border-color:var(--teal)}
+.box{transition:transform .25s,border-color .25s}
+.box:hover{transform:translateY(-3px);border-color:var(--line-2)}
+.ins img{transition:transform .5s}
+.ins:hover img{transform:scale(1.03)}
+.prev .bars i{transform-origin:50% 100%;animation:bgrow .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 60ms + 200ms)}
+@keyframes bgrow{from{transform:scaleY(.05)}to{transform:scaleY(1)}}
+.prev .pl span{animation:pring 2.4s ease-out infinite}
+@keyframes pring{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.35)}70%{box-shadow:0 0 0 18px rgba(255,255,255,0),0 10px 30px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0),0 10px 30px rgba(0,0,0,.35)}}
+.tabs a{position:relative}
+.mbar{transition:transform .3s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="bg-mesh" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="index.html"><svg width="36" height="36" viewBox="0 0 40 40" aria-hidden="true" style="display:block;flex:none"><line x1="9" y1="30" x2="20" y2="12" stroke="#3AA0FF" stroke-width="3" stroke-linecap="round"/><line x1="20" y1="12" x2="31" y2="25" stroke="#00C9A7" stroke-width="3" stroke-linecap="round"/><circle cx="9" cy="30" r="5" fill="#3AA0FF"/><circle cx="20" cy="12" r="5" fill="#0057FF"/><circle cx="31" cy="25" r="5.5" fill="#00C9A7"/></svg><b>Serag</b></a>
+    <span class="sp"></span>
+    <button class="ctl" id="langBtn" type="button" aria-label="Switch language"><span class="lang-mark"><span class="ar">EN</span><span class="en">ع</span></span></button>
+    <button class="ctl" id="themeBtn" type="button" aria-label="Switch theme"><span class="ico" id="themeIco"></span></button>
+    <a class="ctl hide-s" href="portal.html"><span class="ar">دخول المتدربين</span><span class="en">Trainee login</span></a>
+    <a class="btn btn-p" href="#join"><span class="ar">سجّل الآن</span><span class="en">Enroll now</span></a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="index.html"><span class="ar">الرئيسية</span><span class="en">Home</span></a><span class="ico flip" data-i="chev"></span>
+        <span><span class="ar">الدبلومات</span><span class="en">Diplomas</span></span><span class="ico flip" data-i="chev"></span>
+        <span style="color:var(--ink-2)"><span class="ar">تحليل البيانات وذكاء الأعمال</span><span class="en">Data Analytics &amp; BI</span></span>
+      </nav>
+      <span class="tag"><span class="ico" data-i="live" style="width:15px;height:15px"></span><span class="ar">تعلّم مدمج: 60% مسجّل + 40% مباشر</span><span class="en">Blended: 60% recorded + 40% live</span></span>
+      <h1><span class="ar">دبلومة تحليل البيانات وذكاء الأعمال <span class="g">بالذكاء الاصطناعي</span></span><span class="en">AI-Powered Data Analytics <span class="g">&amp; Business Intelligence</span> Diploma</span></h1>
+      <p class="lead"><span class="ar">من أول جدول Excel إلى تقرير Power BI تنفيذي منشور، ومعه الذكاء الاصطناعي كزميل تحليل. تطبيق عملي على حالات أعمال حقيقية.</span><span class="en">From your first Excel table to a published executive Power BI report, with AI as your analysis teammate. Hands-on practice on real business cases.</span></p>
+      <ul class="meta">
+        <li><span class="ico" data-i="clock"></span><span><span class="n">42</span> <span class="ar">ساعة تدريبية</span><span class="en">training hours</span></span></li>
+        <li><span class="ico" data-i="book"></span><span><span class="n">3</span> <span class="ar">فصول</span><span class="en">chapters</span></span></li>
+        <li><span class="ico" data-i="cal"></span><span><span class="n">6</span> <span class="ar">أسابيع جلسات مباشرة</span><span class="en">weeks of live sessions</span></span></li>
+        <li><span class="ico" data-i="level"></span><span class="ar">من المبتدئ إلى المتقدم</span><span class="en">Beginner to advanced</span></li>
+        <li><span class="ico" data-i="cert"></span><span class="ar">شهادة إتمام رقمية</span><span class="en">Digital certificate</span></li>
+      </ul>
+      <div class="by"><img src="assets/trainer.jpg" alt=""><span><span class="ar">المدرب</span><span class="en">Instructor</span><b><span class="ar">محمود سراج</span><span class="en">Mahmoud Serag</span></b></span></div>
+    </div>
+    <aside class="ecard" id="ecardTop"></aside>
+  </div>
+</section>
+
+<nav class="tabs" id="tabs" aria-label="Course sections">
+  <div class="tabs-in">
+    <a href="#overview" class="on"><span class="ar">نظرة عامة</span><span class="en">Overview</span></a>
+    <a href="#curriculum"><span class="ar">المنهج</span><span class="en">Curriculum</span></a>
+    <a href="#audience"><span class="ar">لمن الدبلومة</span><span class="en">Who it is for</span></a>
+    <a href="#instructor"><span class="ar">المدرب</span><span class="en">Instructor</span></a>
+    <a href="#faq"><span class="ar">الأسئلة الشائعة</span><span class="en">FAQ</span></a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="cols">
+    <div>
+      <section class="sec" id="overview">
+        <h2><span class="ar">ماذا ستتعلم</span><span class="en">What you will learn</span></h2>
+        <p class="sub"><span class="ar">مهارات تطبّقها في عملك من أول أسبوع.</span><span class="en">Skills you can apply at work from week one.</span></p>
+        <ul class="learn" id="learn"></ul>
+        <div class="stats" id="stats"></div>
+      </section>
+
+      <section class="sec" id="curriculum">
+        <h2><span class="ar">محتوى الدبلومة</span><span class="en">Course content</span></h2>
+        <div class="chead"><span class="tot" id="tot"></span><button type="button" id="expand"></button></div>
+        <div class="free"><span class="ico" data-i="play"></span><span><b><span class="ar">جرّب قبل التسجيل:</span><span class="en">Try before you enroll:</span></b> <span class="ar">أول محاضرتين متاحتان مجانًا في الكراش كورس.</span><span class="en">the first 2 lectures are free in the crash course.</span></span><a href="free/"><span class="ar">ابدأ الكراش كورس المجاني</span><span class="en">Start the free crash course</span></a></div>
+        <div class="chaps" id="chaps"></div>
+      </section>
+
+      <section class="sec" id="audience">
+        <h2><span class="ar">لمن هذه الدبلومة؟</span><span class="en">Who is this diploma for?</span></h2>
+        <p class="sub"><span class="ar">لا تحتاج خبرة سابقة. تحتاج لابتوب ووقتًا للتمارين.</span><span class="en">No prior experience needed. You need a laptop and time for the exercises.</span></p>
+        <div class="two" id="who"></div>
+      </section>
+
+      <section class="sec" id="instructor">
+        <h2><span class="ar">المدرب</span><span class="en">Your instructor</span></h2>
+        <div class="ins" style="margin-top:16px">
+          <img src="assets/trainer.jpg" alt="Mahmoud Serag">
+          <div>
+            <h3><span class="ar">محمود سراج</span><span class="en">Mahmoud Serag</span></h3>
+            <p class="role"><span class="ar">مدرب مؤسسي · مستشار Business Intelligence · مصمم برامج AI Analytics</span><span class="en">Corporate trainer · BI consultant · AI analytics program designer</span></p>
+            <p><span class="ar">بدأ التدريب عام 2008، ويجمع بين عمق تقني كمطوّر Power BI وتصميم تعليمي منهجي. نفّذ برامج ومشاريع داشبورد لجهات حكومية وشركات في مصر والسعودية والخليج، في البنوك والصحة والطاقة والاتصالات والتعليم.</span><span class="en">Training since 2008, combining deep technical skill as a Power BI developer with structured instructional design. He has delivered programs and dashboard projects for government bodies and companies across Egypt, Saudi Arabia and the GCC, in banking, healthcare, energy, telecom and education.</span></p>
+            <div class="creds" id="creds"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="faq">
+        <h2><span class="ar">الأسئلة الشائعة</span><span class="en">Frequently asked questions</span></h2>
+        <div class="faq" id="faqList" style="margin-top:16px"></div>
+      </section>
+    </div>
+    <aside class="side"><div class="ecard" id="ecardSide" style="top:130px"></div></aside>
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <span class="n">© 2026 Mahmoud Serag · Turning Data Into Decisions</span>
+  <a href="https://wa.me/201550888810" target="_blank" rel="noopener"><span class="ar">الدعم عبر واتساب</span><span class="en">WhatsApp support</span></a>
+</footer>
+
+<div class="mbar">
+  <div class="p"><small><span class="ar">سعر الدبلومة</span><span class="en">Diploma price</span></small><b><span class="n" id="mPrice"></span> <small><span class="ar">ج.م</span><span class="en">EGP</span></small></b></div>
+  <a class="btn btn-p" href="#join"><span class="ar">سجّل الآن</span><span class="en">Enroll now</span></a>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* Price shown on the page. Change here when the offer changes. */
+var PRICE = 10000, WA = 'https://wa.me/201550888810';
+var root = document.documentElement;
+var $ = function(id){ return document.getElementById(id); };
+var store = {get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+var esc = function(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); };
+
+var I = {
+  chev:'<path d="m9 6 6 6-6 6"/>', down:'<path d="m6 9 6 6 6-6"/>', check:'<path d="m5 12.5 4.5 4.5L19 7.5"/>', x:'<path d="M6 6l12 12M18 6 6 18"/>',
+  play:'<circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/>', lock:'<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', book:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5M8.5 7.5h7M8.5 11h5"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', live:'<circle cx="12" cy="12" r="2.5"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/>',
+  level:'<path d="M5 20V14M12 20V9M19 20V4"/>', cert:'<circle cx="12" cy="9" r="5.5"/><path d="m8.5 13.5-1.5 7 5-2.5 5 2.5-1.5-7"/>', target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  shield:'<path d="M12 3 5 6v5.5c0 4.3 2.8 7.6 7 9.5 4.2-1.9 7-5.2 7-9.5V6z"/><path d="m9 12 2.2 2.2L15.5 10"/>', chat:'<path d="M4 19.5 5.3 15A8 8 0 1 1 9 18.7z"/><path d="M9 10.5h6M9 13.5h4"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>', moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>'
+};
+function ic(k,c){ return '<span class="ico'+(c?' '+c:'')+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'</svg></span>'; }
+function paint(){ document.querySelectorAll('.ico[data-i]').forEach(function(el){ var k=el.getAttribute('data-i'); if(I[k]) el.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'</svg>'; }); }
+
+/* bilingual helper: [ar, en] */
+var lang = function(){ return root.dataset.lang==='en' ? 1 : 0; };
+var b = function(p){ return '<span class="ar">'+p[0]+'</span><span class="en">'+p[1]+'</span>'; };
+
+/* ---------- content (same curriculum as the main diploma page) ---------- */
+var CH = [
+  {no:'01', h:'17.5', t:['الفصل الأول: تحليل البيانات بـ Excel','Chapter 1: Data Analysis Using Excel'], s:'Excel · Power Query · Power Pivot · DAX', g:['الناتج: داشبورد KPI ديناميكي في Excel مبني على Data Model و DAX.','Outcome: a dynamic Excel KPI dashboard built on a data model and DAX.'],
+   l:['Classic Excel Dashboard Design','PivotTables & PivotCharts: Slicers, Timelines, Grouping','Data Visualization best practices, dynamic labels, themes','ETL with Power Query: Excel, CSV, Access sources','Power Query transformations: Merge, Append, M-Code basics','Power Pivot & Data Modeling: relationships','DAX: Calculated Columns, Measures, Row & Filter Context','Advanced DAX: Aggregation, Date/Time, Filter, Logical, Text','Calendar Table & Time Intelligence','Dynamic Excel Reports & KPI Dashboards']},
+  {no:'02', h:'19.5', t:['الفصل الثاني: تحليل البيانات بـ Power BI','Chapter 2: Data Analysis Using Power BI'], s:'Core · Modeling · Visuals · Publishing', g:['الناتج: تقرير Power BI تنفيذي تفاعلي، منشور ومتشارك بأمان.','Outcome: an interactive executive Power BI report, published and shared securely.'],
+   l:['Introduction to Power BI & the 7 Pillars of Mastery','Loading & Transforming Data (Power Query)','Data Modeling: Relationships, Measures, Quick Measures','DAX in Power BI & Time Intelligence','Visuals: Filters, Drill-down, Drill-through, Hierarchies','Conditional & Color Formatting','Bookmarks, Buttons & Interactive Storytelling','Understanding Data Refresh','Publishing & Sharing Reports Securely']},
+  {no:'03', h:'5', t:['الفصل الثالث: التحليل المعزّز بالذكاء الاصطناعي','Chapter 3: AI-Augmented Analytics'], s:'GenAI · AI Visuals · AI Data Prep · MCP', g:['الناتج: الذكاء الاصطناعي زميل تحليل يكتب ويراجع ويفسّر، ومتصل بنموذج بياناتك.','Outcome: AI as an analysis teammate that writes, reviews and explains, connected to your own model.'],
+   l:['GenAI co-pilot: write & debug DAX and M-Code with ChatGPT, Claude, Gemini','Practical prompting for data professionals','AI Visuals: Key Influencers, Decomposition Tree, Smart Narratives, Q&A','AI data prep: Column from Examples, Analyze Data in Excel','MCP: connect an AI assistant directly to your Power BI model','Responsible AI: privacy, access control, human in the loop']}
+];
+var LEARN = [
+  ['تبني داشبوردات تفاعلية احترافية في Excel و Power BI','Build professional interactive dashboards in Excel and Power BI'],
+  ['تنفّذ عمليات ETL بـ Power Query بمساعدة الذكاء الاصطناعي ودونها','Run ETL with Power Query, with and without AI assistance'],
+  ['تصمّم نماذج بيانات علائقية وتكتب DAX محسّن الأداء','Design relational data models and write optimized DAX'],
+  ['تطبّق Time Intelligence لمقارنة الفترات ببعضها','Apply Time Intelligence for period-over-period analysis'],
+  ['تستخدم AI Visuals مثل Key Influencers و Decomposition Tree لاكتشاف أسباب الأرقام','Use AI visuals like Key Influencers and Decomposition Tree to find root causes'],
+  ['تعمل مع Claude و ChatGPT و Gemini كمساعد يكتب ويراجع DAX و M-Code','Work with Claude, ChatGPT and Gemini as a co-pilot for DAX and M-Code'],
+  ['توصّل مساعد ذكاء اصطناعي بنموذج Power BI عبر MCP وتسأله بلغة طبيعية','Connect an AI assistant to a Power BI model through MCP and query it in plain language'],
+  ['تبني مشروع تحليل بيانات كاملًا من البداية للنهاية، وتنشره وتشاركه بأمان','Deliver a complete analytics project end to end, published and shared securely']
+];
+var STATS = [['17','سنة خبرة في التدريب والتحليل','years in training & analytics'],['25K+','ساعة تدريب منجزة','training hours delivered'],['60+','عميل مؤسسي','corporate clients'],['3K+','متدرب في تحليل البيانات','data analytics trainees']];
+var YES = [['مبتدئ بلا خبرة سابقة وتريد أن تبدأ بشكل صحيح','You are a beginner with no prior experience and want to start right'],['محلل أعمال أو بيانات وتريد الانتقال لمستوى احترافي','You are a business or data analyst ready to level up'],['تعمل في المالية أو الموارد البشرية أو العمليات وتريد تقارير مؤثرة','You work in finance, HR or operations and want reports that matter'],['تريد تغيير مجالك أو العمل الحر في تحليل البيانات','You want to switch careers or freelance in data analysis'],['تريد إدخال الذكاء الاصطناعي في عملك اليومي','You want AI in your everyday workflow']];
+var NO = [['تبحث عن كورس نظري بلا تطبيق','You want theory without practice'],['لا تستطيع تخصيص وقت للمحتوى المسجّل والتمارين','You cannot set aside time for recorded content and exercises'],['هدفك الشهادة فقط دون تعلّم المهارة','You only want the certificate, not the skill']];
+var INCL = [['42 ساعة: 60% مسجّل + 40% مباشر','42 hours: 60% recorded + 40% live'],['جلسة مباشرة أسبوعيًا لمدة 6 أسابيع على Google Meet','A weekly live session for 6 weeks on Google Meet'],['ملفات بيانات وحالات عملية حقيقية','Real datasets and case files'],['AI Prompting Cheat Sheet وشرائح كاملة','AI prompting cheat sheet and full slides'],['شهادة إتمام رقمية','Digital certificate of completion'],['بوابة متدربين لمتابعة تقدّمك محاضرة بمحاضرة','Learner portal to track progress lecture by lecture']];
+var CREDS = ['MOS','MCP','MCITP','PMP','TOT','CCNA','ICDL'];
+var FAQ = [
+  [['هل أحتاج خبرة سابقة؟','Do I need prior experience?'],['لا. تبدأ الدبلومة من الصفر في Excel و Power BI، وكل ما تحتاجه لابتوب ووقت للتمارين.','No. The diploma starts from zero in Excel and Power BI. All you need is a laptop and time for the exercises.']],
+  [['متى وأين الجلسات المباشرة؟','When and where are the live sessions?'],['جلسة مباشرة كل أسبوع لمدة 6 أسابيع على Google Meet، وتُسجَّل لمن فاتته.','One live session every week for six weeks on Google Meet. Sessions are recorded in case you miss one.']],
+  [['كيف يعمل التعلّم المدمج؟','How does the blended format work?'],['60% تدريب مسجّل موجّه بخطة مذاكرة وتمارين، و40% جلسات مباشرة للتطبيق والأسئلة ومراجعة عملك.','60% guided recorded training with a study plan and exercises, and 40% live sessions for hands-on practice, Q&A and review.']],
+  [['كم مدة الوصول للمحتوى؟','How long do I keep access?'],['يستمر وصولك لبوابة المتدربين 6 أشهر من تاريخ تفعيل حسابك.','Your learner portal access lasts 6 months from the date your account is activated.']],
+  [['هل استخدام الذكاء الاصطناعي آمن على بيانات شركتي؟','Is AI safe for my company data?'],['نتدرب على بيانات تدريبية، وفي الفصل الثالث جزء كامل عن الاستخدام المسؤول: الخصوصية والصلاحيات ودور الإنسان.','We practice on training datasets, and Chapter 3 includes a full part on responsible use: privacy, access control and human oversight.']],
+  [['هل الدبلومة متاحة للشركات؟','Is it available for companies?'],['نعم. دفعات مفتوحة للأفراد، وتدريب داخل الشركة يُفصَّل على بياناتها وقطاعها.','Yes. Open cohorts for individuals, and in-house delivery tailored to your sector and data.']]
+];
+
+/* ---------- render ---------- */
+var fmt = function(n){ return n.toLocaleString('en-US'); };
+function ecard(){
+  var bars = [34,46,40,58,52,70,64,82,74,90].map(function(h,i){ return '<i style="height:'+h+'%;--i:'+i+'"></i>'; }).join('');
+  return '<a class="prev" href="free/" aria-label="Free preview"><div class="bars">'+bars+'</div><div class="pl"><span><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span></div><div class="cap">'+b(['شاهد معاينة مجانية للكورس','Watch a free course preview'])+'</div></a>'+
+  '<div class="eb"><div class="price"><b>'+fmt(PRICE)+'</b><span>'+b(['جنيه مصري','EGP'])+'</span></div><p class="price-note">'+b(['دفع واحد للدبلومة كاملة','One payment for the full diploma'])+'</p>'+
+  '<a class="btn btn-p" href="#join">'+b(['سجّل في الدبلومة','Enroll in the diploma'])+'</a>'+
+  '<a class="btn btn-o" href="free/">'+ic('play')+b(['ابدأ الكراش كورس المجاني','Start the free crash course'])+'</a>'+
+  '<div class="guar">'+ic('shield')+b(['لا التزام قبل تأكيد التفاصيل على واتساب','No commitment until we confirm details on WhatsApp'])+'</div>'+
+  '<h4>'+b(['تتضمن الدبلومة','This diploma includes'])+'</h4><ul class="incl">'+INCL.map(function(x){ return '<li>'+ic('check')+'<span>'+b(x)+'</span></li>'; }).join('')+'</ul>'+
+  '<div class="ewa"><a href="'+WA+'" target="_blank" rel="noopener">'+ic('chat')+b(['لديك سؤال؟ تواصل على واتساب','Questions? Chat on WhatsApp'])+'</a></div></div>';
+}
+function build(){
+  $('ecardTop').innerHTML = ecard(); $('ecardSide').innerHTML = ecard();
+  $('mPrice').textContent = fmt(PRICE);
+  $('learn').innerHTML = LEARN.map(function(x){ return '<li>'+ic('check')+'<span>'+b(x)+'</span></li>'; }).join('');
+  $('stats').innerHTML = STATS.map(function(s){ return '<div class="st"><b>'+s[0]+'</b><span>'+b([s[1],s[2]])+'</span></div>'; }).join('');
+  var total = CH.reduce(function(a,c){ return a+c.l.length; },0);
+  $('tot').innerHTML = '<span class="n">'+CH.length+'</span> '+b(['فصول','chapters'])+' · <span class="n">'+total+'</span> '+b(['موضوعًا','topics'])+' · <span class="n">42</span> '+b(['ساعة','hours'])+' · '+b(['+ جلسات مباشرة','+ live sessions']);
+  $('chaps').innerHTML = CH.map(function(c,i){
+    return '<details class="chap k'+(i+1)+'"'+(i===0?' open':'')+'><summary><div class="ch-no"><small>CH</small><b>'+c.no+'</b></div><div class="ch-t"><h4>'+b(c.t)+'</h4><span class="n">'+esc(c.s)+'</span></div><span class="ch-h"><span class="n">'+c.h+'</span> '+b(['ساعة','h'])+'</span>'+ic('down','ch-arrow')+'</summary>'+
+      '<div class="ch-body"><div class="goal">'+ic('target')+'<span>'+b(c.g)+'</span></div>'+
+      c.l.map(function(t,j){ return '<div class="les">'+ic('play')+'<span class="no">'+(i+1)+'.'+(j+1)+'</span><span style="direction:ltr;unicode-bidi:plaintext;text-align:start">'+esc(t)+'</span><span class="lk">'+ic('lock','lk')+'</span></div>'; }).join('')+'</div></details>';
+  }).join('');
+  $('who').innerHTML = '<div class="box yes"><h3>'+ic('check')+b(['مناسبة لك إذا كنت','This is for you if'])+'</h3><ul>'+YES.map(function(x){ return '<li>'+ic('check')+'<span>'+b(x)+'</span></li>'; }).join('')+'</ul></div>'+
+    '<div class="box no"><h3>'+ic('x')+b(['غير مناسبة إذا','Probably not for you if'])+'</h3><ul>'+NO.map(function(x){ return '<li>'+ic('x')+'<span>'+b(x)+'</span></li>'; }).join('')+'</ul></div>';
+  $('creds').innerHTML = CREDS.map(function(x){ return '<span>'+x+'</span>'; }).join('');
+  $('faqList').innerHTML = FAQ.map(function(f,i){ return '<details'+(i===0?' open':'')+'><summary><span>'+b(f[0])+'</span>'+ic('down')+'</summary><p>'+b(f[1])+'</p></details>'; }).join('');
+  syncBtn(); paint();
+}
+function syncBtn(){ var e=$('expand'), all = Array.prototype.every.call(document.querySelectorAll('#chaps details'),function(d){return d.open;}); e.innerHTML = all ? b(['طيّ الكل','Collapse all']) : b(['توسيع الكل','Expand all']); }
+$('expand').addEventListener('click',function(){ var ds=document.querySelectorAll('#chaps details'); var all=Array.prototype.every.call(ds,function(d){return d.open;}); ds.forEach(function(d){ d.open=!all; }); syncBtn(); });
+document.addEventListener('toggle',function(e){ if(e.target.closest && e.target.closest('#chaps')) syncBtn(); },true);
+
+/* ---------- language + theme ---------- */
+function setLang(l){ root.lang=l; root.dir=l==='ar'?'rtl':'ltr'; root.dataset.lang=l; store.set('serag-lang',l); document.title = l==='ar' ? 'دبلومة تحليل البيانات وذكاء الأعمال بالذكاء الاصطناعي | محمود سراج' : 'AI-Powered Data Analytics & BI Diploma | Mahmoud Serag'; }
+$('langBtn').addEventListener('click',function(){ setLang(root.dataset.lang==='ar'?'en':'ar'); });
+var mq = matchMedia('(prefers-color-scheme: light)');
+var eff = function(){ return root.getAttribute('data-theme') || (mq.matches?'light':'dark'); };
+function syncTheme(){ $('themeIco').innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">'+(eff()==='dark'?I.sun:I.moon)+'</svg>'; }
+var st = store.get('serag-theme'); if(st) root.setAttribute('data-theme',st);
+$('themeBtn').addEventListener('click',function(){ var n = eff()==='dark'?'light':'dark'; root.setAttribute('data-theme',n); store.set('serag-theme',n); syncTheme(); });
+if(mq.addEventListener) mq.addEventListener('change',syncTheme);
+
+/* ---------- tabs scroll-spy ---------- */
+var links = Array.prototype.slice.call(document.querySelectorAll('#tabs a'));
+var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function spy(){ var y = window.scrollY + 150, cur = 0; secs.forEach(function(s,i){ if(s && s.offsetTop <= y) cur = i; }); links.forEach(function(a,i){ a.classList.toggle('on', i===cur); }); }
+addEventListener('scroll',spy,{passive:true});
+
+setLang((location.search.indexOf('lang=en')>-1) ? 'en' : (store.get('serag-lang') || 'ar'));
+syncTheme(); build(); spy();
+})();
+</script>
+</body>
+</html>
