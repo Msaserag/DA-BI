@@ -25,16 +25,17 @@
   function fmt(n) { return n < 10 ? "0" + n : "" + n; }
   function text(ms) {
     var s = Math.floor(ms / 1e3), c = fmt(Math.floor(s / 3600)) + ":" + fmt(Math.floor(s % 3600 / 60)) + ":" + fmt(s % 60);
+    var sm = window.innerWidth < 640;
     return lang() === "en"
-      ? { msg: "Black Friday offer · 50% off the diploma · 5,000 EGP instead of 10,000", cd: c + " left", cta: "Claim it" }
-      : { msg: "عرض Black Friday · خصم 50% على الدبلومة · 5,000 ج.م بدل 10,000", cd: "متبقي " + c, cta: "احجز بالخصم" };
+      ? { msg: sm ? "Black Friday · 50% off · 5,000 EGP" : "Black Friday offer · 50% off the diploma · 5,000 EGP instead of 10,000", cd: c + " left", cta: sm ? "" : "Claim it" }
+      : { msg: sm ? "Black Friday · خصم 50% · 5,000 ج.م" : "عرض Black Friday · خصم 50% على الدبلومة · 5,000 ج.م بدل 10,000", cd: "متبقي " + c, cta: sm ? "" : "احجز بالخصم" };
   }
   function ribbon() {
     if (!O.active() || document.querySelector("x-dc,[data-sg-own-offer]")) return;
     var src = (document.currentScript && document.currentScript.src) || "";
     var el = document.createElement("a");
     el.id = "sg-offer"; el.href = (src ? new URL("./#join", src).href : "/#join");
-    el.setAttribute("style", "display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font:700 14px/1.6 Cairo,Outfit,sans-serif;text-align:center;position:relative;z-index:90");
+    el.setAttribute("style", "display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:7px 12px;background:#FFB800;color:#1A1200;text-decoration:none;font:700 14px/1.6 Cairo,Outfit,sans-serif;text-align:center;position:relative;z-index:90");
     el.innerHTML = '<span class="m"></span><span class="c" style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-variant-numeric:tabular-nums;direction:ltr"></span><span class="g" style="text-decoration:underline"></span>';
     document.body.insertBefore(el, document.body.firstChild);
     function tick() {

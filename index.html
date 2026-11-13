@@ -20,6 +20,16 @@
 <script src="analytics.js" defer></script>
 <script src="./register.js" defer></script>
 <script src="./testimonials.js" defer></script>
+<style>
+/* mobile: header is one compact sticky bar, the offer ribbon scrolls away with the page */
+@media (max-width:640px){
+  .sg-stk{position:static!important}
+  .sg-stk nav{position:sticky;top:0;z-index:50}
+  .sg-stk nav>div{padding-block:8px!important;gap:8px 10px!important;justify-content:space-between}
+  .sg-nl{display:none!important}
+  .sg-rb{padding:8px 12px!important;font-size:12.5px!important;gap:4px 10px!important;line-height:1.55}
+}
+</style>
 </head>
 <body>
 <x-dc>
@@ -28,9 +38,9 @@
 <sc-if value="{{ isAr }}" hint-placeholder-val="{{ true }}">
 <div dir="rtl" lang="ar" style="background:var(--bg,#0A1633);color:var(--ink,#FFFFFF);line-height:1.7">
 
-  <div style="position:sticky;top:0;z-index:50">
+  <div class="sg-stk" style="position:sticky;top:0;z-index:50">
     <sc-if value="{{ showRibbon }}" hint-placeholder-val="{{ true }}">
-      <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:700;text-align:center">
+      <a class="sg-rb" href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:700;text-align:center">
         <span>عرض <b style="font-family:Outfit,sans-serif">Black Friday</b> المبكر · خصم <b style="font-family:Outfit,sans-serif">50%</b> · الأماكن محدودة · <b style="font-family:Outfit,sans-serif">5,000</b> ج.م بدل <s style="font-family:Outfit,sans-serif;opacity:.7">10,000</s> · <span>{{ untilAr }}</span></span>
         <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-family:Cairo,sans-serif;font-variant-numeric:tabular-nums">{{ cdText }}</span>
       </a>
@@ -38,7 +48,7 @@
     <nav style="background:var(--nav,rgba(10,22,51,.88));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line,rgba(255,255,255,.09))">
       <div style="max-width:1200px;margin:0 auto;padding:12px clamp(16px,4vw,24px);display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px">
         <a href="#top" style="text-decoration:none;display:flex"><dc-import name="Serag Logo" variant="node" tone="{{ logoTone }}" size="36" hint-size="190px,36px"></dc-import></a>
-        <div style="display:flex;gap:6px 22px;margin-inline-start:auto;flex-wrap:wrap;flex:1 1 auto;justify-content:flex-end;min-width:0">
+        <div class="sg-nl" style="display:flex;gap:6px 22px;margin-inline-start:auto;flex-wrap:wrap;flex:1 1 auto;justify-content:flex-end;min-width:0">
           <a href="#structure" style="color:var(--ink-2,rgba(228,236,255,.76));text-decoration:none;font-size:14.5px;font-weight:600">المنهج</a>
           <a href="#trainer" style="color:var(--ink-2,rgba(228,236,255,.76));text-decoration:none;font-size:14.5px;font-weight:600">المدرب</a>
           <a href="#register" style="color:var(--ink-2,rgba(228,236,255,.76));text-decoration:none;font-size:14.5px;font-weight:600">السعر</a>
@@ -246,9 +256,9 @@
 <sc-if value="{{ isEn }}">
 <div dir="ltr" lang="en" style="background:var(--bg,#0A1633);color:var(--ink,#FFFFFF);line-height:1.65;font-family:Outfit,Cairo,sans-serif">
 
-  <div style="position:sticky;top:0;z-index:50">
+  <div class="sg-stk" style="position:sticky;top:0;z-index:50">
     <sc-if value="{{ showRibbon }}">
-      <a href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:600;text-align:center">
+      <a class="sg-rb" href="#register" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:9px 16px;background:#FFB800;color:#1A1200;text-decoration:none;font-size:14px;font-weight:600;text-align:center">
         <span><b>Black Friday</b> early offer · <b>50% off</b> · limited seats · <b>5,000 EGP</b> instead of <s style="opacity:.7">10,000</s> · <span>{{ untilEn }}</span></span>
         <span style="padding:1px 12px;border-radius:999px;background:#1A1200;color:#FFB800;font-size:13px;font-variant-numeric:tabular-nums">{{ cdTextEn }}</span>
       </a>
@@ -256,7 +266,7 @@
     <nav style="background:var(--nav,rgba(10,22,51,.88));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line,rgba(255,255,255,.09))">
       <div style="max-width:1200px;margin:0 auto;padding:12px clamp(16px,4vw,24px);display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px">
         <a href="#top" style="text-decoration:none;display:flex"><dc-import name="Serag Logo" variant="node" tone="{{ logoTone }}" size="36" hint-size="190px,36px"></dc-import></a>
-        <div style="display:flex;gap:6px 22px;margin-inline-start:auto;flex-wrap:wrap;flex:1 1 auto;justify-content:flex-end;min-width:0">
+        <div class="sg-nl" style="display:flex;gap:6px 22px;margin-inline-start:auto;flex-wrap:wrap;flex:1 1 auto;justify-content:flex-end;min-width:0">
           <a href="#structure" style="color:var(--ink-2,rgba(228,236,255,.76));text-decoration:none;font-size:14.5px;font-weight:500">Syllabus</a>
           <a href="#trainer" style="color:var(--ink-2,rgba(228,236,255,.76));text-decoration:none;font-size:14.5px;font-weight:500">Trainer</a>
           <a href="#register" style="color:var(--ink-2,rgba(228,236,255,.76));text-decoration:none;font-size:14.5px;font-weight:500">Pricing</a>

@@ -240,6 +240,11 @@ html[dir="rtl"] .flip svg{transform:scaleX(-1)}
 }
 @media (max-width:700px){
   .wrap,.top-in,.tabs-in{padding-inline:16px}
+  .top,.tabs,.mbar{background:var(--bg,#0A1633);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .top-in{padding-block:8px}
+  .tabs{top:var(--topH,56px)}
+  .tabs a{padding:11px 14px;font-size:14px}
+  .mbar{padding-top:8px}
   .learn,.two{grid-template-columns:1fr}
   .ins{grid-template-columns:1fr}
   .ins img{width:150px}
@@ -490,5 +495,6 @@ setLang((location.search.indexOf('lang=en')>-1) ? 'en' : (store.get('serag-lang'
 syncTheme(); build(); spy();
 })();
 </script>
+<script>(function(){var t=document.querySelector(".top");function f(){if(t)document.documentElement.style.setProperty("--topH",t.offsetHeight+"px")}f();addEventListener("resize",f);addEventListener("load",f);document.fonts&&document.fonts.ready.then(f)})()</script>
 </body>
 </html>
