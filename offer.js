@@ -24,14 +24,15 @@
   function lang() { var h = document.documentElement; return (h.getAttribute("data-lang") || h.getAttribute("lang") || "ar").slice(0, 2) === "en" ? "en" : "ar"; }
   function fmt(n) { return n < 10 ? "0" + n : "" + n; }
   function text(ms) {
-    var s = Math.floor(ms / 1e3), c = fmt(Math.floor(s / 3600)) + ":" + fmt(Math.floor(s % 3600 / 60)) + ":" + fmt(s % 60);
+    var s = Math.floor(ms / 1e3), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sc = s % 60;
+    var ce = d + (d === 1 ? " day " : " days ") + fmt(h) + " hours " + fmt(m) + " min " + fmt(sc) + " sec", ca = d + " يوم " + fmt(h) + " ساعة " + fmt(m) + " دقيقة " + fmt(sc) + " ثانية";
     var sm = window.innerWidth < 640;
     return lang() === "en"
-      ? { msg: sm ? "Black Friday · 50% off · 5,000 EGP" : "Black Friday offer · 50% off the diploma · 5,000 EGP instead of 10,000", cd: c + " left", cta: sm ? "" : "Claim it" }
-      : { msg: sm ? "Black Friday · خصم 50% · 5,000 ج.م" : "عرض Black Friday · خصم 50% على الدبلومة · 5,000 ج.م بدل 10,000", cd: "متبقي " + c, cta: sm ? "" : "احجز بالخصم" };
+      ? { msg: sm ? "Black Friday · 50% off · 5,000 EGP" : "Black Friday offer · 50% off the diploma · 5,000 EGP instead of 10,000", cd: ce + " left", cta: sm ? "" : "Claim it" }
+      : { msg: sm ? "Black Friday · خصم 50% · 5,000 ج.م" : "عرض Black Friday · خصم 50% على الدبلومة · 5,000 ج.م بدل 10,000", cd: "متبقي " + ca, cta: sm ? "" : "احجز بالخصم" };
   }
   function ribbon() {
-    if (!O.active() || document.querySelector("x-dc,[data-sg-own-offer]")) return;
+    if (!O.active() || window.sgOfferOwn || document.querySelector("x-dc,script[data-dc-script],[data-sg-own-offer]")) return;
     var src = (document.currentScript && document.currentScript.src) || "";
     var el = document.createElement("a");
     el.id = "sg-offer"; el.href = (src ? new URL("./#join", src).href : "/#join");

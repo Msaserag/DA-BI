@@ -14,6 +14,7 @@
 <meta property="og:url" content="https://da-bi-diploma.vercel.app/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://da-bi-diploma.vercel.app/assets/social/bf-og.png">
+<script>window.sgOfferOwn=1</script>
 <script src="./offer.js"></script>
 <script src="./support.js"></script>
 <script src="./motion.js" defer></script>
@@ -550,8 +551,8 @@ class Component extends DCLogic {
       offerActive: early, offerOver: !early,
       showRibbon: early && (this.props.showRibbon ?? true),
       cdCells: [{v:pad(d),ar:'يوم',en:'days'},{v:pad(h),ar:'ساعة',en:'hours'},{v:pad(m),ar:'دقيقة',en:'min'},{v:pad(sec),ar:'ثانية',en:'sec'}],
-      cdText: d > 0 ? `متبقي ${d === 1 ? 'يوم' : d === 2 ? 'يومان' : d + (d <= 10 ? ' أيام' : ' يومًا')} و ${pad(h)}:${pad(m)}:${pad(sec)}` : `متبقي ${pad(h)}:${pad(m)}:${pad(sec)}`,
-      cdTextEn: d > 0 ? `${d} ${d === 1 ? 'day' : 'days'} ${pad(h)}:${pad(m)}:${pad(sec)} left` : `${pad(h)}:${pad(m)}:${pad(sec)} left`,
+      cdText: `متبقي ${d} يوم ${pad(h)} ساعة ${pad(m)} دقيقة ${pad(sec)} ثانية`,
+      cdTextEn: `${d} ${d === 1 ? 'day' : 'days'} ${pad(h)} hours ${pad(m)} min ${pad(sec)} sec left`,
       untilAr: 'حتى ' + fmtDay(deadline, 'ar-EG-u-nu-latn'), endsAr: 'ينتهي ' + fmtDay(deadline, 'ar-EG-u-nu-latn'),
       untilEn: 'until ' + fmtDay(deadline, 'en-US'), endsEn: 'Ends ' + fmtDay(deadline, 'en-US')
     };
