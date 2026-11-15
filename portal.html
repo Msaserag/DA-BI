@@ -1415,7 +1415,7 @@ function render(){
   $('hello').textContent = t('hello')(first);
   $('whoName').textContent = S.n; $('avatar').textContent = (S.n||'?').trim().charAt(0).toUpperCase();
   $('chips').innerHTML =
-    (S.c ? '<span class="chip">'+ic('users')+t('cohort')+': <span class="n">'+esc(S.c)+'</span></span>' : '') +
+    '' +   /* cohort chip intentionally not shown to trainees (internal grouping) */
     '<span class="chip">'+ic('cal')+(S.u ? t('until')+': <span class="n">'+esc(S.u)+'</span>' : t('noLimit'))+'</span>';
   if(C.campaign) $('chips').insertAdjacentHTML('beforeend','<span class="chip new">'+ic('clock')+'<span id="campLeft"></span></span>');
   const newCount = [].concat(...C.chapters.filter(c=>c.id!=='L').map(c=>[].concat(...c.sections.map(s=>s.lessons)))).filter(isNewLesson).length;
