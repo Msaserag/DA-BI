@@ -374,6 +374,11 @@ button.watch{cursor:pointer;font-family:inherit}
 .pbtn.ok{background:var(--grad-btn);border-color:transparent;color:#fff}
 .pbtn.ok.is{background:var(--chip-teal);color:var(--ink);border-color:var(--teal)}
 .pnote{font-size:12px;color:var(--ink-3);margin:10px 2px 0}
+.ptrack{font-size:12.5px;font-weight:700;color:var(--ink-2);margin:10px 2px 0;display:flex;align-items:center;gap:8px}
+.ptrack[hidden]{display:none}
+.ptrack i{display:block;flex:0 0 120px;height:6px;border-radius:99px;background:var(--line-2);overflow:hidden}
+.ptrack i em{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;transition:width .6s}
+.lesson.started:not(.done) .tick{border-color:var(--teal);box-shadow:inset 0 0 0 3px var(--chip-teal)}
 @media (max-width:640px){
   .player{margin-inline-start:0;padding:10px}
   .pact .sp{display:none}
@@ -743,7 +748,7 @@ const T = {
        bell:'التنبيهات', noAnn:'لا توجد تنبيهات حاليًا.', newL:n=>n+(n===1?' محاضرة جديدة':' محاضرات جديدة'), newBadge:'جديد', view:'عرض كل التنبيهات', dismiss:'تم', openLink:'افتح الرابط',
        hide:'إغلاق', markDone:'تحديد كمكتملة', markedDone:'مكتملة ✓', nextVid:'المحاضرة التالية', ytOpen:'فتح في YouTube', driveOpen:'فتح في Drive',
        vNote:'إذا لم يظهر الفيديو، تأكد من تسجيل الدخول إلى YouTube بنفس حساب Google المسجّل لدينا.',
-       recorded:'محاضرة مسجّلة', resource:'ملفات', lecture:'المحاضرة المسجّلة', saved:'تم حفظ تقدّمك', notSaved:'تعذّر حفظ التقدّم، سيُعاد المحاولة تلقائيًا' },
+       recorded:'محاضرة مسجّلة', resource:'ملفات', lecture:'المحاضرة المسجّلة', saved:'تم حفظ تقدّمك', autoLbl:'تتبّع تلقائي: شاهدت', autoHint:'وتُسجَّل المحاضرة مكتملة عند 80%', autoDone:'تم تسجيل المحاضرة مكتملة تلقائيًا ✓', notSaved:'تعذّر حفظ التقدّم، سيُعاد المحاولة تلقائيًا' },
   en:{ title:'Learner Portal | Mahmoud Serag',
        bad_login:'Wrong username or password. Passwords are case-sensitive.',
        empty:'Please enter your username and password.',
@@ -774,7 +779,7 @@ const T = {
        bell:'Announcements', noAnn:'No announcements yet.', newL:n=>n+(n===1?' new lecture':' new lectures'), newBadge:'NEW', view:'View all announcements', dismiss:'Got it', openLink:'Open link',
        hide:'Close', markDone:'Mark as completed', markedDone:'Completed ✓', nextVid:'Next lecture', ytOpen:'Open on YouTube', driveOpen:'Open in Drive',
        vNote:'If the video does not appear, make sure you are signed in to YouTube with the Google account registered with us.',
-       recorded:'Recorded lecture', resource:'Files', lecture:'Recorded lecture', saved:'Progress saved', notSaved:'Could not save progress; retrying automatically' }
+       recorded:'Recorded lecture', resource:'Files', lecture:'Recorded lecture', saved:'Progress saved', autoLbl:'Auto-tracking: watched', autoHint:'the lecture is marked complete at 80%', autoDone:'Lecture marked complete automatically ✓', notSaved:'Could not save progress; retrying automatically' }
 };
 const t = k => T[root.dataset.lang||'ar'][k];
 const WA_CODES = ['pending','suspended','expired','locked','setup','campaign_ended'];
@@ -1360,7 +1365,7 @@ function embedSrc(x){
     const tm = (u.searchParams.get('t')||u.searchParams.get('start')||'').match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/);
     if(tm) start = (+tm[1]||0)*3600 + (+tm[2]||0)*60 + (+tm[3]||0);
     /* standard youtube.com embed (not youtube-nocookie) so the viewer's signed-in Google account is recognized for private videos */
-    return {kind:'yt', src:'https://www.youtube.com/embed/'+id+'?rel=0&modestbranding=1&playsinline=1'+(start?'&start='+start:'')};
+    return {kind:'yt', src:'https://www.youtube.com/embed/'+id+'?rel=0&modestbranding=1&playsinline=1&enablejsapi=1'+(/^https?:$/.test(location.protocol)?'&origin='+encodeURIComponent(location.origin):'')+(start?'&start='+start:'')};
   }
   if(h==='drive.google.com'){
     const m = u.pathname.match(/\/file\/d\/([\w-]+)/) || null;
@@ -1390,6 +1395,7 @@ function playerHtml(x){
     (nx ? '<button type="button" class="pbtn" data-play="'+esc(nx.id)+'">'+ic('arrow','flip')+'<span>'+t('nextVid')+'</span></button>' : '')+
     '<span class="sp"></span>'+
     '<button type="button" class="pbtn" data-play="'+id+'">'+ic('down')+'<span>'+t('hide')+'</span></button></div>'+
+    (em.kind==='yt' ? '<p class="ptrack" data-ptrack hidden></p>' : '')+
     '<p class="pnote">'+t('vNote')+'</p></div>';
 }
 const typeIcon = x => x.type==='Live'?'live':(x.type==='Resource'?'file':'play');
@@ -1452,7 +1458,7 @@ function render(){
       return '<div class="section"><div class="s-head"><span class="n">'+esc(s.no)+'</span><b>'+esc(L(s))+'</b></div>'+ls.map(x=>{
         const d = !!P[x.id];
         const emb = !!embedSrc(x);
-        return '<div class="lesson'+(x.locked?' locked':'')+(d?' done':'')+(emb?' playable':'')+(OPEN===x.id?' playing':'')+'" data-lrow="'+esc(x.id)+'"'+(emb?' data-play="'+esc(x.id)+'"':'')+'><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
+        return '<div class="lesson'+(x.locked?' locked':'')+(d?' done':'')+(!d&&autoStarted(x.id)?' started':'')+(emb?' playable':'')+(OPEN===x.id?' playing':'')+'" data-lrow="'+esc(x.id)+'"'+(emb?' data-play="'+esc(x.id)+'"':'')+'><button class="tick" type="button" data-tick="'+esc(x.id)+'" aria-pressed="'+d+'" title="'+t('mark')+'"'+(x.url?'':' disabled')+'>'+ic('check')+'</button>'+
           '<div><div class="lt">'+esc(lessonTitle(x,s))+(isNewLesson(x)?'<span class="newb">'+t('newBadge')+'</span>':'')+'</div><div class="lm"><span>'+ic(typeIcon(x))+typeLabel(x)+'</span>'+
           (x.dur?'<span>'+ic('clock')+'<span class="n">'+x.dur+'</span> '+t('min')+'</span>':'')+
           '<span class="badge '+((x.access==='Public'||(C.campaign&&x.free))&&!x.locked?'pub':'pri')+'">'+(x.locked?t('lockedLbl'):((C.campaign&&x.free)?t('freeLbl'):(x.access==='Public'?t('pub'):t('pri'))))+'</span></div></div>'+
@@ -1468,6 +1474,7 @@ function render(){
       '</summary><div class="ch-body">'+out+(secs || '<div class="empty">'+t('none')+'</div>')+'</div></details>';
   }).join('') || '<div class="empty">'+t('none')+'</div>';
   if(!shown && (q || filter!=='all')) $('chapters').insertAdjacentHTML('afterbegin','<div class="empty">'+t('none')+'</div>');
+  trackAttach();
 }
 
 /* ticking while a video plays updates the page in place, so the video keeps playing */
@@ -1515,6 +1522,77 @@ $('q').addEventListener('input', e=>{ query = e.target.value.trim(); OPEN = null
 document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on', x===b)); filter = b.dataset.f; OPEN = null; render();
 }));
+
+/* ---------- auto progress: "started" on play, completed once 80% of the video has really been played ----------
+   Uses the YouTube IFrame Player API. Only time actually played counts (seeking forward does not), speed-ups count in video time.
+   Drive videos and blocked/unavailable API keep the manual tick. Un-ticking later is respected (it never re-completes). */
+const AUTO_PCT = 0.8;
+let YTAPI = null, TRK = null, WST = null, WSK = '';
+function wLoad(){ if(WST && WSK===sk('watch')) return WST; WSK = sk('watch'); WST = null; try{ WST = JSON.parse(store.get('localStorage', WSK)||'null'); }catch(e){} if(!WST || typeof WST!=='object') WST = {}; WST.w = WST.w||{}; WST.f = WST.f||{}; return WST; }
+function wSave(){ if(WST) store.set('localStorage', WSK, JSON.stringify(WST)); }
+function autoStarted(id){ const w = wLoad(); return !!(w.w[id] > 0 || w.f[id]); }
+function ytApi(){
+  if(YTAPI) return YTAPI;
+  YTAPI = new Promise(res=>{
+    if(window.YT && YT.Player) return res(true);
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = ()=>{ if(prev) try{ prev(); }catch(e){} res(true); };
+    const sc = document.createElement('script'); sc.src = 'https://www.youtube.com/iframe_api'; sc.async = true; sc.onerror = ()=>res(false);
+    document.head.appendChild(sc);
+    setTimeout(()=>res(!!(window.YT && YT.Player)), 8000);
+  });
+  return YTAPI;
+}
+function trackStop(){ if(TRK){ clearInterval(TRK.iv); TRK = null; } }
+function trackPaint(id){
+  const el = document.querySelector('.player[data-player="'+CSS.escape(id)+'"] [data-ptrack]'); if(!el || !TRK || !TRK.dur) return;
+  const pct = Math.min(100, Math.round(wLoad().w[id] / TRK.dur * 100));
+  el.hidden = false;
+  el.innerHTML = '<i><em style="width:'+pct+'%"></em></i><span>'+t('autoLbl')+' '+pct+'% · '+t('autoHint')+'</span>';
+}
+function trackDone(id){
+  const w = wLoad(); if(w.f[id]) return; w.f[id] = 1; wSave();
+  if(P[id]) return;
+  P[id] = 1; gameTick(id, true); markLessonSeen(id);
+  GT = t('autoDone');
+  if(window.sgTrack) window.sgTrack('lecture_auto_done', {lecture: id});
+  if(OPEN===id && filter==='all' && !query) syncTick(id); else render();
+  queueSave();
+}
+function trackAttach(){
+  trackStop();
+  if(!S || !OPEN) return;
+  const id = OPEN, fr = document.querySelector('.player[data-player="'+CSS.escape(id)+'"] iframe[src*="youtube.com/embed"]');
+  if(!fr) return;
+  ytApi().then(ok=>{
+    if(!ok || !fr.isConnected || OPEN!==id) return;
+    const T = TRK = {id, pl:null, dur:0, last:null, iv:0};
+    try{
+      T.pl = new YT.Player(fr, {events:{
+        onStateChange: e=>{
+          if(TRK!==T) return;
+          if(e.data===1){ markLessonSeen(id); const w = wLoad(); if(!w.w[id]){ w.w[id] = 0.01; wSave(); const row = document.querySelector('[data-lrow="'+CSS.escape(id)+'"]'); if(row && !P[id]) row.classList.add('started'); if(window.sgTrack) window.sgTrack('lecture_start', {lecture: id}); } }
+          T.last = (e.data===1 && T.pl.getCurrentTime) ? T.pl.getCurrentTime() : null;
+        }
+      }});
+    }catch(e){ return; }
+    T.iv = setInterval(()=>{
+      if(TRK!==T || !fr.isConnected || OPEN!==id){ if(TRK===T) trackStop(); return; }
+      const p = T.pl; if(!p || !p.getPlayerState) return;
+      let st, cur, dur; try{ st = p.getPlayerState(); cur = p.getCurrentTime(); dur = p.getDuration(); }catch(e){ return; }
+      if(dur > 30) T.dur = dur; if(!T.dur) return;
+      const w = wLoad();
+      if(st===1){
+        if(T.last!=null){ const dl = cur - T.last; if(dl > 0 && dl <= 3.2) w.w[id] = Math.min(T.dur, (w.w[id]||0) + dl); }
+        T.last = cur;
+        if(!T.sv || Date.now()-T.sv > 5000){ T.sv = Date.now(); wSave(); }
+        if(w.w[id] >= T.dur*AUTO_PCT) trackDone(id);
+      } else { T.last = null; if(st===2||st===0) wSave(); }
+      trackPaint(id);
+    }, 1000);
+    trackPaint(id);
+  });
+}
 
 /* ---------- cursor + network ---------- */
 const fine = matchMedia('(hover:hover) and (pointer:fine)').matches, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
