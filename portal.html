@@ -1546,17 +1546,19 @@ function ytApi(){
 }
 let DIRTY = {}, flushT = 0;
 function watchDirty(id){ DIRTY[id] = 1; }
-function watchFlush(){
-  if(!TOKEN || !S) return;
+function watchFlush(final){
+  if(!TOKEN || !S || !configured) return;
   const w = wLoad(), ids = Object.keys(DIRTY); if(!ids.length) return;
-  const items = ids.map(id=>({id, w:Math.round(w.w[id]||0), d:Math.round(w.d[id]||0), pos:Math.round(w.p[id]||0)})).filter(i=>i.w>0);
-  DIRTY = {}; if(!items.length || !configured) return;
-  fetch(API_URL, {method:'POST', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'watch', token:TOKEN, items})})
-    .then(r=>r.json()).then(r=>{ if(!r.ok && r.code==='server_error') items.forEach(i=>DIRTY[i.id]=1); }).catch(()=>items.forEach(i=>DIRTY[i.id]=1));
+  const items = ids.map(id=>({id, w:Math.ceil(w.w[id]||0), d:Math.round(w.d[id]||0), pos:Math.round(w.p[id]||0)})).filter(i=>i.w>0);
+  DIRTY = {}; if(!items.length) return;
+  const redo = ()=>items.forEach(i=>DIRTY[i.id]=1), body = {action:'watch', token:TOKEN, items};
+  /* normal saves use the same call as progress saves; only when the page is closing do we use a keep-alive request */
+  const p = final===true ? fetch(API_URL, {method:'POST', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(body)}).then(r=>r.json()).catch(()=>({ok:false,code:'network'})) : api(body);
+  p.then(r=>{ if(!r.ok){ console.warn('watch save failed:', r.code); if(r.code==='network' || r.code==='server_error') redo(); } });
 }
-addEventListener('pagehide', watchFlush);
-document.addEventListener('visibilitychange', ()=>{ if(document.hidden) watchFlush(); });
-setInterval(watchFlush, 20000);
+addEventListener('pagehide', ()=>watchFlush(true));
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) watchFlush(true); });
+setInterval(()=>watchFlush(), 20000);
 async function watchPull(){
   const r = await api({action:'watch_get', token:TOKEN}); if(!r.ok || !r.watch) return;
   const w = wLoad(); let ch = false;
@@ -1591,13 +1593,13 @@ function trackAttach(){
   if(!fr) return;
   ytApi().then(ok=>{
     if(!ok || !fr.isConnected || OPEN!==id) return;
-    const T = TRK = {id, pl:null, dur:0, last:null, iv:0};
+    const T = TRK = {id, pl:null, dur:0, last:null, lt:0, iv:0};
     try{
       T.pl = new YT.Player(fr, {events:{
         onStateChange: e=>{
           if(TRK!==T) return;
-          if(e.data===1){ markLessonSeen(id); const w = wLoad(); if(!w.w[id]){ w.w[id] = 0.01; wSave(); const row = document.querySelector('[data-lrow="'+CSS.escape(id)+'"]'); if(row && !P[id]) row.classList.add('started'); if(window.sgTrack) window.sgTrack('lecture_start', {lecture: id}); } }
-          T.last = (e.data===1 && T.pl.getCurrentTime) ? T.pl.getCurrentTime() : null;
+          if(e.data===1){ markLessonSeen(id); const w = wLoad(); if(!w.w[id]){ w.w[id] = 0.01; wSave(); const row = document.querySelector('[data-lrow="'+CSS.escape(id)+'"]'); if(row && !P[id]) row.classList.add('started'); if(window.sgTrack) window.sgTrack('lecture_start', {lecture: id}); } watchDirty(id); setTimeout(watchFlush, 4000); }
+          T.last = (e.data===1 && T.pl.getCurrentTime) ? T.pl.getCurrentTime() : null; T.lt = Date.now();
         }
       }});
     }catch(e){ return; }
@@ -1608,11 +1610,12 @@ function trackAttach(){
       if(dur > 30) T.dur = dur; if(!T.dur) return;
       const w = wLoad(); w.d[id] = T.dur;
       if(st===1){
-        if(T.last!=null){ const dl = cur - T.last; if(dl > 0 && dl <= 3.2) w.w[id] = Math.min(T.dur, (w.w[id]||0) + dl); }
-        T.last = cur; w.p[id] = cur; watchDirty(id);
+        if(T.last!=null){ const dl = cur - T.last, wall = Math.max(1, (Date.now() - T.lt) / 1000);   /* background tabs run the timer slowly, so allow for the real time that passed (up to 2x speed) */
+          if(dl > 0 && dl <= wall*2.25 + 1) w.w[id] = Math.min(T.dur, (w.w[id]||0) + dl); }
+        T.last = cur; T.lt = Date.now(); w.p[id] = cur; watchDirty(id);
         if(!T.sv || Date.now()-T.sv > 5000){ T.sv = Date.now(); wSave(); }
         if(w.w[id] >= T.dur*AUTO_PCT) trackDone(id);
-      } else { T.last = null; if(st===2||st===0){ wSave(); watchFlush(); } }
+      } else { T.last = null; T.lt = Date.now(); if(st===2||st===0){ wSave(); watchFlush(); } }
       trackPaint(id);
     }, 1000);
     trackPaint(id);
