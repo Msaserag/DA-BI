@@ -365,6 +365,7 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
       <button type="button" data-v="announce" id="tabAnnounce">Announcements</button>
       <button type="button" data-v="email" id="tabEmail">Email</button>
       <button type="button" data-v="activity">Activity</button>
+      <button type="button" data-v="engage" id="tabEngage">Engagement</button>
       <button type="button" data-v="feedback" id="tabFeedback">Feedback</button>
       <button type="button" data-v="tools" id="tabTools">Tools</button>
     </nav>
@@ -543,6 +544,18 @@ details.emf summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--in
     </div>
 
     <!-- FEEDBACK -->
+    <div class="view" data-view="engage" hidden>
+      <div class="kpis fb-kpis" id="enKpis"></div>
+      <div class="panel" style="margin-top:16px">
+        <div class="ph"><div><h2>Lecture engagement</h2><p class="sub">From the portal's video player: who pressed play and how much was really watched. A lecture counts as finished at 80% watched. Only YouTube lectures are tracked; Google Drive videos are not.</p></div></div>
+        <div class="tw"><table style="min-width:620px"><thead><tr><th class="ns">Lecture</th><th class="ns">Started</th><th class="ns">Finished</th><th class="ns">Average watched</th><th class="ns">Drop-off</th></tr></thead><tbody id="enLec"></tbody></table></div>
+      </div>
+      <div class="panel" style="margin-top:16px">
+        <div class="ph"><div><h2>Trainees</h2><p class="sub">Started but not finished shows who may need a nudge.</p></div></div>
+        <div class="tw"><table style="min-width:620px"><thead><tr><th class="ns">Trainee</th><th class="ns">Lectures started</th><th class="ns">Finished</th><th class="ns">In progress</th><th class="ns">Time watched</th><th class="ns">Last watched</th></tr></thead><tbody id="enUsr"></tbody></table></div>
+      </div>
+    </div>
+
     <div class="view" data-view="feedback" hidden>
       <div class="kpis fb-kpis" id="fbKpis"></div>
       <div class="panel" style="margin-top:16px">
@@ -757,9 +770,9 @@ function applyRole(){
   $('tabAnnounce').hidden = st;
   $('tabTools').hidden = st;
   $('tabEmail').hidden = st;
-  $('tabFeedback').hidden = st;
+  $('tabFeedback').hidden = st; $('tabEngage').hidden = st;
   $('tbSub').textContent = st ? 'View trainees and follow up on WhatsApp. Click a row for details.' : 'Change Login Status or Access Until right here. Click a row for details.';
-  if(st && (view==='announce' || view==='email' || view==='tools' || view==='feedback')){ view='overview'; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.v==='overview')); document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view); }
+  if(st && (view==='announce' || view==='email' || view==='tools' || view==='feedback' || view==='engage')){ view='overview'; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.v==='overview')); document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view); }
 }
 function set(r){ D = r; $('login').hidden=true; $('app').hidden=false; applyRole(); render(); mAfterSet(); }
 $('refresh').addEventListener('click',()=>load(true).then(()=>toast('Updated')));
@@ -771,7 +784,8 @@ $('tabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!
   document.querySelectorAll('.view').forEach(v=>v.hidden = v.dataset.view!==view);
   if(view==='email') loadEmail();
   if(view==='messages') mOpen();
-  if(view==='feedback') fOpen(); });
+  if(view==='feedback') fOpen();
+  if(view==='engage') enOpen(); });
 
 /* helpers */
 const NOW = () => new Date((D && D.now) ? D.now : Date.now());
@@ -1073,6 +1087,32 @@ document.addEventListener('click', e=>{
   if(t) mLogAdd(t, p[1], 'ar', 'whatsapp');
 });
 
+
+/* engagement (owner only): what trainees started and watched in the portal player */
+const EN = {data:null, off:false};
+async function enOpen(){
+  const r = await api({action:'admin_engagement', token:TOKEN});
+  if(r.ok){ EN.data = r; EN.off = false; }
+  else if(r.code==='bad_request'){ EN.off = true; }
+  else if(r.code!=='session_expired'){ toast('Could not load engagement'); }
+  enRender();
+}
+function enRender(){
+  const k = (l,v,s) => '<div class="kpi"><span>'+l+'</span><b>'+v+'</b><small>'+s+'</small></div>';
+  if(EN.off){ $('enKpis').innerHTML = ''; $('enLec').innerHTML = '<tr><td colspan="5" class="muted">Engagement needs backend v2.18.0 or newer. Paste the new code in Apps Script and run afterUpdate.</td></tr>'; $('enUsr').innerHTML = ''; return; }
+  const d = EN.data || {lectures:[], trainees:[]};
+  const started = d.lectures.reduce((a,l)=>a+l.started,0), fin = d.lectures.reduce((a,l)=>a+l.finished,0);
+  $('enKpis').innerHTML = k('Active viewers', d.trainees.length, 'trainees who pressed play')+k('Lectures started', started, 'trainee x lecture pairs')+
+    k('Finished (80%+)', fin, started ? Math.round(fin/started*100)+'% of started' : '–')+k('In progress', started-fin, 'started, not finished');
+  $('enLec').innerHTML = d.lectures.sort((a,b)=>b.started-a.started).map(l=>{
+    const drop = l.started ? Math.round((1-l.finished/l.started)*100) : 0;
+    return '<tr><td>'+esc(l.en||l.id)+(l.ar?' <span class="muted">'+esc(l.ar)+'</span>':'')+'</td><td>'+l.started+'</td><td>'+l.finished+'</td><td>'+Math.round(l.avgPct*100)+'%</td><td>'+drop+'%</td></tr>';
+  }).join('') || '<tr><td colspan="5" class="muted">No viewing data yet. It appears once trainees start playing lectures in the portal.</td></tr>';
+  $('enUsr').innerHTML = d.trainees.map(u=>{
+    const m = Math.round(u.sec/60);
+    return '<tr><td>'+esc(u.name||u.u)+'</td><td>'+u.started+'</td><td>'+u.finished+'</td><td>'+u.inProgress+'</td><td>'+(m>=60 ? Math.floor(m/60)+' h '+(m%60)+' min' : m+' min')+'</td><td>'+(u.last ? rel(new Date(u.last).toISOString()) : '–')+'</td></tr>';
+  }).join('');
+}
 
 /* feedback and testimonials (owner only) */
 const FB = {rows:[], loaded:false, off:false};
