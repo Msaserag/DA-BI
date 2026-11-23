@@ -996,7 +996,7 @@ function svPick(btn){
   $('svErr').hidden = true;
 }
 function svShow(){
-  if(!S || SV.done || (C && C.campaign)) return;
+  if(!S || SV.done) return;
   clearTimeout(SV.timer);
   svBuild();
   $('svBody').hidden = false; $('svThanks').hidden = true; $('svErr').hidden = true;
@@ -1006,13 +1006,14 @@ function svShow(){
 }
 function svClose(){
   $('svModal').hidden = true; document.body.style.overflow = '';
-  if(S) store.set('localStorage', sk('sv-shown'), '1');
+  if(S) store.set('localStorage', sk('sv-shown'), svDay());
 }
-function svSetBtn(){ $('rateBtn').hidden = !(S && SV.ready && !SV.done && !(C && C.campaign)); }
-/* auto prompt: once per trainee, after the first real interaction (first tick) or ~90 seconds in, never over another dialog */
+const svDay = () => new Date().toISOString().slice(0,10);
+function svSetBtn(){ $('rateBtn').hidden = !(S && SV.ready && !SV.done); }
+/* auto prompt for everyone who has not answered yet: at most once a day, after the first real interaction (first tick) or ~90 seconds in, never over another dialog. The "Rate us" button stays until they submit. */
 function svSchedule(ms){
   clearTimeout(SV.timer);
-  if(!S || !SV.ready || SV.done || (C && C.campaign) || store.get('localStorage', sk('sv-shown'))) return;
+  if(!S || !SV.ready || SV.done || store.get('localStorage', sk('sv-shown'))===svDay()) return;
   SV.timer = setTimeout(()=>{
     if(!$('pwModal').hidden || !$('svModal').hidden || document.hidden || TOUR.on){ svSchedule(15000); return; }
     svShow();
@@ -1125,10 +1126,13 @@ function tourAuto(){
 }
 $('tourBtn').addEventListener('click', ()=>tourStart(true));
 
-async function svInit(){
+async function svInit(tries){
   SV.ready = false; SV.done = false; svSetBtn();
   const r = await api({action:'survey_status', token:TOKEN});
-  if(!r.ok) return;                       // survey is optional: stay silent if the backend is not updated yet
+  if(!r.ok){                              // optional: stay silent if the backend is not updated yet, but retry after a bad connection
+    if((r.code==='network' || r.code==='server_error') && (tries||0) < 3 && S) setTimeout(()=>{ if(S) svInit((tries||0)+1); }, [8000,30000,60000][tries||0]);
+    return;
+  }
   SV.ready = true; SV.done = !!r.done;
   svSetBtn(); svSchedule(90000);
 }
